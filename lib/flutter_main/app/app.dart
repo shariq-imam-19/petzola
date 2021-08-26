@@ -39,7 +39,7 @@ class AppState extends State<App> {
 
   @override
   Widget build(BuildContext appContext) {
-    // print("Current App Local ---> "+Provider.of<AppModel>(context,listen: false).local.languageCode.toString() );
+    // print("Current App Local ---> "+Provider.of<AppModel>(context,listen: false).local.languageCode.toString() );asdf
     return FutureBuilder(
         future: PrefManager().setupSharedPreferences(),
         builder: (context, snapshot) {

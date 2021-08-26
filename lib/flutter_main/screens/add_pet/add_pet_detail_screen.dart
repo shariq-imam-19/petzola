@@ -205,7 +205,7 @@ class _AddPetDetailScreenState extends State<AddPetDetailScreen> {
                           ? Color(0xff00aeef)
                           : Color(0xfff8f9fa),
                       borderRadius: BorderRadius.circular(5)),
-                  child: new Text("Male",
+                  child: new Text("Female",
                       style: Theme.of(context).textTheme.subtitle2.copyWith(
                           color: _currentGender == CurrentGender.MALE
                               ? Colors.white70
