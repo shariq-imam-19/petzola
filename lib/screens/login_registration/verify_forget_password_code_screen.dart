@@ -121,8 +121,8 @@ class _VerifyForgetPassswordCodeScreenState extends State<VerifyForgetPassswordC
                             activeColor:Color(0xff00AEEF) ,
                             inactiveColor: Color(0xffE8E8E8),
                             borderRadius: BorderRadius.circular(8),
-                            fieldHeight: height*0.10,
-                            fieldWidth: width*0.15,
+                            fieldHeight: height*0.08,
+                            fieldWidth: width*0.13,
                             inactiveFillColor: themeColor2,
                             activeFillColor:
                             hasError ? Colors.orange : Color(0x4800AEEF),
@@ -281,8 +281,8 @@ class _VerifyForgetPassswordCodeScreenState extends State<VerifyForgetPassswordC
                             activeColor:Color(0xff00AEEF) ,
                             inactiveColor: Color(0xffE8E8E8),
                             borderRadius: BorderRadius.circular(8),
-                            fieldHeight: height*0.10,
-                            fieldWidth: width*0.15,
+                            fieldHeight: height*0.08,
+                            fieldWidth: width*0.13,
                             inactiveFillColor: themeColor2,
                             activeFillColor:
                             hasError ? Colors.orange : Color(0x4800AEEF),

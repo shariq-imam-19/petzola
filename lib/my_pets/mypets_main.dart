@@ -8,8 +8,13 @@ import 'package:petzola/common/commons.dart';
 
 import 'package:petzola/common/commons.dart';
 import 'package:petzola/common/common_z.dart';
+import 'package:petzola/common/global_variables.dart';
+import 'package:petzola/localization/language_constants.dart';
+import 'package:petzola/my_pets/add_care_screen.dart';
 import 'package:petzola/my_pets/add_vaccination.dart';
 import 'package:petzola/my_pets/mypets_profile.dart';
+import 'dart:math' as math;
+import 'add_medical_screen.dart';
 
 //import 'package:bottom_drawer/bottom_drawer.dart';
 
@@ -192,12 +197,13 @@ class _MyPetProfileState extends State<MyPetProfile> with SingleTickerProviderSt
                   },
                   child: Container(
                     height: cHeight * 0.04,
-                    width: cHeight * 0.12,
+                    //width: cHeight * 0.12,
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
                         color: Color(0xFF00AEEF),
                         borderRadius: BorderRadius.circular(10)
                     ),
-                    child: Center(child: VariableText(text: 'View Profile', fontsize: 15, fontcolor: Colors.white),),
+                    child: Center(child: VariableText(text: getTranslated(context, 'View Profile'), fontsize: 15, fontcolor: Colors.white),),
                   ),
                 ),
               ),
@@ -244,33 +250,33 @@ class _MyPetProfileState extends State<MyPetProfile> with SingleTickerProviderSt
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              VariableText(text: widget.petDetails['gender'], fontcolor: Color(0xFF2B3E4F), fontsize: 13, fontFamily: 'sftsb',),
+              VariableText(text: widget.petDetails['gender'], fontcolor: Color(0xFF2B3E4F), fontsize: 14, fontFamily: 'sftsb',),
               SizedBox(height: 5),
-              VariableText(text: 'Gender', fontcolor: Color(0x603C3C43), fontsize: 11, fontFamily: 'sftsb',),
+              VariableText(text: getTranslated(context, 'Gender'), fontcolor: Color(0x603C3C43), fontsize: 12, fontFamily: 'sftsb',),
             ],
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              VariableText(text: widget.petDetails['age'], fontcolor: Color(0xFF2B3E4F), fontsize: 13, fontFamily: 'sftsb',),
+              VariableText(text: widget.petDetails['age'], fontcolor: Color(0xFF2B3E4F), fontsize: 14, fontFamily: 'sftsb',),
               SizedBox(height: 5),
-              VariableText(text: 'Age', fontcolor: Color(0x603C3C43), fontsize: 11, fontFamily: 'sftsb',),
+              VariableText(text: getTranslated(context, 'Age'), fontcolor: Color(0x603C3C43), fontsize: 12, fontFamily: 'sftsb',),
             ],
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              VariableText(text: widget.petDetails['color'], fontcolor: Color(0xFF2B3E4F), fontsize: 13, fontFamily: 'sftsb',),
+              VariableText(text: widget.petDetails['color'], fontcolor: Color(0xFF2B3E4F), fontsize: 14, fontFamily: 'sftsb',),
               SizedBox(height: 5),
-              VariableText(text: 'Color', fontcolor: Color(0x603C3C43), fontsize: 11, fontFamily: 'sftsb',),
+              VariableText(text: getTranslated(context, 'Color'), fontcolor: Color(0x603C3C43), fontsize: 12, fontFamily: 'sftsb',),
             ],
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              VariableText(text: widget.petDetails['weight'], fontcolor: Color(0xFF2B3E4F), fontsize: 13, fontFamily: 'sftsb',),
+              VariableText(text: widget.petDetails['weight'], fontcolor: Color(0xFF2B3E4F), fontsize: 14, fontFamily: 'sftsb',),
               SizedBox(height: 5),
-              VariableText(text: 'Weight', fontcolor: Color(0x603C3C43), fontsize: 11, fontFamily: 'sftsb',),
+              VariableText(text: getTranslated(context, 'Weight'), fontcolor: Color(0x603C3C43), fontsize: 12, fontFamily: 'sftsb',),
             ],
           )
         ]
@@ -316,7 +322,7 @@ class _MyPetProfileState extends State<MyPetProfile> with SingleTickerProviderSt
       children: <Widget>[
         SingleChildScrollView(
           physics: NeverScrollableScrollPhysics(),
-            child: MyPetsReminder(cHeight: cHeight, cWidth: cWidth, fHeight: fHeight, fWidth: fWidth,)),
+            child: MyPetsReminder(cHeight: cHeight, cWidth: cWidth, fHeight: fHeight, fWidth: fWidth,petDetails: widget.petDetails,)),
         SingleChildScrollView(
           //physics: NeverScrollableScrollPhysics(),
           child: MyPetsVaccination(cHeight: cHeight, cWidth: cWidth,
@@ -332,10 +338,19 @@ class _MyPetProfileState extends State<MyPetProfile> with SingleTickerProviderSt
         ),
         SingleChildScrollView(
             physics: NeverScrollableScrollPhysics(),
-            child: MyMedical(cHeight: cHeight, cWidth: cWidth)),
+            child: MyMedical(cHeight: cHeight, cWidth: cWidth,
+            onAddMedical: (){
+              Navigator.push(context, MaterialPageRoute(builder: (_)=> AddMedical(petDetails: widget.petDetails, cHeight: cHeight, cWidth: cWidth,)));
+
+            },)),
         SingleChildScrollView(
             physics: NeverScrollableScrollPhysics(),
-            child: MyCare(cHeight: cHeight, cWidth: cWidth)),
+            child: MyCare(cHeight: cHeight, cWidth: cWidth,
+            onAddCare: (){
+              Navigator.push(context, MaterialPageRoute(builder: (_)=> AddCare(petDetails: widget.petDetails, cHeight: cHeight, cWidth: cWidth,)));
+
+
+            },)),
       ],
     );
 
@@ -348,7 +363,7 @@ class _MyPetProfileState extends State<MyPetProfile> with SingleTickerProviderSt
       titleSpacing: 0,
       centerTitle: true,
       leadingWidth: 65,
-      title: VariableText(text: 'My Pets', fontcolor: Color(0xFF2C3E50), fontsize: 17, fontFamily: 'sftsb',),
+      title: VariableText(text: getTranslated(context, 'My Pets'), fontcolor: Color(0xFF2C3E50), fontsize: 17, fontFamily: 'sftsb',),
       leading: Container(
         margin: EdgeInsets.only(left: 8),
         child: Padding(
@@ -358,11 +373,22 @@ class _MyPetProfileState extends State<MyPetProfile> with SingleTickerProviderSt
                 color: Color(0xFFEAF0F9),
                 borderRadius: BorderRadius.circular(60)
             ),
-            child: IconButton(icon: Image.asset('lib/assets/icons/appbar_back.png', scale: 3.2,),
-              onPressed: (){
-                Navigator.of(context).pop();
-              },
-            ),
+            child: 
+                currLang =='ar' ?
+            Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(math.pi),
+              child: IconButton(icon: Image.asset('lib/assets/icons/appbar_back.png', scale: 3.2,),
+                onPressed: (){
+                  Navigator.of(context).pop();
+                },
+              ),
+            ) :
+                IconButton(icon: Image.asset('lib/assets/icons/appbar_back.png', scale: 3.2,),
+                  onPressed: (){
+                    Navigator.of(context).pop();
+                  },
+                ),
           ),
         ),
       ),
@@ -394,7 +420,7 @@ class _MyPetProfileState extends State<MyPetProfile> with SingleTickerProviderSt
         context: context, builder: (context) {
 
       return DraggableScrollableSheet(
-          initialChildSize: 0.32, //set this as you want
+          initialChildSize: 0.38, //set this as you want
           maxChildSize:0.75, //set this as you want
           minChildSize:0.30, //set this as you want
           expand: false,

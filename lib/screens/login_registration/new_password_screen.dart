@@ -122,11 +122,8 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                   ),
                   SizedBox(height: height*0.08,),
 
-
-
-
                   Padding(
-                    padding:  EdgeInsets.only(bottom: height*0.07),
+                    padding:  EdgeInsets.only(bottom: height*0.005),
                     child: CustomButton(
                         buttonHeight: height*0.07,
                         buttonWidth:height*0.90,
@@ -137,7 +134,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                         buttonText: "Save New Password",
                         buttonFontFamily:'sfdm',
                         buttonOnTap:(){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>LoginScreen()), (route) => route.isCurrent);
                         }
                     ),
                   ),
@@ -167,122 +164,117 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
               child: SingleChildScrollView(
                 reverse: true,
                 physics: ScrollPhysics(),
-                child: Padding(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minWidth: constraints.maxWidth, minHeight: constraints.maxHeight),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: constraints.maxWidth, minHeight: constraints.maxHeight),
 
-                    child: IntrinsicHeight(
-                      child: Column(
-                        children: [
-                          CustomApploginRegistration(ontap: (){
-                            Navigator.pop(context);
+                  child: IntrinsicHeight(
+                    child: Column(
+                      children: [
+                        SizedBox(height: height * 0.02,),
+                        CustomApploginRegistration(ontap: (){
+                          Navigator.pop(context);
+                        },
+                          size: height,text: "New Password",),
+                        SizedBox(height: height*0.08,),
+                        Center(
+                          child: Container(
+                            height: height*0.08,
+                            width: width*0.30,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        'lib/assets/icons/splashlogo.png'
+                                    ),
+                                    fit: BoxFit.fill
+                                )
+                            ),
+
+
+                          ),
+                        ),
+                        SizedBox(height: height*0.03,),
+                        VariableText(text: "Be Sure To Set A Strong",
+                          fontsize: height*0.025,
+                          fontcolor: Color(0xff2B3E4F),
+                          weight: FontWeight.bold,
+                          fontFamily: 'sfdb',),
+                        VariableText(text: "Password",
+                          fontsize: height*0.025,
+                          fontcolor: Color(0xff2B3E4F),
+                          weight: FontWeight.bold,
+                          fontFamily: 'sfdb',),
+
+                        SizedBox(height: height*0.05,),
+
+                        SizedBox(height: height*0.05,),
+                        RectangluartextFeildWithIcon(
+
+                          heights: height*0.07,
+                          widths: width*0.90,
+                          obscuringCharacter: "*",
+                          texthidden: viewPassword?true:false,
+                          onTap: (){
+
+                            setState(() {
+
+                              if(viewPassword==false){
+                                viewPassword=true;
+                              }
+                              else{
+                                viewPassword=false;
+                              }
+                            });
                           },
-                            size: height,text: "New Password",),
-                          SizedBox(height: height*0.08,),
-                          Center(
-                            child: Container(
-                              height: height*0.08,
-                              width: width*0.30,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          'lib/assets/icons/splashlogo.png'
-                                      ),
-                                      fit: BoxFit.fill
-                                  )
-                              ),
+                          fontsize: height*0.019,
 
+                          hinttext: "New Password",
+                          imageIconPath: "lib/assets/icons/eyeicon.png",
+                          keytype: TextInputType.text,
 
-                            ),
+                        ),
+                        SizedBox(height: height*0.02,),
+                        RectangluartextFeildWithIcon(
+
+                          heights: height*0.07,
+                          widths: width*0.90,
+                          obscuringCharacter: "*",
+                          texthidden: viewPassword?true:false,
+                          onTap: (){
+
+                            setState(() {
+
+                              if(viewPassword==false){
+                                viewPassword=true;
+                              }
+                              else{
+                                viewPassword=false;
+                              }
+                            });
+                          },
+                          fontsize: height*0.019,
+
+                          hinttext: "Confirm A New Password",
+                          imageIconPath: "lib/assets/icons/eyeicon.png",
+                          keytype: TextInputType.text,
+
+                        ),
+                        Spacer(),
+                        Padding(
+                          padding:  EdgeInsets.only(bottom: height*0.005),
+                          child: CustomButton(
+                              buttonHeight: height*0.07,
+                              buttonWidth:width*0.90,
+                              buttonBorderRadius:8,
+                              buttonFontSize:height*0.025,
+                              buttonColor:themeColor1,
+                              buttonTextColor:themeColor2,
+                              buttonText: "Save New Password",
+                              buttonFontFamily:'sfdm',
+                              buttonOnTap:(){
+                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>LoginScreen()), (route) => route.isCurrent);
+                              }
                           ),
-                          SizedBox(height: height*0.03,),
-                          VariableText(text: "Be Sure To Set A Strong",
-                            fontsize: height*0.025,
-                            fontcolor: Color(0xff2B3E4F),
-                            weight: FontWeight.bold,
-                            fontFamily: 'sfdb',),
-                          VariableText(text: "Password",
-                            fontsize: height*0.025,
-                            fontcolor: Color(0xff2B3E4F),
-                            weight: FontWeight.bold,
-                            fontFamily: 'sfdb',),
-
-                          SizedBox(height: height*0.05,),
-
-                          SizedBox(height: height*0.05,),
-                          RectangluartextFeildWithIcon(
-
-                            heights: height*0.07,
-                            widths: width*0.90,
-                            obscuringCharacter: "*",
-                            texthidden: viewPassword?true:false,
-                            onTap: (){
-
-                              setState(() {
-
-                                if(viewPassword==false){
-                                  viewPassword=true;
-                                }
-                                else{
-                                  viewPassword=false;
-                                }
-                              });
-                            },
-                            fontsize: height*0.019,
-
-                            hinttext: "New Password",
-                            imageIconPath: "lib/assets/icons/eyeicon.png",
-                            keytype: TextInputType.text,
-
-                          ),
-                          SizedBox(height: height*0.02,),
-                          RectangluartextFeildWithIcon(
-
-                            heights: height*0.07,
-                            widths: width*0.90,
-                            obscuringCharacter: "*",
-                            texthidden: viewPassword?true:false,
-                            onTap: (){
-
-                              setState(() {
-
-                                if(viewPassword==false){
-                                  viewPassword=true;
-                                }
-                                else{
-                                  viewPassword=false;
-                                }
-                              });
-                            },
-                            fontsize: height*0.019,
-
-                            hinttext: "Confirm A New Password",
-                            imageIconPath: "lib/assets/icons/eyeicon.png",
-                            keytype: TextInputType.text,
-
-                          ),
-                          Spacer(),
-
-
-
-                          Padding(
-                            padding:  EdgeInsets.only(bottom: height*0.07),
-                            child: CustomButton(
-                                buttonHeight: height*0.07,
-                                buttonWidth:width*0.90,
-                                buttonBorderRadius:8,
-                                buttonFontSize:height*0.025,
-                                buttonColor:themeColor1,
-                                buttonTextColor:themeColor2,
-                                buttonText: "Save New Password",
-                                buttonFontFamily:'sfdm',
-                                buttonOnTap:(){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
-                                }
-                            ),
-                          ),
+                        ),
 
 
 
@@ -292,8 +284,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
 
 
 
-                        ],
-                      ),
+                      ],
                     ),
                   ),
                 ),

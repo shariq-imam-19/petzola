@@ -59,8 +59,9 @@ class _OnboardingScreen4State extends State<OnboardingScreen4>   {
               padding:  EdgeInsets.all(width*0.01),
               child: Column(
                 children: [
+                  SizedBox(height: width * 0.02,),
                   ChangeOrientationIcon(ontap: (){    Navigator.of(context).pop();},size: width,),
-                  SizedBox(height: width*0.08,),
+                  SizedBox(height: width*0.06,),
                   Center(
                     child:
 
@@ -226,8 +227,9 @@ class _OnboardingScreen4State extends State<OnboardingScreen4>   {
             padding:  EdgeInsets.all(height*0.01),
             child: Column(
               children: [
+                SizedBox(height: height * 0.02,),
                 ChangeOrientationIcon(ontap: (){    Navigator.of(context).pop();},size: height,),
-                SizedBox(height: height*0.08,),
+                SizedBox(height: height*0.06,),
                 Center(
                   child:
 

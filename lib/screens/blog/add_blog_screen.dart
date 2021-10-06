@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:petzola/common/common_z.dart';
 import 'package:petzola/common/commons.dart';
 import 'package:petzola/common/style.dart';
+import 'package:petzola/localization/language_constants.dart';
 class AddBlogScreen extends StatefulWidget {
 
   @override
@@ -46,7 +47,7 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
           resizeToAvoidBottomInset: false,
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(kToolbarHeight),
-            child: CustomMenuAppBar(size: height,title: "Create Post",),
+            child: CustomMenuAppBar(size: height,title: "Create Post"),
           ),
           backgroundColor: themeColor2,
           body:  SingleChildScrollView(
@@ -96,7 +97,7 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
                           focusedBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none, hintText: "What's new",
+                          disabledBorder: InputBorder.none, hintText: getTranslated(context, "What's New"),
                           hintStyle: TextStyle(
                               fontSize:  height*0.018,
                               fontFamily: 'sftr',
@@ -139,9 +140,9 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset("lib/assets/icons/cameraicon.png",scale:height*0.005,),
+                            Image.asset("lib/assets/icons/cameraicon.png",scale:height*0.003,),
                             SizedBox(height: height*0.0055,),
-                            VariableText(text: "Add Media",
+                            VariableText(text: getTranslated(context, "Add Media"),
                               fontsize:  height*0.015,
                               fontFamily: 'sftr',
                               fontcolor: Color(
@@ -165,7 +166,7 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
                         buttonFontSize:height*0.025,
                         buttonColor:themeColor1,
                         buttonTextColor:themeColor2,
-                        buttonText: "Publish",
+                        buttonText: getTranslated(context, "Publish"),
                         buttonFontFamily:'sfdm',
                         buttonOnTap:(){
                           Navigator.pop(context);
@@ -189,7 +190,7 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
           resizeToAvoidBottomInset: false,
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(kToolbarHeight),
-            child: CustomMenuAppBar(size: height,title: "Create Post",),
+            child: CustomMenuAppBar(size: height,title: "Create Post"),
           ),
           backgroundColor: themeColor2,
           body: LayoutBuilder(
@@ -244,7 +245,7 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
                                   focusedBorder: InputBorder.none,
                                   enabledBorder: InputBorder.none,
                                   errorBorder: InputBorder.none,
-                                  disabledBorder: InputBorder.none, hintText: "What's new",
+                                  disabledBorder: InputBorder.none, hintText: getTranslated(context, "What's New"),
                                   hintStyle: TextStyle(
                                       fontSize:  height*0.018,
                                       fontFamily: 'sftr',
@@ -287,9 +288,9 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Image.asset("lib/assets/icons/cameraicon.png",scale:height*0.005,),
+                                  Image.asset("lib/assets/icons/cameraicon.png",scale:height*0.003,),
                                   SizedBox(height: height*0.0055,),
-                                  VariableText(text: "Add Media",
+                                  VariableText(text: getTranslated(context, "Add Media"),
                                     fontsize:  height*0.015,
                                     fontFamily: 'sftr',
                                     fontcolor: Color(
@@ -311,7 +312,7 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
                                 buttonFontSize:height*0.025,
                                 buttonColor:themeColor1,
                                 buttonTextColor:themeColor2,
-                                buttonText: "Publish",
+                                buttonText: getTranslated(context, "Publish"),
                                 buttonFontFamily:'sfdm',
                                 buttonOnTap:(){
                                   Navigator.pop(context);

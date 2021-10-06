@@ -155,135 +155,132 @@ Widget OnboardingScreen1() {
     case Orientation.portrait:
       return Scaffold(
         backgroundColor: themeColor2,
-        body: Padding(
-          padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: SingleChildScrollView(
-            physics: ScrollPhysics(),
+        body: SingleChildScrollView(
+          physics: ScrollPhysics(),
 
-            child: Padding(
-              padding:  EdgeInsets.all(height*0.01),
-              child: Column(
-                children: [
-                  ChangeOrientationIcon(ontap: (){    Navigator.of(context).pop();},size: height,),
-                  SizedBox(height: height*0.08,),
-                  Center(
-                    child:
-                    VariableText(text: "Welcome to Petzola",
-                      fontsize: height*0.030,
-                      fontcolor: Color(0xff2B3E4F),
-                      weight: FontWeight.bold,
-                      fontFamily: 'sfdb',),
-                  ),
-                  SizedBox(height: height*0.05,),
-                  Center(
-                    child: Container(
-                      height: height*0.14,
-                      width: width*0.50,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                  'lib/assets/icons/splashlogo.png'
-                              ),
-                              fit: BoxFit.fill
-                          )
-                      ),
-
-
+          child: Padding(
+            padding:  EdgeInsets.all(height*0.01),
+            child: Column(
+              children: [
+                ChangeOrientationIcon(ontap: (){    Navigator.of(context).pop();},size: height,),
+                SizedBox(height: height*0.08,),
+                Center(
+                  child:
+                  VariableText(text: "Welcome to Petzola",
+                    fontsize: height*0.030,
+                    fontcolor: Color(0xff2B3E4F),
+                    weight: FontWeight.bold,
+                    fontFamily: 'sfdb',),
+                ),
+                SizedBox(height: height*0.05,),
+                Center(
+                  child: Container(
+                    height: height*0.14,
+                    width: width*0.50,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage(
+                                'lib/assets/icons/splashlogo.png'
+                            ),
+                            fit: BoxFit.fill
+                        )
                     ),
-                  ),
-                  SizedBox(height: height*0.05,),
-                  RectangluartextFeild(
-                    heights: height*0.07,
-                    widths: width*0.90,
 
-                    hinttext: "Your Name",
-                    //cont: password,
-                    textlength: 11,
-
-                    fontsize: height*0.019,
-                    obscuringCharacter: "*",
-
-                   // obscureText: true,
-
-                    keytype: TextInputType.text,
-                  //  onChanged: enableBtn(mobileno.text),
 
                   ),
-                  SizedBox(height: height*0.02,),
+                ),
+                SizedBox(height: height*0.05,),
                 RectangluartextFeild(
-                    heights: height*0.07,
-                    widths: width*0.90,
-                    hinttext: "Your Email",
+                  heights: height*0.07,
+                  widths: width*0.90,
 
-                    fontsize: height*0.019,
-                    keytype: TextInputType.text,
-                  ),
-                  SizedBox(height: height*0.02,),
-                  RectangluartextFeildWithIcon(
+                  hinttext: "Your Name",
+                  //cont: password,
+                  textlength: 11,
 
-                    heights: height*0.07,
-                    widths: width*0.90,
-                    obscuringCharacter: "*",
+                  fontsize: height*0.019,
+                  obscuringCharacter: "*",
 
-                    texthidden: viewPassword?true:false,
-                    onTap: (){
+                 // obscureText: true,
 
-                      setState(() {
+                  keytype: TextInputType.text,
+                //  onChanged: enableBtn(mobileno.text),
 
-                        if(viewPassword==false){
-                          viewPassword=true;
-                        }
-                        else{
-                          viewPassword=false;
-                        }
-                      });
-                    },
-                    fontsize: height*0.019,
+                ),
+                SizedBox(height: height*0.02,),
+              RectangluartextFeild(
+                  heights: height*0.07,
+                  widths: width*0.90,
+                  hinttext: "Your Email",
 
-                    hinttext: "Password",
-                    imageIconPath: "lib/assets/icons/eyeicon.png",
-                    keytype: TextInputType.text,
+                  fontsize: height*0.019,
+                  keytype: TextInputType.text,
+                ),
+                SizedBox(height: height*0.02,),
+                RectangluartextFeildWithIcon(
 
-                   ),
-                  SizedBox(height: height*0.04,),
-                 Row(
-                   crossAxisAlignment: CrossAxisAlignment.center,
-                   mainAxisAlignment: MainAxisAlignment.center,
-                   children: [
-                   AppCheckbox(size:  height*0.03,),
-                   SizedBox(width: width*0.03,),
-                   VariableText(text: "I Agree",
-                     fontsize: height*0.015,
-                     fontcolor: Color(0xff2C3E50),
+                  heights: height*0.07,
+                  widths: width*0.90,
+                  obscuringCharacter: "*",
 
-                     fontFamily: 'sftr',),
+                  texthidden: viewPassword?true:false,
+                  onTap: (){
 
-                     SizedBox(width: width*0.01,),
-                   VariableText(text: "Term & Cnndition",
-                     underlined: true,
-                     fontsize: height*0.015,
-                     fontcolor: themeColor1,
+                    setState(() {
 
-                     fontFamily: 'sftr',),
+                      if(viewPassword==false){
+                        viewPassword=true;
+                      }
+                      else{
+                        viewPassword=false;
+                      }
+                    });
+                  },
+                  fontsize: height*0.019,
 
-                 ],),
-                  SizedBox(height: height*0.06,),
-                  CustomLoadingAnimation(height: height,width: width,animationPercent: 0.25,onTap: (){
+                  hinttext: "Password",
+                  imageIconPath: "lib/assets/icons/eyeicon.png",
+                  keytype: TextInputType.text,
+
+                 ),
+                SizedBox(height: height*0.04,),
+               Row(
+                 crossAxisAlignment: CrossAxisAlignment.center,
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: [
+                 AppCheckbox(size:  height*0.03,),
+                 SizedBox(width: width*0.03,),
+                 VariableText(text: "I Agree",
+                   fontsize: height*0.015,
+                   fontcolor: Color(0xff2C3E50),
+
+                   fontFamily: 'sftr',),
+
+                   SizedBox(width: width*0.01,),
+                 VariableText(text: "Term & Cnndition",
+                   underlined: true,
+                   fontsize: height*0.015,
+                   fontcolor: themeColor1,
+
+                   fontFamily: 'sftr',),
+
+               ],),
+                SizedBox(height: height*0.06,),
+                CustomLoadingAnimation(height: height,width: width,animationPercent: 0.25,onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=>OnboardingScreen2()));
+
+
+                },)
+             /*   InkWell(
+                  onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (_)=>OnboardingScreen2()));
-
-
-                  },)
-               /*   InkWell(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (_)=>OnboardingScreen2()));
-                    },
-                    child: CircleAvatar(
-                      radius: 30,
-                     backgroundImage: AssetImage("lib/assets/icons/nextbutton.png"),
-                      backgroundColor: Colors.transparent,
-                    ),
-                  )*/
+                  },
+                  child: CircleAvatar(
+                    radius: 30,
+                   backgroundImage: AssetImage("lib/assets/icons/nextbutton.png"),
+                    backgroundColor: Colors.transparent,
+                  ),
+                )*/
 
 
 
@@ -292,8 +289,7 @@ Widget OnboardingScreen1() {
 
 
 
-                ],
-              ),
+              ],
             ),
           ),
         ),

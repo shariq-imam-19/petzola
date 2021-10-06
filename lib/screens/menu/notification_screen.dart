@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:petzola/common/commons.dart';
 import 'package:petzola/common/common_z.dart';
 import 'package:petzola/common/style.dart';
+import 'package:petzola/localization/language_constants.dart';
 class NotificationScreen extends StatefulWidget {
 
   @override
@@ -38,7 +39,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   SizedBox(height: width*0.03,),
                   ListTile(
                     leading:
-                    VariableText(text: "Notification Sound",
+                    VariableText(text: getTranslated(context, "Notification Sound"),
                       fontsize: width*0.023,
                       fontcolor: Color(0xff2B3E4F),
                       weight: FontWeight.normal,
@@ -69,7 +70,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         buttonFontSize:width*0.025,
                         buttonColor:themeColor1,
                         buttonTextColor:themeColor2,
-                        buttonText: "Save change ",
+                        buttonText: getTranslated(context, "Save Changes"),
                         buttonFontFamily:'sfdm',
                         buttonOnTap:(){
                           Navigator.pop(context);
@@ -101,7 +102,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 SizedBox(height: height*0.03,),
                 ListTile(
                   leading:
-                  VariableText(text: "Notification Sound",
+                  VariableText(text: getTranslated(context, "Notification Sound"),
                     fontsize: height*0.023,
                     fontcolor: Color(0xff2B3E4F),
                     weight: FontWeight.normal,
@@ -133,7 +134,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       buttonFontSize:height*0.025,
                       buttonColor:themeColor1,
                       buttonTextColor:themeColor2,
-                      buttonText: "Save change",
+                      buttonText: getTranslated(context, "Save Changes"),
                       buttonFontFamily:'sfdm',
                       buttonOnTap:(){
                         Navigator.pop(context);  }

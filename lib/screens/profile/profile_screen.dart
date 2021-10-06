@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:petzola/common/common_z.dart';
 import 'package:petzola/common/commons.dart';
 import 'package:petzola/common/style.dart';
+import 'package:petzola/localization/language_constants.dart';
 import 'package:petzola/screens/profile/edit_profile_screen.dart';
+
 class ProfileScreen extends StatefulWidget {
 
   @override
@@ -74,7 +76,7 @@ Widget ProfileScreen() {
                               fontsize: height*0.022,
                               fontcolor: Color(0xff00AEEF),),
                             SizedBox(height: height*0.004,),
-                            VariableText(text: "Following",
+                            VariableText(text: getTranslated(context, "Following"),
                               fontsize: height*0.016,
                               fontcolor: Color(0x6c3C3C43),
                               fontFamily: 'sftr',),
@@ -110,7 +112,7 @@ Widget ProfileScreen() {
                               fontsize: height*0.022,
                               fontcolor: Color(0xff00AEEF),),
                             SizedBox(height: height*0.004,),
-                            VariableText(text: "Followers",
+                            VariableText(text: getTranslated(context, "Followers"),
                               fontsize: height*0.016,
                               fontcolor: Color(0x6c3C3C43),
                               fontFamily: 'sftr',),
@@ -144,7 +146,7 @@ Widget ProfileScreen() {
                               fontFamily: 'sftsb',
                               fontsize: height*0.022,
                               fontcolor: Color(0xff2B3E4F),),
-                            VariableText(text: "Point",
+                            VariableText(text: getTranslated(context, "Point"),
                               fontsize: height*0.016,
                               fontcolor: Color(0x6c3C3C43),
                               fontFamily: 'sftr',),
@@ -175,33 +177,29 @@ Widget ProfileScreen() {
 
                   child: Row(
                     children: List.generate(profileButton.length, (index) =>
-                        GestureDetector(
-                          onTap: () {
-                            _onSelected(index);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xFFF8F7F7),
-                              borderRadius:
-                              BorderRadius.circular(15),
-                   /*            index == 0 ? BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15)):
-                          BorderRadius.only(topRight: Radius.circular(15), bottomRight: Radius.circular(15))*/
-                            ),
-                            child: Container(
-                              height: height*0.06,
-                              width: height*0.315,
-                              decoration: BoxDecoration(
-                                  color: _selectedIndex == index
-                                      ? Color(0xFF00AEEF)
-                                      : Color(0xFFF8F7F7),
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Center(
-                                child: VariableText(
-                                    text: profileButton[index],
-                                    fontsize: 15,
-                                    fontcolor: _selectedIndex == index
-                                        ? Colors.white
-                                        : Color(0xFF2C3E50)),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: GestureDetector(
+                              onTap: () {
+                                _onSelected(index);
+                              },
+                              child: Container(
+                                height: height*0.06,
+                                //width: height*0.315,
+                                decoration: BoxDecoration(
+                                    color: _selectedIndex == index
+                                        ? Color(0xFF00AEEF)
+                                        : Color(0xFFF8F7F7),
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Center(
+                                  child: VariableText(
+                                      text: getTranslated(context, profileButton[index]),
+                                      fontsize: 15,
+                                      fontcolor: _selectedIndex == index
+                                          ? Colors.white
+                                          : Color(0xFF2C3E50)),
+                                ),
                               ),
                             ),
                           ),
@@ -255,7 +253,7 @@ Widget ProfileScreen() {
                                     ),],
                                 ),
                               ),
-                              SizedBox(width: height*0.52,),
+                              Spacer(),
                               Container(
                                 height: height*0.04,
                                 width: width*0.16,
@@ -326,7 +324,7 @@ Widget ProfileScreen() {
                                     SizedBox(width: height*0.04,),
                                     Image.asset("lib/assets/icons/comment.png",scale: 2.5,),
                                     SizedBox(width: height*0.015,),
-                                    VariableText(text: "32 Comments",
+                                    VariableText(text: "32 Comment",
                                       fontFamily: 'sftr',
                                       fontsize: height*0.015,
                                       fontcolor: Color(0xff2B3E4F),),
@@ -345,7 +343,8 @@ Widget ProfileScreen() {
                       Padding(
                         padding:  EdgeInsets.symmetric(horizontal:height*0.04),
 
-                        child: Container(
+                        child:
+                        Container(
                           height: height*0.10,
                           width: height*0.95,
                           decoration: BoxDecoration(
@@ -364,21 +363,20 @@ Widget ProfileScreen() {
                                 backgroundColor: Colors.red,),
                               SizedBox(width: height*0.01,),
 
-                              Stack(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
-                                    height: height*0.06,
-                                    width: height*0.801,
-                                    decoration:  BoxDecoration(
-                                      color: Color(0xffF0F5FC),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(height*0.02) //                 <--- border radius here
-                                      ),
-                                    ),
-                                    child:
-                                    Padding(
-                                      padding:  EdgeInsets.all(height*0.002),
+                              Container(
+                                padding: EdgeInsets.only(left: 10, bottom: 10, top: 10,right: 10),
+                                height: height*0.06,
+                                width: height*0.801,
+                                decoration:  BoxDecoration(
+                                  color: Color(0xffF0F5FC),
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(height*0.02) //                 <--- border radius here
+                                  ),
+                                ),
+                                child:
+                                Row(
+                                  children: [
+                                    Flexible(
                                       child: TextField(
                                         style:  TextStyle(color: Color(0xff2B3E4F),
                                             fontSize: height*0.015,fontFamily: 'sftr'),
@@ -391,14 +389,12 @@ Widget ProfileScreen() {
                                             border: InputBorder.none),
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding:  EdgeInsets.only(top: height*0.016,left: height*0.738),
-                                    child: Image.asset("lib/assets/icons/cameraicon.png",scale: height*0.005,),
-                                  )
-
-                                ],
+                                    Spacer(),
+                                    Image.asset("lib/assets/icons/cameraicon.png",scale: height*0.0035,),
+                                  ],
+                                ),
                               ),
+
                             ],
                           ),
 
@@ -463,7 +459,7 @@ Widget ProfileScreen() {
                               fontsize: height*0.022,
                               fontcolor: Color(0xff00AEEF),),
                             SizedBox(height: height*0.004,),
-                            VariableText(text: "Following",
+                            VariableText(text: getTranslated(context, "Following") ,
                               fontsize: height*0.016,
                               fontcolor: Color(0x6c3C3C43),
                               fontFamily: 'sftr',),
@@ -499,7 +495,7 @@ Widget ProfileScreen() {
                               fontsize: height*0.022,
                               fontcolor: Color(0xff00AEEF),),
                             SizedBox(height: height*0.004,),
-                            VariableText(text: "Followers",
+                            VariableText(text: getTranslated(context, "Followers"),
                               fontsize: height*0.016,
                               fontcolor: Color(0x6c3C3C43),
                               fontFamily: 'sftr',),
@@ -533,7 +529,7 @@ Widget ProfileScreen() {
                           fontFamily: 'sftsb',
                           fontsize: height*0.022,
                           fontcolor: Color(0xff2B3E4F),),
-                        VariableText(text: "Point",
+                        VariableText(text: getTranslated(context, "Point"),
                           fontsize: height*0.016,
                           fontcolor: Color(0x6c3C3C43),
                           fontFamily: 'sftr',),
@@ -563,37 +559,33 @@ Widget ProfileScreen() {
                 Container(
                   child: Row(
                     children: List.generate(profileButton.length, (index) =>
-                         GestureDetector(
+                         Expanded(
+                           child: Padding(
+                             padding: EdgeInsets.symmetric(horizontal: 5),
+                             child: GestureDetector(
                         onTap: () {
                   _onSelected(index);
                   },
                     child: Container(
+                      height: height*0.06,
+                      //width: width*0.295,
                       decoration: BoxDecoration(
-                          color: Color(0xFFF8F7F7),
-                          borderRadius:
-                        BorderRadius.circular(15),
-                        /* index == 0 ? BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15)):
-                          BorderRadius.only(topRight: Radius.circular(15), bottomRight: Radius.circular(15))*/
-                      ),
-                      child: Container(
-                        height: height*0.06,
-                        width: width*0.295,
-                        decoration: BoxDecoration(
-                            color: _selectedIndex == index
-                                ? Color(0xFF00AEEF)
-                                : Color(0xFFF8F7F7),
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Center(
-                          child: VariableText(
-                              text: profileButton[index],
-                              fontsize: 15,
-                              fontcolor: _selectedIndex == index
-                                  ? Colors.white
-                                  : Color(0xFF2C3E50)),
-                        ),
+                              color: _selectedIndex == index
+                                  ? Color(0xFF00AEEF)
+                                  : Color(0xFFF8F7F7),
+                              borderRadius: BorderRadius.circular(15)),
+                      child: Center(
+                        child: VariableText(
+                                text: getTranslated(context, profileButton[index]),
+                                fontsize: 15,
+                                fontcolor: _selectedIndex == index
+                                    ? Colors.white
+                                    : Color(0xFF2C3E50)),
                       ),
                     ),
-                  ),),
+                  ),
+                           ),
+                         ),),
                   ),
                 ),
                 SizedBox(height: height*0.02),
@@ -643,7 +635,8 @@ Widget ProfileScreen() {
                                   ),],
                               ),
                             ),
-                              SizedBox(width: height*0.10,),
+                              //SizedBox(width: height*0.10,),
+                              Spacer(),
                               Container(
                                 height: height*0.04,
                                 width: width*0.16,
@@ -714,7 +707,7 @@ Widget ProfileScreen() {
                                     SizedBox(width: height*0.04,),
                                     Image.asset("lib/assets/icons/comment.png",scale: 2.5,),
                                     SizedBox(width: height*0.015,),
-                                    VariableText(text: "32 Comments",
+                                    VariableText(text: "32 Comment",
                                       fontFamily: 'sftr',
                                       fontsize: height*0.015,
                                       fontcolor: Color(0xff2B3E4F),),
@@ -749,8 +742,40 @@ Widget ProfileScreen() {
                           AssetImage("lib/assets/icons/personicon.png"),
                           backgroundColor: Colors.red,),
                       SizedBox(width: height*0.01,),
+                         Container(
+                           padding: EdgeInsets.only(left: 10, bottom: 10, top: 10,right: 10),
+                           height: height*0.06,
+                           width: width*0.72,
+                           decoration:  BoxDecoration(
+                           color: Color(0xffF0F5FC),
+                           borderRadius: BorderRadius.all(
+                               Radius.circular(height*0.02) //                 <--- border radius here
+                           ),
+                         ),
+                           child:
+                           Row(
+                             children: [
+                               Flexible(
+                                 child: TextField(
+                                   style:  TextStyle(color: Color(0xff2B3E4F),
+                                       fontSize: height*0.015,fontFamily: 'sftr'),
 
-                      Stack(
+                                   decoration: InputDecoration(
+                                       hintText: "Write A Comment",
+                                       hintStyle: TextStyle(color: Color(0xfc3C3C43),
+                                       fontSize: height*0.015,fontFamily: 'sftr'),
+
+                                       border: InputBorder.none),
+                                 ),
+                               ),
+                               Image.asset("lib/assets/icons/cameraicon.png",scale: height*0.0035,),
+                             ],
+                           ),
+                         ),
+
+                             
+
+                   /*   Stack(
                         children: [
                           Container(
                             padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
@@ -778,13 +803,14 @@ Widget ProfileScreen() {
                               ),
                             ),
                           ),
-                          Padding(
+
+                               Padding(
                             padding:  EdgeInsets.only(top: height*0.016,left: height*0.298),
-                            child: Image.asset("lib/assets/icons/cameraicon.png",scale: height*0.005,),
+                            child: Image.asset("lib/assets/icons/cameraicon.png",scale: height*0.0035,),
                           )
 
                         ],
-                      ),
+                      ),*/
                     ],
                   ),
 

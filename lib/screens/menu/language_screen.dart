@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:petzola/common/commons.dart';
 import 'package:petzola/common/common_z.dart';
+import 'package:petzola/common/global_variables.dart';
 import 'package:petzola/common/style.dart';
+import 'package:petzola/localization/Language.dart';
+import 'package:petzola/localization/language_constants.dart';
+import 'package:petzola/screens/home/home_page.dart';
 import 'package:petzola/screens/splash_screen.dart';
 class LanguageScreen extends StatefulWidget {
 
@@ -29,6 +33,16 @@ class _LanguageScreenState extends State<LanguageScreen> {
     });
   }
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(currLang == 'ar'){
+      selectlanguage = 0;
+    }else{
+      selectlanguage = 1;
+    }
+  }
+  @override
   Widget build(BuildContext context) {
     return LanguageScreen();
   }
@@ -42,7 +56,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
         return Scaffold(
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(kToolbarHeight),
-            child: CustomMenuAppBar(size: width,title: "Language",),
+            child: CustomMenuAppBar(size: width,title: getTranslated(context, "Language")),
           ),
           backgroundColor: themeColor2,
           body: SingleChildScrollView(
@@ -107,10 +121,18 @@ class _LanguageScreenState extends State<LanguageScreen> {
                         buttonFontSize:width*0.025,
                         buttonColor:themeColor1,
                         buttonTextColor:themeColor2,
-                        buttonText: "Save change language",
+                        buttonText: getTranslated(context, "Save Language"),
                         buttonFontFamily:'sfdm',
                         buttonOnTap:(){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>SplashScreen()));
+                          if(selectlanguage == 0){
+                            Language l1 = new Language(2, 'arabic', 'ar');
+                            _changeLanguage(l1);
+                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>SplashScreen()), (route) => route.isCurrent);
+                          }else{
+                            Language l1 = new Language(2, 'English', 'en');
+                            _changeLanguage(l1);
+                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>SplashScreen()), (route) => route.isCurrent);
+                          }
                         }
                     ),
                   )
@@ -192,10 +214,22 @@ class _LanguageScreenState extends State<LanguageScreen> {
                       buttonFontSize:height*0.025,
                       buttonColor:themeColor1,
                       buttonTextColor:themeColor2,
-                      buttonText: "Save change language",
+                      buttonText: getTranslated(context, "Save Language"),
                       buttonFontFamily:'sfdm',
                       buttonOnTap:(){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SplashScreen()));
+
+                        if(selectlanguage == 0){
+                          Language l1 = new Language(2, 'arabic', 'ar');
+                          _changeLanguage(l1);
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>SplashScreen()), (route) => route.isCurrent);
+                        }else{
+                          Language l1 = new Language(2, 'English', 'en');
+                          _changeLanguage(l1);
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>SplashScreen()), (route) => route.isCurrent);
+                        }
+
+                        //print(countryList[selectlanguage]['name']);
+
                       }
                   ),
                 )
@@ -210,4 +244,10 @@ class _LanguageScreenState extends State<LanguageScreen> {
         );
     }
   }
+
+  void _changeLanguage(Language language) async {
+    Locale _locale = await setLocale(language.languageCode);
+    HomePage.setLocale(context, _locale);
+  }
+
 }

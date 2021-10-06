@@ -11,6 +11,7 @@ class ForgetScreen extends StatefulWidget {
 
 class _ForgetScreenState extends State<ForgetScreen> {
 
+  TextEditingController _emailController = new TextEditingController();
   bool viewPassword=false;
   @override
   Widget build(BuildContext context) {
@@ -63,10 +64,13 @@ class _ForgetScreenState extends State<ForgetScreen> {
                     heights: height*0.07,
                     widths: height*0.90,
                     hinttext: "Your Email",
-
+                    cont: _emailController,
                     fontsize: height*0.019,
-                    imageIconPath: "lib/assets/icons/changeorientation.png",
+                    imageIconPath: "lib/assets/icons/cross_clear.png",
                     keytype: TextInputType.emailAddress,
+                    onTap: (){
+                      _emailController.clear();
+                    },
                   ),
                   SizedBox(height: height*0.05,),
 
@@ -139,10 +143,13 @@ class _ForgetScreenState extends State<ForgetScreen> {
                     heights: height*0.07,
                     widths: width*0.90,
                     hinttext: "Your Email",
-
                     fontsize: height*0.019,
-                    imageIconPath: "lib/assets/icons/changeorientation.png",
+                    cont: _emailController,
+                    imageIconPath: "lib/assets/icons/cross_clear.png",
                     keytype: TextInputType.emailAddress,
+                    onTap: (){
+                      _emailController.clear();
+                    },
                   ),
                   SizedBox(height: height*0.05,),
 

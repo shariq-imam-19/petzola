@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:petzola/common/commons.dart';
 import 'package:petzola/common/common_z.dart';
 import 'package:petzola/common/style.dart';
+import 'package:petzola/localization/language_constants.dart';
 class InviteFriendScreen extends StatefulWidget {
 
   @override
@@ -48,23 +49,23 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                     ),
                   ),
                   SizedBox(height: height*0.05,),
-                  VariableText(text: "Invite Your Friends",
+                  VariableText(text: getTranslated(context, "Invite Your Friends") ,
                     fontsize: height*0.028,
                     fontcolor: Color(0xff2B3E4F),
 
                     fontFamily: 'sftr',),
-                  VariableText(text: "Reward Youself",
+                  VariableText(text: getTranslated(context, "Reward Yourself") ,
                     fontsize: height*0.028,
                     fontcolor: Color(0xff2B3E4F),
 
                     fontFamily: 'sftr',),
                   SizedBox(height: height*0.02,),
-                  VariableText(text: "For Every Friends Join. You",
+                  VariableText(text: getTranslated(context, "For Every Friend Join,") ,
                     fontsize: height*0.016,
                     fontcolor: Color(0x6c3C3C43),
                     fontFamily: 'sftr',),
                   SizedBox(height: height*0.0055,),
-                  VariableText(text: "Both Get 1200 Point",
+                  VariableText(text: getTranslated(context, "You Both Get 1200 Point") ,
                     fontsize: height*0.016,
                     fontcolor: Color(0x6c3C3C43),
                     fontFamily: 'sftr',),
@@ -72,7 +73,7 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                   RectangluartextFeild(
                     heights: height*0.07,
                     widths: height*0.95,
-                    hinttext: "Email",
+                    hinttext: getTranslated(context, "Email") ,
 
                     fontsize: height*0.019,
                     keytype: TextInputType.emailAddress,
@@ -83,7 +84,7 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                     fontcolor: Color(0xff2B3E4F),
                     fontFamily: 'sftsb',),
                   SizedBox(height: height*0.0055,),
-                  VariableText(text: "Your invite code",
+                  VariableText(text: getTranslated(context, "Your Invite Code") ,
                     fontsize: height*0.016,
                     fontcolor: Color(0x6c3C3C43),
                     fontFamily: 'sftr',),
@@ -104,7 +105,7 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                         buttonFontSize:height*0.025,
                         buttonColor:themeColor1,
                         buttonTextColor:themeColor2,
-                        buttonText: "Send invite",
+                        buttonText: getTranslated(context, "Send Invite") ,
                         buttonFontFamily:'sfdm',
                         buttonOnTap:(){
                           Navigator.pop(context);
@@ -147,23 +148,23 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                   ),
                 ),
                 SizedBox(height: height*0.05,),
-                VariableText(text: "Invite Your Friends",
+                VariableText(text: getTranslated(context, "Invite Your Friends") ,
                   fontsize: height*0.028,
                   fontcolor: Color(0xff2B3E4F),
 
                   fontFamily: 'sftr',),
-                VariableText(text: "Reward Youself",
+                VariableText(text: getTranslated(context, "Reward Yourself") ,
                   fontsize: height*0.028,
                   fontcolor: Color(0xff2B3E4F),
 
                   fontFamily: 'sftr',),
                 SizedBox(height: height*0.02,),
-                VariableText(text: "For Every Friends Join. You",
+                VariableText(text: getTranslated(context, "For Every Friend Join,"),
                   fontsize: height*0.016,
                   fontcolor: Color(0x6c3C3C43),
                  fontFamily: 'sftr',),
                 SizedBox(height: height*0.0055,),
-                VariableText(text: "Both Get 1200 Point",
+                VariableText(text: getTranslated(context, "You Both Get 1200 Point"),
                   fontsize: height*0.016,
                   fontcolor: Color(0x6c3C3C43),
                   fontFamily: 'sftr',),
@@ -171,7 +172,7 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                 RectangluartextFeild(
                   heights: height*0.07,
                   widths: width*0.90,
-                  hinttext: "Email",
+                  hinttext: getTranslated(context, "Email") ,
 
                   fontsize: height*0.019,
                   keytype: TextInputType.emailAddress,
@@ -182,7 +183,7 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                   fontcolor: Color(0xff2B3E4F),
                   fontFamily: 'sftsb',),
                 SizedBox(height: height*0.0055,),
-                VariableText(text: "Your invite code",
+                VariableText(text: getTranslated(context, "Your Invite Code"),
                   fontsize: height*0.016,
                   fontcolor: Color(0x6c3C3C43),
                   fontFamily: 'sftr',),
@@ -197,7 +198,7 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                       buttonFontSize:height*0.025,
                       buttonColor:themeColor1,
                       buttonTextColor:themeColor2,
-                      buttonText: "Send invite",
+                      buttonText: getTranslated(context, "Send Invite") ,
                       buttonFontFamily:'sfdm',
                       buttonOnTap:(){
                         Navigator.pop(context);

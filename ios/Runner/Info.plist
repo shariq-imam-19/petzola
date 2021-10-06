@@ -12,12 +12,33 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>petzola</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+     <string>This application requires location services to work</string>
+     <key>NSLocationAlwaysUsageDescription</key>
+     <string>This application requires location services to work</string>
+     <key>NSAppTransportSecurity</key>
+     <dict>
+        <key>NSAllowsLocalNetworking</key>
+        <true/>
+     </dict>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>This application requires to upload images as profile picture</string>
+    <key>NSCameraUsageDescription</key>
+    <string>This application requires to upload images as profile picture</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This application requires to upload images as profile picture</string>
+    <key>NSAppleMusicUsageDescription</key>
+    <string>This app requires access to play sound.</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>Calender is required to see scheduled bookings.</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>io.flutter.embedded_views_preview</key>
+    <true/>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>

@@ -5,14 +5,18 @@ import 'package:petzola/common/commons.dart';
 import 'package:petzola/common/commons.dart';
 import 'package:petzola/common/common_z.dart';
 import 'package:petzola/common/style.dart';
+import 'package:petzola/screens/appointment/appoinment_details.dart';
 
 class ScheduleScreen extends StatefulWidget {
+  var newAppointment;
+  ScheduleScreen({this.newAppointment});
 
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
 }
 
-class _ScheduleScreenState extends State<ScheduleScreen> {
+class _ScheduleScreenState extends State<
+    ScheduleScreen> {
 
   Map<String, dynamic> appointments = {'appointments': [{
     'January': [
@@ -53,6 +57,17 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       ]
     }
   ]};
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(widget.newAppointment != null){
+      Navigator.push(context, MaterialPageRoute(builder: (_)=>AppointmentDetailsScreen(appoinmnetDetailsdata: widget.newAppointment,)));
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -65,6 +80,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   AppointmentsAll(appointmentList: appointments['appointments'],
                       cWidth: size.width,
                       cHeight: size.width),
+                  SizedBox(height: 70,),
                 ]
             )
         );
@@ -76,6 +92,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   AppointmentsAll(appointmentList: appointments['appointments'],
                       cWidth: size.width,
                       cHeight: size.height),
+                  SizedBox(height: 90,),
                 ]
             )
         );

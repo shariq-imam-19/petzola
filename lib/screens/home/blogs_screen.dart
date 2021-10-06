@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petzola/common/common_z.dart';
 import 'package:petzola/common/commons.dart';
+import 'package:petzola/common/global_variables.dart';
 import 'package:petzola/common/style.dart';
+import 'package:petzola/localization/language_constants.dart';
 import 'package:petzola/screens/blog/add_blog_screen.dart';
 
 import 'package:petzola/screens/blog/view_profile_screen.dart';
@@ -34,11 +36,10 @@ class _BlogsScreenState extends State<BlogsScreen> {
                 children: [
                   SizedBox(height: height*0.05,),
                   RectangluartextFeildWithStartIcon(
-                    heights: height*0.07,
+                    heights: height*0.06,
                     widths:height*0.95,
-
-                    fontsize:height*0.019,
-                    hinttext: "Search",
+                    fontsize:height*0.017,
+                    hinttext: getTranslated(context, "Search"),
                     imageIconPath: "lib/assets/icons/searchIcon.png",
                     keytype: TextInputType.text,
                   ),
@@ -51,7 +52,10 @@ class _BlogsScreenState extends State<BlogsScreen> {
                       itemBuilder: (context,i){
                         return  Column(
                           children: [
-                            CustomBlogContainer(height: height,width: height,orientation: landscapeOrientation,onTap:(){
+                            CustomBlogContainer(height: height,width: height,orientation: landscapeOrientation,
+                 onTapComment: (){
+                 CommentBottomSheet(height,width,context);},
+                                onTap:(){
                               Navigator.push(context, MaterialPageRoute(builder: (_)=>ViewProfileScreen()));
                             }),
                             SizedBox(height: height*0.03,),],
@@ -64,13 +68,19 @@ class _BlogsScreenState extends State<BlogsScreen> {
               ),
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            elevation: 0,
-            backgroundColor: themeColor1,
-            child: Icon(Icons.add),
-            onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (_)=>AddBlogScreen()));
-            },
+          floatingActionButton: Container(
+            margin: EdgeInsets.only(bottom: 70),
+            child: Align(
+              alignment: currLang == 'ar' ?Alignment.bottomLeft : Alignment.bottomRight,
+              child: FloatingActionButton(
+                elevation: 1,
+                backgroundColor: themeColor1,
+                child: Icon(Icons.add),
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=>AddBlogScreen()));
+                },
+              ),
+            ),
           ),
         );
       case Orientation.portrait:
@@ -89,11 +99,10 @@ class _BlogsScreenState extends State<BlogsScreen> {
                 children: [
                   SizedBox(height: height*0.05,),
                   RectangluartextFeildWithStartIcon(
-                    heights: height*0.07,
+                    heights: height*0.06,
                     widths:width*0.90,
-
                     fontsize:height*0.019,
-                    hinttext: "Search",
+                    hinttext: getTranslated(context, "Search"),
                     imageIconPath: "lib/assets/icons/searchIcon.png",
                     keytype: TextInputType.text,
                   ),
@@ -122,13 +131,19 @@ class _BlogsScreenState extends State<BlogsScreen> {
               ),
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            elevation: 0,
-            backgroundColor: themeColor1,
-            child: Icon(Icons.add),
-            onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (_)=>AddBlogScreen()));
-            },
+          floatingActionButton: Container(
+            margin: EdgeInsets.only(bottom: 80),
+            child: Align(
+              alignment: currLang == 'ar' ?Alignment.bottomLeft : Alignment.bottomRight,
+              child: FloatingActionButton(
+                elevation: 1,
+                backgroundColor: themeColor1,
+                child: Icon(Icons.add),
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=>AddBlogScreen()));
+                },
+              ),
+            ),
           ),
         );
 

@@ -7,6 +7,7 @@ import 'package:petzola/common/commons.dart';
 import 'package:petzola/common/common_z.dart';
 
 import 'package:petzola/common/style.dart';
+import 'package:petzola/localization/language_constants.dart';
 import 'package:petzola/screens/onboarding_screens/onboarding_screen2.dart';
 
 class PetsScreen extends StatefulWidget {
@@ -57,7 +58,7 @@ class _PetsScreenState extends State<PetsScreen> {
         return SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: size.height * 0.10),
+              SizedBox(height: size.height * 0.05),
               Container(
                 height: size.height * 0.35,
                 width: size.width,
@@ -66,13 +67,20 @@ class _PetsScreenState extends State<PetsScreen> {
                     color: Color(0xFFF0F5FC),
                     borderRadius: BorderRadius.circular(10)
                 ),
-                child: Align(
-                    alignment: Alignment.center,
-                    child: VariableText(text: 'Your Pets Need Your Care And Attention To Keep\nThem Healthy, Happy, And Safe.',
-                        fontsize: 13, textAlign: TextAlign.center,
-                        fontcolor: Color(0xFF2B3E4F))),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    VariableText(text: getTranslated(context, 'Your Pets Need Your Care And Attention To Keep'),
+                        fontsize: size.width * 0.016, textAlign: TextAlign.center,
+                        fontcolor: Color(0xFF2B3E4F)),
+                    SizedBox(height: 5),
+                    VariableText(text: getTranslated(context, 'Them Healthy, Happy, And Safe.'),
+                        fontsize: size.width * 0.016, textAlign: TextAlign.center,
+                        fontcolor: Color(0xFF2B3E4F)),
+                  ],
+                ),
               ),
-              SizedBox(height: 40,),
+              SizedBox(height: 30,),
               Row(
                 children: [
                   Padding(
@@ -103,7 +111,7 @@ class _PetsScreenState extends State<PetsScreen> {
                             color: Color(0xFFF8F9FA), //Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Center(child: VariableText(text: 'Add New', fontsize: 15, fontcolor: Color(0x603C3C43)),),
+                          child: Center(child: VariableText(text: getTranslated(context, 'Add New'), fontsize: 15, fontcolor: Color(0x603C3C43)),),
                         ),
                       ),
                     ),
@@ -113,11 +121,10 @@ class _PetsScreenState extends State<PetsScreen> {
               Container(
                   padding: EdgeInsets.only(top: 12),
                   alignment: Alignment.topLeft,
-                  height: size.width,
+                  height: size.width*0.80,
                   width: size.width,
                   child: MyPetsSlider(myPets: myPets['pets'], cHeight: size.height, cWidth: size.width,)),
-
-
+              SizedBox(height: 0,),
             ],
           ),
         );
@@ -134,28 +141,33 @@ class _PetsScreenState extends State<PetsScreen> {
                     color: Color(0xFFF0F5FC),
                   borderRadius: BorderRadius.circular(10)
                 ),
-                child: Align(
-                    alignment: Alignment.center,
-                    child: VariableText(text: 'Your Pets Need Your Care And Attention To Keep\nThem Healthy, Happy, And Safe.',
-                        fontsize: 13, textAlign: TextAlign.center,
-                        fontcolor: Color(0xFF2B3E4F))),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    VariableText(text: getTranslated(context, 'Your Pets Need Your Care And Attention To Keep'),
+                        fontsize: size.height * 0.016, textAlign: TextAlign.center,
+                        fontcolor: Color(0xFF2B3E4F)),
+                    SizedBox(height: 5),
+                    VariableText(text: getTranslated(context, 'Them Healthy, Happy, And Safe.'),
+                        fontsize: size.height * 0.016, textAlign: TextAlign.center,
+                        fontcolor: Color(0xFF2B3E4F)),
+                  ],
+                ),
               ),
-
-              SizedBox(height: 40,),
+              SizedBox(height: 30,),
               Row(
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: VariableText(text: 'My Pets', fontsize: 17, fontcolor: Color(0xFF2B3E4F),),
+                    child: VariableText(text: getTranslated(context, 'My Pets'), fontsize: 17, fontcolor: Color(0xFF2B3E4F),),
                   ),
                 ],
               ),
               InkWell(
-            onTap: (){
-
-          Navigator.push(context, MaterialPageRoute(builder: (_)=>OnboardingScreen2()));},
-
-          child: Row(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=>OnboardingScreen2()));
+                  },
+                    child: Row(
                   children: [
                     Padding(
                       padding: EdgeInsets.only(left: 16, top: 10),
@@ -172,22 +184,26 @@ class _PetsScreenState extends State<PetsScreen> {
                               color: Color(0xFFF8F9FA), //Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Center(child: VariableText(text: 'Add New', fontsize: 15, fontcolor: Color(0x603C3C43)),),
+                          child: Center(
+                            child: VariableText(
+                                text: getTranslated(context, 'Add New'),
+                                fontsize: 15, fontcolor: Color(0x603C3C43)),),
                         ),
                       ),
                     ),
+
                   ],
                 ),
               ),
               Container(
-
                   padding: EdgeInsets.only(top: 12),
-                  alignment: Alignment.topLeft,
-                  height: size.height * 0.60,
+                  //color: Colors.red,
+                  //alignment: Alignment.topLeft,
+                  height: size.height * 0.68,
                   width: size.width,
-                  child: MyPetsSlider(myPets: myPets['pets'], cHeight: size.height, cWidth: size.width,)),
-
-
+                  child: MyPetsSlider(myPets: myPets['pets'], cHeight: size.height, cWidth: size.width,)
+              ),
+              SizedBox(height: 85,),
             ],
           ),
         );

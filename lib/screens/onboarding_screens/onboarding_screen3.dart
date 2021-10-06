@@ -14,18 +14,26 @@ class _OnboardingScreen3State extends State<OnboardingScreen3>   {
   int genderSelected=0;
   bool landscapOrientation=true;
   List<String> gender=["Male","Female"];
+
   TextEditingController dateOfBirth=new TextEditingController();
   String showBreedType;
 
   List<Map<String, dynamic>> breedType = [
-    {"name": "Terry Alvarado",},
-    {"name": "Carmen Marshall",},
-    {"name": "Steve Wells",},
-    {"name": "Dennis Lynch",},
-    {"name": "Richard Reyes",},
-    {"name": "Sara Mccoy",},
+    {"name": "Terry Alvarado", },
+    {"name": "Carmen Marshall", },
+    {"name": "Steve Wells",    },
+    {"name": "Dennis Lynch",   },
+    {"name": "Richard Reyes" ,  },
+    {"name": "Sara Mccoy",     },
+    {"name": "Terry Alvarado", },
+    {"name": "Carmen Marshall", },
+    {"name": "Steve Wells",    },
+    {"name": "Dennis Lynch",   },
+    {"name": "Richard Reyes" ,  },
+    {"name": "Sara Mccoy",     },
 
   ];
+
 
   _onselected(int i){
     setState(() {
@@ -38,7 +46,6 @@ class _OnboardingScreen3State extends State<OnboardingScreen3>   {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
@@ -49,11 +56,7 @@ class _OnboardingScreen3State extends State<OnboardingScreen3>   {
         dateOfBirth.text=tempdate;
       });
   }
-  @override
-  initState() {
-    super.initState();
 
-  }
 
   @override
   void dispose() {
@@ -79,8 +82,9 @@ class _OnboardingScreen3State extends State<OnboardingScreen3>   {
               padding:  EdgeInsets.all(width*0.01),
               child: Column(
                 children: [
+                  SizedBox(height: width * 0.02,),
                   ChangeOrientationIcon(ontap: (){    Navigator.of(context).pop();},size: width,),
-                  SizedBox(height: width*0.08,),
+                  SizedBox(height: width*0.06,),
                   Center(
                     child:
 
@@ -195,7 +199,7 @@ class _OnboardingScreen3State extends State<OnboardingScreen3>   {
                     imageIconPath: "lib/assets/icons/dropdownicon.png",
                     keytype: TextInputType.text,
                     onTap: (){
-                      selectBreedType(width,height);
+                      selectBreedTypeL(width,height);
 
                     },
                   ),
@@ -244,8 +248,9 @@ class _OnboardingScreen3State extends State<OnboardingScreen3>   {
               padding:  EdgeInsets.all(height*0.01),
               child: Column(
                 children: [
+                  SizedBox(height: height * 0.02,),
                   ChangeOrientationIcon(ontap: (){    Navigator.of(context).pop();},size: height,),
-                  SizedBox(height: height*0.08,),
+                  SizedBox(height: height*0.06,),
                   Center(
                     child:
 
@@ -418,12 +423,38 @@ class _OnboardingScreen3State extends State<OnboardingScreen3>   {
           builder: (context, scrollController) {
             return SearchBreed(height:height,width:width,landscapOrientation: landscapOrientation,
               onselected: (temp){
-              Navigator.of(context).pop();
+                Navigator.of(context).pop();
               setState(() {
                 showBreedType=temp;
               });
 
             },);
+            //whatever you're returning, does not have to be a Container
+          }
+
+      );
+    });
+  }
+  void selectBreedTypeL(double height,double width){
+    showModalBottomSheet(
+        isScrollControlled: true,
+        //transitionAnimationController: controller,
+        backgroundColor: Colors.transparent,
+        context: context, builder: (context) {
+      return DraggableScrollableSheet(
+          initialChildSize: 0.90, //set this as you want
+          maxChildSize:0.90, //set this as you want
+          minChildSize:0.70, //set this as you want
+
+          builder: (context, scrollController) {
+            return SearchBreed(height:height,width:width,landscapOrientation: landscapOrientation,
+              onselected: (temp){
+                Navigator.of(context).pop();
+                setState(() {
+                  showBreedType=temp;
+                });
+
+              },);
             //whatever you're returning, does not have to be a Container
           }
 
@@ -449,10 +480,39 @@ class _SearchBreedState extends State<SearchBreed> {
     {"name": "Dennis Lynch",},
     {"name": "Richard Reyes",},
     {"name": "Sara Mccoy",},
+    {"name": "Terry Alvarado",},
+    {"name": "Carmen Marshall",},
+    {"name": "Steve Wells",},
+    {"name": "Dennis Lynch",},
+    {"name": "Richard Reyes",},
+    {"name": "Sara Mccoy",},
 
   ];
   int defaultindex=-1;
   String selectedBreedType;
+  final TextEditingController _controller = new TextEditingController();
+  List<dynamic> _list;
+  bool _isSearching;
+  List<dynamic>  searchresult = new List();
+  bool startsearching;
+  @override
+  void initState() {
+    super.initState();
+    startsearching=false;
+    _isSearching = false;
+    values();
+  }
+  void values() {
+    _list = List();
+    _list.add(["Terry Alvarado"]);
+    _list.add(["Carmen Marshall"]);
+    _list.add(["Steve Wells",   ]);
+    _list.add(["Dennis Lynch",   ]);
+    _list.add(["Richard Reyes" ,  ]);
+    _list.add(["Sara Mccoy",     ]);
+
+
+  }
   @override
   Widget build(BuildContext context) {
     return  Container(
@@ -463,42 +523,80 @@ class _SearchBreedState extends State<SearchBreed> {
             topRight: Radius.circular(widget.height*0.05)
         ),
       ),
-      child: SingleChildScrollView(
-
-        child: Column(
-          children: [
-            SizedBox(height: widget.height*0.03,),
-            VariableText(text: "Select Breed",
-              fontsize: widget.height*0.028,
-              fontcolor: Color(0xff2B3E4F),
-
-              fontFamily: 'sfdr',),
-            SizedBox(height: widget.height*0.03,),
-            Padding(padding:  const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            child: RectangluartextFeildWithStartIcon(
-              heights: widget.height*0.07,
-              fontsize: widget.height*0.019,
-              hinttext: "Search",
-              imageIconPath: "lib/assets/icons/searchIcon.png",
-              keytype: TextInputType.text,
-            ),
+          SizedBox(height: widget.height*0.03,),
+          VariableText(text: "Select Breed",
+            fontsize: widget.height*0.028,
+            fontcolor: Color(0xff2B3E4F),
+
+            fontFamily: 'sfdr',),
+          SizedBox(height: widget.height*0.03,),
+          Padding(padding:  const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+      children: [
+        Expanded(
+          child: RectangluartextFeildWithStartIcon(
+            heights: widget.height*0.07,
+            fontsize: widget.height*0.019,
+            hinttext: "Search",
+            imageIconPath: "lib/assets/icons/searchIcon.png",
+            keytype: TextInputType.text,
+            onChanged: searchOperation,
           ),
-        ],
+        ),
+      ],
       ),),
-            SizedBox(height: widget.height*0.02,),
-            ListView.builder(
+          SizedBox(height: widget.height*0.02,),
+          Expanded(
+            child: Container(
+              //color: Colors.red,
+              child:      searchresult.length != 0 || _controller.text.isNotEmpty
+                  ? new ListView.builder(
+                shrinkWrap: true,
+                itemCount: searchresult.length,
+                itemBuilder: (BuildContext context, int index) {
+
+                  return new   InkWell(
+
+                    onTap: (){
+                      setState(() {
+                        defaultindex=index;
+                        selectedBreedType=searchresult[defaultindex][0];
+                      });
+                      print("selected type"+selectedBreedType);
+
+                    },
+                    child:  Container(
+                      color: defaultindex==index?themeColor1:themeColor2,
+                      child: ListTile(
+
+                        title:  Padding(
+                          padding:  EdgeInsets.only(left:widget.height*0.02),
+                          child: VariableText(
+                            text:
+                            searchresult[index][0],
+                            fontsize: widget.height*0.017,
+                            fontcolor:defaultindex==index?themeColor2:Color(0xff2B3E4F),
+                            weight: FontWeight.normal,
+                            fontFamily: 'sftr',),
+                        ),
+
+                      ),
+                    ),
+                  );
+                },
+              )
+                  :
+                ListView.builder(
                // controller: scrollController,
-                physics: NeverScrollableScrollPhysics(), ///
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 itemCount: breedType.length,
                 itemBuilder: (BuildContext context,int index){
                   return    InkWell(
                   onTap: (){
-                    print("ajajajajaj");
+
                   setState(() {
                   defaultindex=index;
                   selectedBreedType=breedType[defaultindex]['name'];
@@ -507,7 +605,6 @@ class _SearchBreedState extends State<SearchBreed> {
 
                   child: Container(
                     color: defaultindex==index?themeColor1:themeColor2,
-
                     child: ListTile(
 
                         title:  Padding(
@@ -526,40 +623,63 @@ class _SearchBreedState extends State<SearchBreed> {
                   );
 
                 }),
-
-
-
-
-
-        
-
-            Padding(
-              padding:  const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: CustomButton(
-                        buttonHeight:widget. height*0.06,
-                       
-                        buttonBorderRadius:8,
-                        buttonFontSize:widget.height*0.025,
-                        buttonColor:themeColor1,
-                        buttonTextColor:themeColor2,
-                        buttonText: "Select",
-                        buttonFontFamily:'sfdm',
-                        buttonOnTap:(){
-                          Navigator.pop(context); }
-                    ),
-                  ),
-                ],
-              ),
             ),
-            SizedBox(height: widget.width*0.07,),
+          ),
 
-          ],
-        ),
+
+
+
+
+
+      
+
+          Padding(
+            padding:  const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: CustomButton(
+                      buttonHeight:widget. height*0.06,
+                     
+                      buttonBorderRadius:8,
+                      buttonFontSize:widget.height*0.025,
+                      buttonColor:themeColor1,
+                      buttonTextColor:themeColor2,
+                      buttonText: "Select",
+                      buttonFontFamily:'sfdm',
+                      buttonOnTap:(){
+                        widget.onselected(
+                            selectedBreedType
+                        );
+
+                      }
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: widget.width*0.02,),
+
+        ],
       ),
     );
+  }
+  void searchOperation(String searchText) {
+
+
+    searchresult.clear();
+    if (_isSearching != null) {
+      for (int i = 0; i < _list.length; i++) {
+        String data = _list[i][0];
+        print("data "+data);
+        if (data.toLowerCase().contains(searchText.toLowerCase())) {
+          searchresult.addAll([_list[i]]);
+
+          setState(() {
+          });
+        }
+      }
+    }
   }
 }
 

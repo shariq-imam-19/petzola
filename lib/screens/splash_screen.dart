@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:petzola/common/style.dart';
 import 'package:nuts_activity_indicator/nuts_activity_indicator.dart';
+import 'package:petzola/localization/language_constants.dart';
+import 'package:petzola/screens/home/home_page.dart';
 
 import 'onboarding_screens/select_language_screen.dart';
 class SplashScreen extends StatefulWidget {
@@ -12,13 +14,15 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
   @override
   void initState() {
     super.initState();
     Timer(
         Duration(seconds: 2),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => SelectLanguageScreen())));
+            builder: (BuildContext context) => /*HomePage()*/SelectLanguageScreen()))
+    );
   }
   @override
   Widget build(BuildContext context) {

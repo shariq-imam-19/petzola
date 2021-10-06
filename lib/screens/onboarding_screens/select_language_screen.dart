@@ -6,6 +6,7 @@ import 'package:petzola/common/common_z.dart';
 import 'package:petzola/common/style.dart';
 import 'package:petzola/screens/login_registration/login_screen.dart';
 import 'package:petzola/screens/onboarding_screens/onboarding_screen1.dart';
+import 'package:petzola/screens/splash_screen.dart';
 class SelectLanguageScreen extends StatefulWidget {
 
   @override
@@ -206,8 +207,8 @@ class _SelectLanguageScreenState extends State<SelectLanguageScreen> {
                       buttonText: "Select",
                       buttonFontFamily:'sfdm',
                       buttonOnTap:(){
-                        //Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>OnboardingScreen1()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                        //Navigator.push(context, MaterialPageRoute(builder: (context)=>SplashScreen()));
                       }
                   ),
                 )

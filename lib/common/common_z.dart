@@ -2,11 +2,25 @@ import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petzola/common/commons.dart';
+import 'package:petzola/common/global_variables.dart';
 import 'package:petzola/common/style.dart';
+import 'package:petzola/localization/language_constants.dart';
+import 'package:petzola/models/reminder.dart';
+import 'package:petzola/my_pets/add_medical_lab_result.dart';
+import 'package:petzola/my_pets/add_reminder_screen.dart';
+import 'package:petzola/my_pets/edit_reminder_screen.dart';
 import 'package:petzola/my_pets/mypets_main.dart';
 import 'package:petzola/screens/appointment/appoinment_details.dart';
+import 'package:petzola/screens/appointment/appointmentrate_screen.dart';
+import 'package:petzola/screens/services/PetConsultationServiceScreen.dart';
 import 'package:petzola/screens/services/all_services.dart';
 import 'package:petzola/screens/onboarding_screens/onboarding_screen2.dart';
+import 'package:petzola/screens/services/payment_credit_card_screen.dart';
+import 'package:petzola/screens/services/select_service_screen.dart';
+import 'package:petzola/screens/services/vet_consultation_screen.dart';
+import 'package:intl/intl.dart';
+
+import 'package:translator/translator.dart';
 
 class VariableText extends StatelessWidget {
   final String text;
@@ -52,7 +66,7 @@ class VariableText extends StatelessWidget {
         fontSize: fontsize,
         //  fontSize: fontsize,
         fontFamily: fontFamily,
-        decorationThickness: 3.0,
+        decorationThickness: 2.0,
         decoration: underlined
             ? TextDecoration.underline
             : (linethrough ? TextDecoration.lineThrough : TextDecoration.none),
@@ -249,37 +263,37 @@ class TextFieldWithStartIcon extends StatelessWidget {
           height: heights,
           width: double.infinity,
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(width: widths * 0.04,),
               Container(
-                margin: EdgeInsets.only(top: heights * 0.08),
+                //color: Colors.red,
+                //margin: EdgeInsets.only(top: heights * 0.08),
                 child: ImageIcon(AssetImage(imageIconPath),size: 24),
               ),
+              SizedBox(width: widths * 0.02,),
               Expanded(
-                child: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: TextFormField(
-                    enabled: enable,
-                    style: TextStyle(
-                      fontSize:  fontsize,
-                      color: Color(0xff3C3C43,),
-                      fontFamily: 'sftr',
-                    ),
-                    onChanged: onChanged,
-                    controller: cont,
-                    keyboardType: keytype,
-                    decoration: InputDecoration(
-                      fillColor: Color(0xffF5F8FA),
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none, hintText: hinttext,
-                      hintStyle: TextStyle(
-                          fontSize: fontsize,
-                          fontFamily: 'sftr',
-                          color:hinttextColor),
-                    ),
+                child: TextFormField(
+                  enabled: enable,
+                  style: TextStyle(
+                    fontSize:  fontsize,
+                    color: Color(0xff3C3C43,),
+                    fontFamily: 'sftr',
+                  ),
+                  onChanged: onChanged,
+                  controller: cont,
+                  keyboardType: keytype,
+                  decoration: InputDecoration(
+                    fillColor: Color(0xffF5F8FA),
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none, hintText: hinttext,
+                    hintStyle: TextStyle(
+                        fontSize: fontsize,
+                        fontFamily: 'sftr',
+                        color:hinttextColor),
                   ),
                 ),
               ),
@@ -291,21 +305,192 @@ class TextFieldWithStartIcon extends StatelessWidget {
 }
 
 
-class HomeSliderSpecialOffer extends StatelessWidget {
+class HomeSliderSpecialOffer extends StatefulWidget {
+  List offers;
+  static var indexx = 0;
   var title;
   var subTitle;
   double cHeight;
   double cWidth;
+  Function onTap;
   HomeSliderSpecialOffer(
-      {this.title, this.subTitle, this.cHeight, this.cWidth});
+      {this.offers, this.title, this.subTitle, this.cHeight, this.cWidth,this.onTap});
+
+  @override
+  _HomeSliderSpecialOfferState createState() => _HomeSliderSpecialOfferState();
+}
+
+class _HomeSliderSpecialOfferState extends State<HomeSliderSpecialOffer> with SingleTickerProviderStateMixin {
+
+  AnimationController _controller;
+  Animation<Offset> _offsetFloat;
+
+  int offerCount = 1;
+
+  final translator = GoogleTranslator();
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    HomeSliderSpecialOffer.indexx = 1;
+    _controller = AnimationController(
+      vsync: this,
+      //  reverseDuration: Duration(seconds: 6),
+      duration: const Duration(milliseconds: 500),
+    );
+    _offsetFloat = Tween(begin: Offset(5.0, 0.0), end: Offset(0.0, 0.0))
+        .animate(CurvedAnimation(
+      curve: Curves.easeInOut,
+      parent: _controller,
+    ));
+
+    _offsetFloat.addListener(() {
+      setState(() {});
+    });
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    var size = MediaQuery.of(context).size;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: VariableText(
+                text: getTranslated(context, widget.title.toString()),
+                fontsize: 20,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: VariableText(
+                text: offerCount.toString()+ "/" + widget.offers.length.toString(),
+                fontsize: 13,
+                fontcolor: Color(0xFFF47920),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 7),
+          height: widget.cHeight,
+          //alignment: Alignment.center,
+          child: SlideTransition(
+            position: _offsetFloat,
+            child: PageView.builder(
+              physics: BouncingScrollPhysics(),
+              reverse: false,
+              itemCount: widget.offers.length,
+              controller: PageController(
+                  viewportFraction: 0.93, keepPage: true, initialPage: 0),
+              onPageChanged: (int index) => setState(() {
+
+                HomeSliderSpecialOffer.indexx = index;
+                setState(() {
+                  offerCount = index + 1;
+                });
+
+                //widget.onChange(index);
+
+              }),
+              itemBuilder: (_, i) {
+                return InkWell(
+                  onTap: (){
+                    widget.onTap();
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 2),
+                    decoration: BoxDecoration(
+                        color: Color.fromARGB(35, 244, 121, 32),//Color(0x30F47920),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                EdgeInsets.symmetric(horizontal: widget.cWidth * 0.05),
+                                child: VariableText(
+                                  text: getTranslated(context, widget.offers[i]['title'].toString()) ,
+                                  fontsize: 17,
+                                  fontcolor: Color(0xFFF47920),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: widget.cWidth * 0.05, vertical: widget.cHeight * 0.06),
+                                child: VariableText(
+                                  text: getTranslated(context, widget.offers[i]['detail'].toString()) ,
+                                  fontsize: 11,
+                                  fontcolor: Color(0xFFF47920),
+                                ),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: widget.cWidth * 0.05),
+                                  child: Container(
+                                    height: widget.cHeight * 0.20,
+                                    width: widget.cWidth * 0.33,
+                                    decoration: BoxDecoration(
+                                        color: Color(0xFFF47920),
+                                        borderRadius:
+                                        BorderRadius.circular(10)),
+                                    child: Center(
+                                      child: VariableText(
+                                        text: getTranslated(context, 'Get Offer') ,
+                                        fontsize: 13,
+                                        fontcolor: Colors.white,
+                                      ),
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          child: Image.asset(
+                            widget.offers[i]['image'],
+                            scale: 2.4,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+
+    /*return Row(
       children: [
         Container(
-          height: cHeight,
-          width: cWidth,
+          height: widget.cHeight,
+          width: widget.cWidth,
           padding: EdgeInsets.only(left: 11, right: 0),
           //color: Colors.red,
           child: Column(
@@ -317,14 +502,14 @@ class HomeSliderSpecialOffer extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(left: 05) ,
                     child: VariableText(
-                      text: title,
+                      text: widget.title,
                       fontsize: 20,
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 16) ,
                     child: VariableText(
-                      text: subTitle,
+                      text: widget.subTitle,
                       fontsize: 13,
                       fontcolor: Color(0xFFF47920),
                     ),
@@ -339,68 +524,71 @@ class HomeSliderSpecialOffer extends StatelessWidget {
                     itemCount: 3,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, index) {
-                      return Container(
-                        width: cWidth * 0.85,
-                        margin: EdgeInsets.symmetric(horizontal: 5),
-                        decoration: BoxDecoration(
-                            color: Color(0x10F47920),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                    EdgeInsets.only(left: cWidth * 0.05),
-                                    child: VariableText(
-                                      text: '30% Offers',
-                                      fontsize: 17,
-                                      fontcolor: Color(0xFFF47920),
+                      return InkWell(
+                        onTap: widget.onTap,
+                        child: Container(
+                          width: widget.cWidth * 0.85,
+                          margin: EdgeInsets.symmetric(horizontal: 5),
+                          decoration: BoxDecoration(
+                              color: Color(0x10F47920),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                      EdgeInsets.only(left: widget.cWidth * 0.05),
+                                      child: VariableText(
+                                        text: '30% Offers',
+                                        fontsize: 17,
+                                        fontcolor: Color(0xFFF47920),
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: cWidth * 0.05,
-                                        top: cHeight * 0.05),
-                                    child: VariableText(
-                                      text: 'Check For Deals For Today',
-                                      fontsize: 11,
-                                      fontcolor: Color(0xFFF47920),
-                                    ),
-                                  ),
-                                  Padding(
+                                    Padding(
                                       padding: EdgeInsets.only(
-                                          left: cWidth * 0.05,
-                                          top: cHeight * 0.05),
-                                      child: Container(
-                                        height: cHeight * 0.15,
-                                        width: cWidth * 0.33,
-                                        decoration: BoxDecoration(
-                                            color: Color(0xFFF47920),
-                                            borderRadius:
-                                            BorderRadius.circular(22)),
-                                        child: Center(
-                                          child: VariableText(
-                                            text: 'Get Offer',
-                                            fontsize: 13,
-                                            fontcolor: Colors.white,
+                                          left: widget.cWidth * 0.05,
+                                          top: widget.cHeight * 0.05),
+                                      child: VariableText(
+                                        text: 'Check For Deals For Today',
+                                        fontsize: 11,
+                                        fontcolor: Color(0xFFF47920),
+                                      ),
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            left: widget.cWidth * 0.05,
+                                            top: widget.cHeight * 0.05),
+                                        child: Container(
+                                          height: widget.cHeight * 0.15,
+                                          width: widget.cWidth * 0.33,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xFFF47920),
+                                              borderRadius:
+                                              BorderRadius.circular(22)),
+                                          child: Center(
+                                            child: VariableText(
+                                              text: 'Get Offer',
+                                              fontsize: 13,
+                                              fontcolor: Colors.white,
+                                            ),
                                           ),
-                                        ),
-                                      )),
-                                ],
+                                        )),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Container(
-                              child: Image.asset(
-                                'lib/assets/images/home_bandAid.png',
-                                scale: 2.4,
-                              ),
-                            )
-                          ],
+                              Container(
+                                child: Image.asset(
+                                  'lib/assets/images/home_bandAid.png',
+                                  scale: 2.4,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       );
                     }),
@@ -409,7 +597,7 @@ class HomeSliderSpecialOffer extends StatelessWidget {
           ),
         ),
       ],
-    );
+    );*/
   }
 }
 
@@ -437,9 +625,9 @@ class HomeSliderService extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: VariableText(
-                      text: title,
+                      text: getTranslated(context, title.toString()) ,
                       fontsize: 20,
                     ),
                   ),
@@ -449,7 +637,7 @@ class HomeSliderService extends StatelessWidget {
                           MaterialPageRoute(builder: (_) => AllServices(serviceList: serviceList)));
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                         decoration: BoxDecoration(
@@ -457,7 +645,7 @@ class HomeSliderService extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10)
                         ),
                         child: VariableText(
-                            text: subTitle,
+                            text: getTranslated(context, subTitle.toString()) ,
                             fontsize: 13,
                             fontcolor: Theme.of(context).primaryColor),
                       ),
@@ -466,8 +654,49 @@ class HomeSliderService extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: 25,
+                height: 20,
               ),
+              currLang == 'ar' ?
+              Container(
+                height: cHeight * 0.70,
+                padding: EdgeInsets.only(right: 16),
+                child: ListView.builder(
+                    itemCount: serviceList.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InkWell(
+                            onTap:(){
+                              Navigator.push(context, MaterialPageRoute(builder: (_)=>SelectServiceScreen()));
+
+                            },
+                            child: Container(
+                              height: cHeight * 0.50,
+                              width: cHeight * 0.55,
+                              margin: EdgeInsets.only(left: 10),
+                              decoration: BoxDecoration(
+                                  color: Color(0x5000AEEF),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Image.asset(
+                                serviceList[index]['image'],
+                                scale: 2.8,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: cHeight * 0.05),
+                            child: VariableText(
+                              text: serviceList[index]['name'],
+                              fontsize: 13,
+                              fontcolor: Color(0xFF2C3E50),
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
+              ) :
               Container(
                 height: cHeight * 0.70,
                 padding: EdgeInsets.only(left: 16),
@@ -478,16 +707,22 @@ class HomeSliderService extends StatelessWidget {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            height: cHeight * 0.50,
-                            width: cHeight * 0.55,
-                            margin: EdgeInsets.only(right: 10),
-                            decoration: BoxDecoration(
-                                color: Color(0x5000AEEF),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Image.asset(
-                              serviceList[index]['image'],
-                              scale: 2.8,
+                          InkWell(
+                            onTap:(){
+                              Navigator.push(context, MaterialPageRoute(builder: (_)=>SelectServiceScreen()));
+
+                            },
+                            child: Container(
+                              height: cHeight * 0.50,
+                              width: cHeight * 0.55,
+                              margin: EdgeInsets.only(right: 10),
+                              decoration: BoxDecoration(
+                                  color: Color(0x5000AEEF),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Image.asset(
+                                serviceList[index]['image'],
+                                scale: 2.8,
+                              ),
                             ),
                           ),
                           Padding(
@@ -509,6 +744,7 @@ class HomeSliderService extends StatelessWidget {
     );
   }
 }
+
 
 class HomeFindVet extends StatefulWidget {
   List myVets;
@@ -547,14 +783,14 @@ class _HomeFindVetState extends State<HomeFindVet> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: VariableText(
-                      text: widget.title,
+                      text: getTranslated(context, widget.title.toString()) ,
                       fontsize: 20,
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                       decoration: BoxDecoration(
@@ -562,7 +798,7 @@ class _HomeFindVetState extends State<HomeFindVet> {
                           borderRadius: BorderRadius.circular(10)
                       ),
                       child: VariableText(
-                          text: widget.subTitle,
+                          text: getTranslated(context, widget.subTitle.toString()),
                           fontsize: 13,
                           fontcolor: Theme.of(context).primaryColor),
                     ),
@@ -572,8 +808,45 @@ class _HomeFindVetState extends State<HomeFindVet> {
               SizedBox(
                 height: 20,
               ),
+              currLang == 'ar' ?
               Container(
-                padding: EdgeInsets.only(left: 16),
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: List.generate(yourVets.length, (index) {
+                    return GestureDetector(
+                      onTap: () {
+                        _onSelected(index);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Color(0xFFF8F7F7),
+                            borderRadius: index == 0 ? BorderRadius.only(topRight: Radius.circular(15), bottomRight: Radius.circular(15)):
+                            BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))
+                        ),
+                        child: Container(
+                          height: widget.cHeight * 0.16,
+                          width: widget.cWidth * 0.42,
+                          decoration: BoxDecoration(
+                              color: _selectedIndex == index
+                                  ? Color(0xFF00AEEF)
+                                  : Color(0xFFF8F7F7),
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Center(
+                            child: VariableText(
+                                text: getTranslated(context, yourVets[index].toString()),
+                                fontsize: 15,
+                                fontcolor: _selectedIndex == index
+                                    ? Colors.white
+                                    : Color(0xFF2C3E50)),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ) :
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: List.generate(yourVets.length, (index) {
                     return GestureDetector(
@@ -596,7 +869,7 @@ class _HomeFindVetState extends State<HomeFindVet> {
                               borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: VariableText(
-                                text: yourVets[index],
+                                text: getTranslated(context, yourVets[index].toString()),
                                 fontsize: 15,
                                 fontcolor: _selectedIndex == index
                                     ? Colors.white
@@ -608,14 +881,10 @@ class _HomeFindVetState extends State<HomeFindVet> {
                   }),
                 ),
               ),
+
               SizedBox(
                 height: 15,
               ),
-              /*Container(
-                  height: widget.cHeight* 0.50,
-                width: widget.cWidth * 0.80,
-                color: Colors.yellow,
-              ),*/
               Container(
                 height: widget.cHeight * 0.55,
                 //padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -632,14 +901,6 @@ class _HomeFindVetState extends State<HomeFindVet> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
-                          /*boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 1,
-                              offset: Offset(0, 0), // changes position of shadow
-                            ),
-                          ],*/
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -659,7 +920,7 @@ class _HomeFindVetState extends State<HomeFindVet> {
                                     padding:
                                     EdgeInsets.only(left: 0),
                                     child: VariableText(
-                                      text: widget.myVets[index]['name'],
+                                      text: getTranslated(context, widget.myVets[index]['name'].toString()) ,
                                       fontsize: 15,
                                       fontcolor: Color(0xFF2B3E4F),
                                     ),
@@ -681,7 +942,7 @@ class _HomeFindVetState extends State<HomeFindVet> {
   }
 }
 
-class HomeSliderMyPets extends StatelessWidget {
+class HomeSliderMyPets extends StatefulWidget {
   var title;
   var subTitle;
   double cHeight;
@@ -689,12 +950,18 @@ class HomeSliderMyPets extends StatelessWidget {
   HomeSliderMyPets({this.title, this.subTitle, this.cHeight, this.cWidth});
 
   @override
+  _HomeSliderMyPetsState createState() => _HomeSliderMyPetsState();
+}
+
+class _HomeSliderMyPetsState extends State<HomeSliderMyPets> {
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Container(
           //height: cHeight * 0.90,
-          width: cWidth,
+          width: widget.cWidth,
           //color: Colors.red,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -703,16 +970,16 @@ class HomeSliderMyPets extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: VariableText(
-                      text: title,
+                      text: getTranslated(context, widget.title.toString()),
                       fontsize: 20,
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: VariableText(
-                      text: subTitle,
+                      text: widget.subTitle,
                       fontsize: 13,
                       fontcolor: Color(0xFFF47920),
                     ),
@@ -723,7 +990,7 @@ class HomeSliderMyPets extends StatelessWidget {
                 height: 15,
               ),
               Container(
-                width: cWidth,
+                width: widget.cWidth,
                 margin: EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
                     color: Color(0xFFEAF0F9),
@@ -737,23 +1004,22 @@ class HomeSliderMyPets extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(left: cWidth * 0.05),
+                            padding: EdgeInsets.symmetric(horizontal: widget.cWidth * 0.05),
                             child: VariableText(
-                                text: 'Time To Add Your Best',
+                                text: getTranslated(context, 'Time To Add Your Best'),
                                 fontsize: 13,
                                 fontcolor: Color(0xFF2C3E50)),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(
-                                left: cWidth * 0.05, top: cHeight * 0.01),
+                            padding: EdgeInsets.symmetric(horizontal: widget.cWidth * 0.05, vertical: widget.cHeight * 0.02),
                             child: VariableText(
-                                text: 'Friend (Your Pet)!',
+                                text: getTranslated(context, 'Friend (Your Pet)!') ,
                                 fontsize: 13,
                                 fontcolor: Color(0xFF2C3E50)),
                           ),
                           Padding(
-                              padding: EdgeInsets.only(
-                                  left: cWidth * 0.05, top: cHeight * 0.05),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: widget.cWidth * 0.05),
                               child: InkWell(
                                 onTap: () {
                                   Navigator.push(
@@ -762,14 +1028,14 @@ class HomeSliderMyPets extends StatelessWidget {
                                           builder: (_) => OnboardingScreen2()));
                                 },
                                 child: Container(
-                                  height: cHeight * 0.15,
-                                  width: cWidth * 0.31,
+                                  height: widget.cHeight * 0.15,
+                                  width: widget.cWidth * 0.31,
                                   decoration: BoxDecoration(
                                       color: Theme.of(context).primaryColor,
                                       borderRadius: BorderRadius.circular(15)),
                                   child: Center(
                                     child: VariableText(
-                                      text: 'Add One',
+                                      text: getTranslated(context, 'Add One'),
                                       fontsize: 13,
                                       fontcolor: Colors.white,
                                     ),
@@ -780,7 +1046,7 @@ class HomeSliderMyPets extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 20, right: 20, bottom: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       child: Container(
                         decoration: BoxDecoration(
                             color: Colors.white,
@@ -816,9 +1082,8 @@ class HomeUpcomingAppointments extends StatelessWidget {
     return Row(
       children: [
         Container(
-          height: cHeight * 0.33,
           width: cWidth,
-          padding: EdgeInsets.only(left: 16, right: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           //color: Colors.red,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -827,134 +1092,374 @@ class HomeUpcomingAppointments extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.symmetric(vertical: 5),
                     child: VariableText(
-                      text: title,
+                      text: getTranslated(context, title.toString()) ,
                       fontsize: 20,
                     ),
                   )
                 ],
               ),
-              SizedBox(
-                height: 5,
-              ),
+              AppointmentCard(cHeight: cHeight, cWidth: cWidth, vetName: subTitle, college: 'United States Medical Colllege',)
+              /*Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Container(
+                  width: cWidth,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Column(
+                    children: [
+                      //upper
+                      Container(
+                        //color: Colors.yellow,
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            //image
+                            Padding(
+                              padding: EdgeInsets.only(top: 15.0),
+                              child: Image.asset(
+                                  'lib/assets/images/appointment_doctor.png',
+                                  scale: 3.3),
+                            ),
+                            //name address
+                            Container(
+                              //color: Colors.red,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    //name & rating
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(top: cHeight * 0.035),
+                                          child: VariableText(
+                                            text: 'Benjamin Hudson',
+                                            fontsize: 17,
+                                            fontcolor: Color(
+                                                0xFF2C3E50),
+                                          ),
+                                        ),
+                                        SizedBox(width: cHeight * 0.02,),
+                                        Padding(
+                                          padding: EdgeInsets.only(top: cHeight * 0.035),
+                                          child: Row(
+                                            children: [
+                                              VariableText(
+                                                text:
+                                                '4.8',
+                                                fontsize: 11,
+                                                fontcolor: Color(
+                                                    0xFF2C3E50),
+                                              ),
+
+                                            ],
+                                          ),
+                                        ),SizedBox(width: 5),
+
+                                        Padding(
+                                          padding: EdgeInsets.only(top: cHeight * 0.032),
+                                          child: Image.asset(
+                                            'lib/assets/icons/appointment_rating.png',
+                                            scale: 3.2,
+                                          ),
+                                        )
+
+                                      ],
+                                    ),
+                                    //address
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                                      child: Row(
+                                        //mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Image.asset(
+                                            'lib/assets/icons/appointment_clinic.png',
+                                            scale: 3.2,
+                                          ),
+                                          SizedBox(width: cHeight * 0.01,),
+                                          VariableText(
+                                            text: 'United States Medical College',
+                                            fontsize: 12,
+                                            fontcolor:
+                                            Color(0xFF2C3E50),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            //home icon
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: cHeight * 0.025),
+                              child: Image.asset(
+                                'lib/assets/icons/appointment_home.png',
+                                scale: 3.2,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+
+                      //lower
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: cHeight * 0.02, horizontal: 16),
+                        //color: Colors.red,
+                        child: Stack(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      height: cHeight * 0.06,
+                                      //width: cWidth * 0.75,
+                                      decoration: BoxDecoration(
+                                        color: Color(0x70ECF1FA),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Row(
+                                        //mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 10),
+                                            child: VariableText(
+                                              text: 'Sun, Jan 19, AT 08:00Am',
+                                              fontsize: 11,
+                                              fontcolor: Color(0xFF2C3E50),
+                                            ),
+                                          ),
+                                          Padding(
+                                              padding: EdgeInsets.only(left: cWidth * 0, right: cHeight * 0),
+                                              child: Container(
+                                                height:
+                                                cHeight * 0.04,
+                                                width: cWidth * 0.24,
+                                                decoration: BoxDecoration(
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(10)),
+                                                child: Center(
+                                                  child: VariableText(
+                                                    text: 'Confirmed',
+                                                    fontsize: 11,
+                                                    fontcolor: Colors.white,
+                                                  ),
+                                                ),
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+                            ),
+                            currLang == 'ar' ?
+                            Positioned(
+                              left: 0,
+                              child: Container(
+                                height: cHeight * 0.06,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: Color(0xFFEAF0F9),
+                                    border: Border.all(color: Colors.white, width: 3)
+                                ),
+                                child: Image.asset(
+                                  'lib/assets/images/appointment_pet.png',
+                                  scale: 3.2,
+                                ),
+                              ),
+                            ) :
+                            Positioned(
+                              right: 0,
+                              child: Container(
+                                height: cHeight * 0.06,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: Color(0xFFEAF0F9),
+                                    border: Border.all(color: Colors.white, width: 3)
+                                ),
+                                child: Image.asset(
+                                  'lib/assets/images/appointment_pet.png',
+                                  scale: 3.2,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),*/
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class AppointmentCard extends StatelessWidget {
+  double cHeight;
+  double cWidth;
+  var vetName;
+  var college;
+  AppointmentCard({this.cHeight, this.cWidth, this.vetName, this.college});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: GestureDetector(
+        onTap: (){
+          Navigator.push(context, MaterialPageRoute(builder: (_)=>AppointmentDetailsScreen(appoinmnetDetailsdata: AppointmentModel(doctorName: vetName, clinicName: 'SF Clinic', rating: '2.4', month: 'january', image: ''))));
+
+        },
+        child: Container(
+          width: cWidth,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10)),
+          child: Column(
+            children: [
+              //upper
               Container(
-                width: cWidth,
-                padding: EdgeInsets.only(top: 16, bottom: 16),
-                //margin: EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Column(
-                  //mainAxisAlignment: MainAxisAlignment.center,
-                  //crossAxisAlignment: CrossAxisAlignment.start,
+                //color: Colors.yellow,
+                //padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //upper
-                    Container(
-                      padding: EdgeInsets.only(left: 16),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //image
-                          Padding(
-                            padding: EdgeInsets.only(top: 15.0),
-                            child: Image.asset(
-                                'lib/assets/images/appointment_doctor.png',
-                                scale: 3.3),
-                          ),
-                          //name address
-                          Container(
-                            child: Column(
-                              children: [
-                                //name & rating
-                                Row(
+                    //image
+                    Padding(
+                      padding: EdgeInsets.only(top: 15.0),
+                      child: Image.asset(
+                          'lib/assets/images/appointment_doctor.png',
+                          scale: 3.3),
+                    ),
+                    //name address
+                    Flexible(
+                      child: Container(
+                        //color: Colors.red,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              //name & rating
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(top: cHeight * 0.035),
+                                    child: VariableText(
+                                      text: 'Clarke Kent',
+                                      fontsize: 17,
+                                      fontcolor: Color(
+                                          0xFF2C3E50),
+                                    ),
+                                  ),
+                                  SizedBox(width: cHeight * 0.02,),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: cHeight * 0.035),
+                                    child: Row(
+                                      children: [
+                                        VariableText(
+                                          text:
+                                          '4.8',
+                                          fontsize: 11,
+                                          fontcolor: Color(
+                                              0xFF2C3E50),
+                                        ),
+
+                                      ],
+                                    ),
+                                  ),SizedBox(width: 5),
+
+                                  Padding(
+                                    padding: EdgeInsets.only(top: cHeight * 0.032),
+                                    child: Image.asset(
+                                      'lib/assets/icons/appointment_rating.png',
+                                      scale: 3.2,
+                                    ),
+                                  )
+
+                                ],
+                              ),
+                              //address
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 8.0),
+                                child: Wrap(
+                                  //mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(top: cHeight * 0.038, left: 8.0),
-                                      child: VariableText(
-                                        text: 'Benjamin Hudson',
-                                        fontsize: 17,
-                                        fontcolor: Color(0xFF2C3E50),
-                                      ),
+                                    Image.asset(
+                                      'lib/assets/icons/appointment_clinic.png',
+                                      scale: 3.2,
                                     ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          top: cHeight * 0.038, left: 10.0),
-                                      child: VariableText(
-                                        text: '4.8',
-                                        fontsize: 11,
-                                        fontcolor: Color(0xFF2C3E50),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          top: cHeight * 0.038,
-                                          left: 2.0,
-                                          bottom: 5.0),
-                                      child: Image.asset(
-                                        'lib/assets/icons/appointment_rating.png',
-                                        scale: 3.2,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                //address
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Image.asset(
-                                        'lib/assets/icons/appointment_clinic.png',
-                                        scale: 3.2,
-                                      ),
-                                    ),
+                                    SizedBox(width: cHeight * 0.01,),
                                     VariableText(
-                                      text: 'United States Medical College',
-                                      fontsize: 12,
-                                      fontcolor: Color(0xFF2C3E50),
+                                      text: college,
+                                      max_lines: 2,
+                                      fontsize: 11,
+                                      fontcolor:
+                                      Color(0xFF2C3E50),
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          //home icon
-                          Padding(
-                            padding:
-                            EdgeInsets.only(top: cHeight * 0.02, left: 15),
-                            child: Image.asset(
-                              'lib/assets/icons/appointment_home.png',
-                              scale: 3.2,
-                            ),
-                          )
-                        ],
+                        ),
                       ),
                     ),
+                    //home icon
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: cHeight * 0.025),
+                      child: Image.asset(
+                        'lib/assets/icons/appointment_home.png',
+                        scale: 3.2,
+                      ),
+                    )
+                  ],
+                ),
+              ),
 
-                    //lower
-                    Container(
-                      padding: EdgeInsets.only(top: cHeight * 0.02, left: cWidth * 0.07, right: 10),
+              //lower
+              Container(
+                padding: EdgeInsets.symmetric(vertical: cHeight * 0.02,),
+                //color: Colors.red,
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Row(
-                        //mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Expanded(
                             child: Container(
                               height: cHeight * 0.06,
-                              //width: cWidth * 0.58,
+                              //width: cWidth * 0.75,
                               decoration: BoxDecoration(
-                                  color: Color(0x70ECF1FA),
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10), topRight: Radius.circular(50),
-                                      bottomRight: Radius.circular(50)
-                                  )
+                                color: Color(0x70ECF1FA),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                //mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(
-                                      left: 10.0,
-                                    ),
+                                    padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: VariableText(
                                       text: 'Sun, Jan 19, AT 08:00Am',
                                       fontsize: 11,
@@ -962,39 +1467,25 @@ class HomeUpcomingAppointments extends StatelessWidget {
                                     ),
                                   ),
                                   Padding(
-                                      padding: EdgeInsets.only(
-                                          left: cWidth * 0.05, right: cWidth * 0.04),
+                                      padding: EdgeInsets.only(left: cWidth * 0, right: cHeight * 0),
                                       child: Container(
-                                        height: cHeight * 0.035,
-                                        width: cWidth * 0.22,
+                                        height:
+                                        cHeight * 0.04,
+                                        width: cWidth * 0.24,
                                         decoration: BoxDecoration(
-                                            color: Theme.of(context).primaryColor,
-                                            borderRadius: BorderRadius.circular(10)),
+                                            color: Theme.of(context)
+                                                .primaryColor,
+                                            borderRadius:
+                                            BorderRadius
+                                                .circular(10)),
                                         child: Center(
                                           child: VariableText(
-                                            text: 'Confirmed',
+                                            text: getTranslated(context, 'Confirmed'),
                                             fontsize: 11,
                                             fontcolor: Colors.white,
                                           ),
                                         ),
                                       )),
-                                  Spacer(),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      right: 0,
-                                    ),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(50),
-                                          //color: Colors.red,
-                                          border: Border.all(color: Colors.white, width: 3)
-                                      ),
-                                      child: Image.asset(
-                                        'lib/assets/images/appointment_pet.png',
-                                        scale: 2.2,
-                                      ),
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -1003,17 +1494,48 @@ class HomeUpcomingAppointments extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 20)
+                    currLang == 'ar' ?
+                    Positioned(
+                      left: 0,
+                      child: Container(
+                        height: cHeight * 0.06,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Color(0xFFEAF0F9),
+                            border: Border.all(color: Colors.white, width: 3)
+                        ),
+                        child: Image.asset(
+                          'lib/assets/images/appointment_pet.png',
+                          scale: 3.2,
+                        ),
+                      ),
+                    ) :
+                    Positioned(
+                      right: 0,
+                      child: Container(
+                        height: cHeight * 0.06,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Color(0xFFEAF0F9),
+                            border: Border.all(color: Colors.white, width: 3)
+                        ),
+                        child: Image.asset(
+                          'lib/assets/images/appointment_pet.png',
+                          scale: 3.2,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 }
+
 
 class HomeUpcomingAppointmentsOnly extends StatelessWidget {
   double cHeight;
@@ -1026,130 +1548,134 @@ class HomeUpcomingAppointmentsOnly extends StatelessWidget {
     return Row(
       children: [
         Container(
-          height: cHeight * 0.70,
           width: cWidth,
-          //color: Colors.red,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10)),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 5,
-              ),
+              //upper
               Container(
-                width: cWidth,
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Column(
+                //color: Colors.yellow,
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //upper
+                    //image
+                    Padding(
+                      padding: EdgeInsets.only(top: 15.0),
+                      child: Image.asset(
+                          'lib/assets/images/appointment_doctor.png',
+                          scale: 3.3),
+                    ),
+                    //name address
                     Container(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //image
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 15.0, left: cWidth * 0.06, right: 10),
-                            child: Image.asset(
-                                'lib/assets/images/appointment_doctor.png',
-                                scale: 3.3),
-                          ),
-                          //name address
-                          Container(
-                            child: Column(
+                      //color: Colors.red,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            //name & rating
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                //name & rating
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          top: cHeight * 0.12, left: 8.0),
-                                      child: VariableText(
-                                        text: 'Benjamin Hudson',
-                                        fontsize: 17,
-                                        fontcolor: Color(0xFF2C3E50),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          top: cHeight * 0.12, left: 10.0),
-                                      child: VariableText(
-                                        text: '4.8',
+                                Padding(
+                                  padding: EdgeInsets.only(top: cHeight * 0.035),
+                                  child: VariableText(
+                                    text: 'Benjamin Hudson',
+                                    fontsize: 17,
+                                    fontcolor: Color(
+                                        0xFF2C3E50),
+                                  ),
+                                ),
+                                SizedBox(width: cHeight * 0.02,),
+                                Padding(
+                                  padding: EdgeInsets.only(top: cHeight * 0.035),
+                                  child: Row(
+                                    children: [
+                                      VariableText(
+                                        text:
+                                        '4.8',
                                         fontsize: 11,
-                                        fontcolor: Color(0xFF2C3E50),
+                                        fontcolor: Color(
+                                            0xFF2C3E50),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          top: cHeight * 0.12,
-                                          left: 2.0,
-                                          bottom: 5.0),
-                                      child: Image.asset(
-                                        'lib/assets/icons/appointment_rating.png',
-                                        scale: 3.2,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                //address
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Image.asset(
-                                        'lib/assets/icons/appointment_clinic.png',
-                                        scale: 3.2,
-                                      ),
-                                    ),
-                                    VariableText(
-                                      text: 'United States Medical College',
-                                      fontsize: 12,
-                                      fontcolor: Color(0xFF2C3E50),
-                                    ),
-                                  ],
-                                ),
+
+                                    ],
+                                  ),
+                                ),SizedBox(width: 5),
+
+                                Padding(
+                                  padding: EdgeInsets.only(top: cHeight * 0.032),
+                                  child: Image.asset(
+                                    'lib/assets/icons/appointment_rating.png',
+                                    scale: 3.2,
+                                  ),
+                                )
+
                               ],
                             ),
-                          ),
-                          //home icon
-                          Padding(
-                            padding:
-                            EdgeInsets.only(top: cHeight * 0.06, left: 15),
-                            child: Image.asset(
-                              'lib/assets/icons/appointment_home.png',
-                              scale: 3.2,
+                            //address
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8.0),
+                              child: Row(
+                                //mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Image.asset(
+                                    'lib/assets/icons/appointment_clinic.png',
+                                    scale: 3.2,
+                                  ),
+                                  SizedBox(width: cHeight * 0.01,),
+                                  VariableText(
+                                    text: 'United States Medical College',
+                                    fontsize: 12,
+                                    fontcolor:
+                                    Color(0xFF2C3E50),
+                                  ),
+                                ],
+                              ),
                             ),
-                          )
-                        ],
+                          ],
+                        ),
                       ),
                     ),
+                    //home icon
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: cHeight * 0.025),
+                      child: Image.asset(
+                        'lib/assets/icons/appointment_home.png',
+                        scale: 3.2,
+                      ),
+                    )
+                  ],
+                ),
+              ),
 
-                    //lower
-                    Container(
-                      padding: EdgeInsets.only(top: cHeight * 0.05, left: cWidth * 0.07),
+              //lower
+              Container(
+                padding: EdgeInsets.symmetric(vertical: cHeight * 0.02, horizontal: 16),
+                //color: Colors.red,
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Row(
-                        //mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Expanded(
                             child: Container(
-                              height: cHeight * 0.17,
-                              //width: cWidth * 0.58,
+                              height: cHeight * 0.06,
+                              //width: cWidth * 0.75,
                               decoration: BoxDecoration(
-                                  color: Color(0x70ECF1FA),
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10), topRight: Radius.circular(50),
-                                      bottomRight: Radius.circular(50)
-                                  )
+                                color: Color(0x70ECF1FA),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                //mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(
-                                      left: 10.0,
-                                    ),
+                                    padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: VariableText(
                                       text: 'Sun, Jan 19, AT 08:00Am',
                                       fontsize: 11,
@@ -1157,38 +1683,25 @@ class HomeUpcomingAppointmentsOnly extends StatelessWidget {
                                     ),
                                   ),
                                   Padding(
-                                      padding: EdgeInsets.only(
-                                          left: cWidth * 0.05, right: cWidth * 0.04),
+                                      padding: EdgeInsets.only(left: cWidth * 0, right: cHeight * 0),
                                       child: Container(
-                                        height: cHeight * 0.10,
-                                        width: cWidth * 0.22,
+                                        height:
+                                        cHeight * 0.04,
+                                        width: cWidth * 0.24,
                                         decoration: BoxDecoration(
-                                            color: Theme.of(context).primaryColor,
-                                            borderRadius: BorderRadius.circular(10)),
+                                            color: Theme.of(context)
+                                                .primaryColor,
+                                            borderRadius:
+                                            BorderRadius
+                                                .circular(10)),
                                         child: Center(
                                           child: VariableText(
-                                            text: 'Confirmed',
+                                            text: getTranslated(context, 'Confirmed'),
                                             fontsize: 11,
                                             fontcolor: Colors.white,
                                           ),
                                         ),
                                       )),
-                                  Spacer(),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      right: 0,
-                                    ),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        color: Colors.white,
-                                      ),
-                                      child: Image.asset(
-                                        'lib/assets/images/appointment_pet.png',
-                                        scale: 2.2,
-                                      ),
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -1197,7 +1710,37 @@ class HomeUpcomingAppointmentsOnly extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 20)
+                    currLang == 'ar' ?
+                    Positioned(
+                      left: 0,
+                      child: Container(
+                        height: cHeight * 0.06,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Color(0xFFEAF0F9),
+                            border: Border.all(color: Colors.white, width: 3)
+                        ),
+                        child: Image.asset(
+                          'lib/assets/images/appointment_pet.png',
+                          scale: 3.2,
+                        ),
+                      ),
+                    ) :
+                    Positioned(
+                      right: 0,
+                      child: Container(
+                        height: cHeight * 0.06,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Color(0xFFEAF0F9),
+                            border: Border.all(color: Colors.white, width: 3)
+                        ),
+                        child: Image.asset(
+                          'lib/assets/images/appointment_pet.png',
+                          scale: 3.2,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -1272,7 +1815,7 @@ class _AppointmentsAllState extends State<AppointmentsAll> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 16, bottom: 10, top: 10),
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                           child: VariableText(
                             text: key[index].toString(),
                             fontsize: 20,
@@ -1294,6 +1837,8 @@ class _AppointmentsAllState extends State<AppointmentsAll> {
                                 monthly[index2].month.toString()
                                 ? InkWell(
                               onTap: (){
+                               Navigator.push(context, MaterialPageRoute(builder: (_)=>AppointmentDetailsScreen(appoinmnetDetailsdata: monthly[index2],)));
+                               // Navigator.push(context, MaterialPageRoute(builder: (_)=>AppointmentRateScreen()));
                                },
                                   child: Container(
                               width: widget.cWidth,
@@ -1306,11 +1851,11 @@ class _AppointmentsAllState extends State<AppointmentsAll> {
                                     BorderRadius.circular(10)),
                               child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
-                                  //crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     //upper
                                     Container(
-                                      padding: EdgeInsets.only(left: 16),
+                                      //color: Colors.yellow,
+                                      padding: EdgeInsets.symmetric(horizontal: 16),
                                       child: Row(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
@@ -1322,77 +1867,87 @@ class _AppointmentsAllState extends State<AppointmentsAll> {
                                                 scale: 3.3),
                                           ),
                                           //name address
-                                          Container(
-                                            //color: Colors.red,
-                                            child: Column(
-                                              children: [
-                                                //name & rating
-                                                Row(
+                                          Flexible(
+                                            child: Container(
+                                              //color: Colors.red,
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
+                                                    //name & rating
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: widget.cHeight * 0.035),
+                                                          child: VariableText(
+                                                            text:
+                                                            monthly[index2]
+                                                                .doctorName,
+                                                            fontsize: 17,
+                                                            fontcolor: Color(
+                                                                0xFF2C3E50),
+                                                          ),
+                                                        ),
+                                                        SizedBox(width: widget.cHeight * 0.02,),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: widget.cHeight * 0.035),
+                                                          child: Row(
+                                                            children: [
+                                                              VariableText(
+                                                                text:
+                                                                monthly[index2]
+                                                                    .rating,
+                                                                fontsize: 11,
+                                                                fontcolor: Color(
+                                                                    0xFF2C3E50),
+                                                              ),
+
+                                                            ],
+                                                          ),
+                                                        ),SizedBox(width: 5),
+
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: widget.cHeight * 0.032),
+                                                          child: Image.asset(
+                                                            'lib/assets/icons/appointment_rating.png',
+                                                            scale: 3.2,
+                                                          ),
+                                                        )
+
+                                                      ],
+                                                    ),
+                                                    //address
                                                     Padding(
-                                                      padding: EdgeInsets.only(top: widget.cHeight * 0.035, left: 8.0),
-                                                      child: VariableText(
-                                                        text:
-                                                        monthly[index2]
-                                                            .doctorName,
-                                                        fontsize: 17,
-                                                        fontcolor: Color(
-                                                            0xFF2C3E50),
+                                                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                                                      child: Row(
+                                                        //mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: [
+                                                          Image.asset(
+                                                            'lib/assets/icons/appointment_clinic.png',
+                                                            scale: 3.2,
+                                                          ),
+                                                          SizedBox(width: widget.cHeight * 0.01,),
+                                                          VariableText(
+                                                            text: monthly[index2]
+                                                                .clinicName,
+                                                            fontsize: 12,
+                                                            fontcolor:
+                                                            Color(0xFF2C3E50),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: widget.cHeight * 0.035, left: 10.0),
-                                                      child: VariableText(
-                                                        text:
-                                                        monthly[index2]
-                                                            .rating,
-                                                        fontsize: 11,
-                                                        fontcolor: Color(
-                                                            0xFF2C3E50),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: widget.cHeight * 0.035,
-                                                          left: 2.0,
-                                                          bottom: 5.0),
-                                                      child: Image.asset(
-                                                        'lib/assets/icons/appointment_rating.png',
-                                                        scale: 3.2,
-                                                      ),
-                                                    )
                                                   ],
                                                 ),
-                                                //address
-                                                Row(
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                      const EdgeInsets
-                                                          .all(8.0),
-                                                      child: Image.asset(
-                                                        'lib/assets/icons/appointment_clinic.png',
-                                                        scale: 3.2,
-                                                      ),
-                                                    ),
-                                                    VariableText(
-                                                      text: monthly[index2]
-                                                          .clinicName,
-                                                      fontsize: 12,
-                                                      fontcolor:
-                                                      Color(0xFF2C3E50),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
+                                              ),
                                             ),
                                           ),
                                           //home icon
                                           Padding(
                                             padding: EdgeInsets.only(
-                                                top: widget.cHeight * 0.025,
-                                                left: 15),
+                                                top: widget.cHeight * 0.025),
                                             child: Image.asset(
                                               'lib/assets/icons/appointment_home.png',
                                               scale: 3.2,
@@ -1404,84 +1959,95 @@ class _AppointmentsAllState extends State<AppointmentsAll> {
 
                                     //lower
                                     Container(
-                                      padding: EdgeInsets.only(top: widget.cHeight * 0.01,
-                                          left: 16,
-                                          right: 10),
-                                      child: Row(
+                                      padding: EdgeInsets.symmetric(vertical: widget.cHeight * 0.02, horizontal: 16),
+                                      //color: Colors.red,
+                                      child: Stack(
                                         children: [
-                                          Expanded(
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 10),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Container(
+                                                    height: widget.cHeight * 0.06,
+                                                    //width: widget.cWidth * 0.75,
+                                                    decoration: BoxDecoration(
+                                                        color: Color(0x70ECF1FA),
+                                                      borderRadius: BorderRadius.circular(10),
+                                                    ),
+                                                    child: Row(
+                                                      //mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                                          child: VariableText(
+                                                            text: monthly[index2].date,
+                                                            fontsize: 11,
+                                                            fontcolor: Color(0xFF2C3E50),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                            padding: EdgeInsets.only(left: widget.cWidth * 0, right: widget.cHeight * 0),
+                                                            child: Container(
+                                                              height:
+                                                              widget.cHeight * 0.04,
+                                                              width: widget.cWidth * 0.24,
+                                                              decoration: BoxDecoration(
+                                                                  color: Theme.of(context)
+                                                                      .primaryColor,
+                                                                  borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(10)),
+                                                              child: Center(
+                                                                child: VariableText(
+                                                                  text: getTranslated(context, 'Confirmed'),
+                                                                  fontsize: 11,
+                                                                  fontcolor: Colors.white,
+                                                                ),
+                                                              ),
+                                                            )),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+
+                                              ],
+                                            ),
+                                          ),
+                                          currLang == 'ar' ?
+                                          Positioned(
+                                            left: 0,
                                             child: Container(
                                               height: widget.cHeight * 0.06,
                                               decoration: BoxDecoration(
-                                                  color: Color(0x70ECF1FA),
-                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10),
-                                                      bottomLeft: Radius.circular(10), topRight: Radius.circular(50),
-                                                      bottomRight: Radius.circular(50)
-                                                  )
+                                                  borderRadius: BorderRadius.circular(50),
+                                                  color: Color(0xFFEAF0F9),
+                                                  border: Border.all(color: Colors.white, width: 3)
                                               ),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                      left: 10.0,
-                                                    ),
-                                                    child: VariableText(
-                                                      text: monthly[index2].date,
-                                                      fontsize: 11,
-                                                      fontcolor: Color(0xFF2C3E50),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left:
-                                                          widget.cWidth * 0.05,
-                                                          right: widget.cHeight *
-                                                              0.02),
-                                                      child: Container(
-                                                        height:
-                                                        widget.cHeight * 0.04,
-                                                        width: widget.cWidth * 0.24,
-                                                        decoration: BoxDecoration(
-                                                            color: Theme.of(context)
-                                                                .primaryColor,
-                                                            borderRadius:
-                                                            BorderRadius
-                                                                .circular(10)),
-                                                        child: Center(
-                                                          child: VariableText(
-                                                            text: 'Confirmed',
-                                                            fontsize: 11,
-                                                            fontcolor: Colors.white,
-                                                          ),
-                                                        ),
-                                                      )),
-                                                  Spacer(),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                      right: 0,
-                                                    ),
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(50),
-                                                          //color: Colors.white,
-                                                          border: Border.all(color: Colors.white, width: 3)
-                                                      ),
-                                                      child: Image.asset(
-                                                        'lib/assets/images/appointment_pet.png',
-                                                        scale: 3.2,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
+                                              child: Image.asset(
+                                                'lib/assets/images/appointment_pet.png',
+                                                scale: 3.2,
+                                              ),
+                                            ),
+                                          ) :
+                                          Positioned(
+                                            right: 0,
+                                            child: Container(
+                                              height: widget.cHeight * 0.06,
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(50),
+                                                  color: Color(0xFFEAF0F9),
+                                                  border: Border.all(color: Colors.white, width: 3)
+                                              ),
+                                              child: Image.asset(
+                                                'lib/assets/images/appointment_pet.png',
+                                                scale: 3.2,
                                               ),
                                             ),
                                           ),
-
                                         ],
                                       ),
                                     ),
-                                    SizedBox(height: 10)
                                   ],
                               ),
                             ),
@@ -1633,19 +2199,16 @@ class _MyPetsSliderState extends State<MyPetsSlider>
                             builder: (_) =>
                                 MyPetProfile(petDetails: widget.myPets[i])));
                   },
-                  child: Container(
-                    //color: Colors.red,
-                    child: Column(
-                      children: [
-                        Image.asset(widget.myPets[i]['image']),
-                        MyPetsSlider.indexx == i
-                            ? DelayedDisplay(
-                            slidingCurve: Curves.fastLinearToSlowEaseIn,
-                            delay: Duration(milliseconds: 100),
-                            child: renderPetDetails(i))
-                            : Container()
-                      ],
-                    ),
+                  child: Column(
+                    children: [
+                      Image.asset(widget.myPets[i]['image'], scale: 2,),
+                      MyPetsSlider.indexx == i
+                          ? DelayedDisplay(
+                          slidingCurve: Curves.fastLinearToSlowEaseIn,
+                          delay: Duration(milliseconds: 100),
+                          child: renderPetDetails(i))
+                          : Container()
+                    ],
                   ),
                 ));
           },
@@ -1655,10 +2218,11 @@ class _MyPetsSliderState extends State<MyPetsSlider>
   }
 
   Widget renderPetDetails(int i) {
+    var size = MediaQuery.of(context).size;
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: size.height * 0.01),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -1666,22 +2230,28 @@ class _MyPetsSliderState extends State<MyPetsSlider>
                   text: widget.myPets[i]['name'],
                   fontsize: 20,
                   fontcolor: Color(0xFF2B3E4F)),
-              Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(9),
-                    color: Color(0xFFF0F5FC)
-                ),
-                child: Image.asset(
-                  'lib/assets/icons/myPets_share.png',
-                  scale: 3.2,
+              InkWell(
+                onTap: (){
+                  MediaQuery.of(context).orientation == Orientation.portrait ?
+                  selectShareOptionsP(size.height, size.width) : selectShareOptionsL(size.width, size.width);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(9),
+                      color: Color(0xFFF0F5FC)
+                  ),
+                  child: Image.asset(
+                    'lib/assets/icons/myPets_share.png',
+                    scale: 3.2,
+                  ),
                 ),
               )
             ],
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             children: [
               VariableText(
@@ -1696,7 +2266,152 @@ class _MyPetsSliderState extends State<MyPetsSlider>
       ],
     );
   }
+  selectShareOptionsP(double height,double width){
+    showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        context: context, builder: (context) {
+
+      return DraggableScrollableSheet(
+          initialChildSize: 0.38, //set this as you want
+          maxChildSize:0.75, //set this as you want
+          minChildSize:0.30, //set this as you want
+          expand: false,
+          builder: (context, scrollController) {
+            return ShareBottomSheet(cHeight: height, cWidth: width,);
+            //whatever you're returning, does not have to be a Container
+          }
+
+      );
+    });
+  }
+
+  selectShareOptionsL(double height,double width){
+    showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        context: context, builder: (context) {
+
+      return DraggableScrollableSheet(
+          initialChildSize: 0.75, //set this as you want
+          maxChildSize:0.75, //set this as you want
+          minChildSize:0.30, //set this as you want
+          expand: false,
+          builder: (context, scrollController) {
+            return ShareBottomSheet(cHeight: height, cWidth: width,);
+            //whatever you're returning, does not have to be a Container
+          }
+
+      );
+    });
+  }
 }
+
+class MapSlider extends StatefulWidget {
+  List myPets;
+  double cHeight;
+  double cWidth;
+  static var indexx = 0;
+  Function onChange;
+
+  MapSlider({this.myPets, this.cWidth, this.cHeight, this.onChange});
+
+  @override
+  _MapSliderState createState() => _MapSliderState();
+}
+
+class _MapSliderState extends State<MapSlider> with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  Animation<Offset> _offsetFloat;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    MapSlider.indexx = 1;
+    _controller = AnimationController(
+      vsync: this,
+      //  reverseDuration: Duration(seconds: 6),
+      duration: const Duration(milliseconds: 500),
+    );
+    _offsetFloat = Tween(begin: Offset(5.0, 0.0), end: Offset(0.0, 0.0))
+        .animate(CurvedAnimation(
+      curve: Curves.easeInOut,
+      parent: _controller,
+    ));
+
+    _offsetFloat.addListener(() {
+      setState(() {});
+    });
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
+    return Container(
+      padding: EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 0),
+      alignment: Alignment.center,
+      //height: MediaQuery.of(context).size.width,
+      //width: MediaQuery.of(context).size.width,
+      child: SlideTransition(
+        position: _offsetFloat,
+        child: PageView.builder(
+          physics: BouncingScrollPhysics(),
+          reverse: false,
+          itemCount: widget.myPets.length,
+          controller: PageController(
+              viewportFraction: 0.94, keepPage: true, initialPage: 0),
+          onPageChanged: (int index) => setState(() {
+
+            MapSlider.indexx = index;
+            widget.onChange(index);
+
+          }),
+          itemBuilder: (_, i) {
+            return Transform.scale(
+                scale: i == MapSlider.indexx ? 1 : 1,
+                child: InkWell(
+                  onTap: () {
+
+                  },
+                  child: Container(
+                    //color: Colors.red,
+                    margin: EdgeInsets.only(right: 5),
+                    child: ServiceContainer(
+                        cWidth:widget.cWidth,
+                        cHeight: widget.cHeight,
+                        name: widget.myPets[i]['name'],
+                        address: widget.myPets[i]['address'],
+                        image: widget.myPets[i]['image'],
+                        serivicetype: widget.myPets[i]['serivicetype'],
+                        timming: widget.myPets[i]['timming'],
+                        ontapBookNow:(){
+
+                          if(i==1){
+                            Navigator.push(context, MaterialPageRoute(builder: (_)=>PetConsultationServiceScreen()));
+                          } else {
+                            Navigator.push(context, MaterialPageRoute(builder: (_)=>VetConsultationServiceScreen()));
+
+                          }
+                        }
+
+                    ),
+                  ),
+                ));
+          },
+        ),
+      ),
+    );
+  }
+}
+
 
 ///Pet Profile
 //Share bottom sheet
@@ -1813,6 +2528,7 @@ class _ShareBottomSheetState extends State<ShareBottomSheet> {
               ),
             ),
           ),
+
         ],
       ),
     );
@@ -1822,7 +2538,8 @@ class _ShareBottomSheetState extends State<ShareBottomSheet> {
 //select vaccine Sheet
 
 class SelectVaccineSheet extends StatefulWidget {
-  List<String> vaccineNames;
+  List<String>
+  vaccineNames;
   double cHeight;
   double cWidth;
   Function onSelect;
@@ -1857,9 +2574,9 @@ class _SelectVaccineSheetState extends State<SelectVaccineSheet> {
         child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                 child: VariableText(
-                  text: 'Select Vaccines',
+                  text: getTranslated(context, 'Select Vaccines'),
                   fontcolor: Color(0xFF2B3E4F),
                   fontsize: 22,
                   fontFamily: 'sfdr',
@@ -1897,7 +2614,95 @@ class _SelectVaccineSheetState extends State<SelectVaccineSheet> {
                         borderRadius: BorderRadius.circular(10)),
                     child: Center(
                         child: VariableText(
-                            text: 'Select',
+                            text: getTranslated(context, 'Select'),
+                            fontsize: 15,
+                            fontcolor: Colors.white,
+                            fontFamily: 'sftr')),
+                  ),
+                ),
+              ),
+            ]));
+  }
+}
+//select medical Sheet
+
+class SelectMedicalSheet extends StatefulWidget {
+  List<String> medicalType;
+  double cHeight;
+  double cWidth;
+  Function onSelect;
+
+  SelectMedicalSheet({this.medicalType, this.cWidth, this.cHeight, this.onSelect});
+
+  @override
+  _SelectMedicalSheetState createState() => _SelectMedicalSheetState();
+}
+
+class _SelectMedicalSheetState extends State<SelectMedicalSheet> {
+
+  static int _selectedIndexMedical = -1;
+
+  String selectedVacc;
+
+  onVaccinePressed(int i) {
+    setState(() {
+      _selectedIndexMedical = i;
+    });
+    selectedVacc = widget.medicalType[_selectedIndexMedical];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+        ),
+        child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                child: VariableText(
+                  text: getTranslated(context, 'Type'),
+                  fontcolor: Color(0xFF2B3E4F),
+                  fontsize: 22,
+                  fontFamily: 'sfdr',
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  //shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemCount: widget.medicalType.length,
+                    itemBuilder: (BuildContext context, index){
+                      return InkWell(
+                        onTap: (){
+                          onVaccinePressed(index);
+                        },
+                        child: Container(
+                          color: _selectedIndexMedical == index ? Theme.of(context).primaryColor : Colors.white,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+                            child: VariableText(text: widget.medicalType[index], fontcolor: _selectedIndexMedical == index ? Colors.white : Color(0xFF2B3E4F), fontsize: 15, fontFamily: 'sftr',),
+                          ),
+                        ),
+                      );
+                    }),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                child: InkWell(
+                  onTap: ()=> widget.onSelect(selectedVacc),
+                  child: Container(
+                    height: widget.cHeight * 0.07,
+                    width: widget.cWidth,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Center(
+                        child: VariableText(
+                            text: getTranslated(context, 'Select'),
                             fontsize: 15,
                             fontcolor: Colors.white,
                             fontFamily: 'sftr')),
@@ -1914,8 +2719,9 @@ class MyPetsReminder extends StatefulWidget {
   double cWidth;
   double fHeight;
   double fWidth;
+  var petDetails;
 
-  MyPetsReminder({this.cHeight, this.cWidth, this.fHeight, this.fWidth});
+  MyPetsReminder({this.cHeight, this.cWidth, this.fHeight, this.fWidth,this.petDetails});
 
   @override
   _MyPetsReminderState createState() => _MyPetsReminderState();
@@ -1924,16 +2730,59 @@ class MyPetsReminder extends StatefulWidget {
 class _MyPetsReminderState extends State<MyPetsReminder> with TickerProviderStateMixin{
   TabController tabViewController;
 
+
+  Map<String, dynamic> reminderJson = {
+    "reminders": [
+      {
+        "title": "Breakfast",
+        "time": "08:00Am",
+        "date": "1",
+        "month": "October",
+        "note": "Write note here"
+      },
+
+    ]
+  };
+
+  DateFormat dateFormatter = DateFormat('MMMM, yyyy');
+  DateTime selectedDateCalendar = DateTime.now();
+
   List<String> weekDays = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   List<String> dailyTime = ['08:00Am', '08:30Am', '09:00Am', '09:30Am'];
+  List<String> weekDates1 = ['1', '2', '3', '4', '5', '6', '7'];
+  List<String> weekDates2 = ['8', '9', '10', '11', '12', '13', '14'];
+  List<String> weekDates3 = ['15', '16', '17', '18', '19', '20', '21'];
+  List<String> weekDates4 = ['22', '23', '24', '25', '26', '27', '28'];
 
-  int _selectedIndex = -1;
+  List<ReminderModel> remindersAll = [];
+  List<ReminderModel> remindersSelected = [];
+  String selectedDate = '1';
+
+
   double fSize;
 
-  onDaySelected(int i){
+  /*onDaySelected(int i){
     setState(() {
       _selectedIndex = i;
     });
+  }*/
+
+  onDaySelected(String date) {
+      setState(() {
+        selectedDate = date;
+      });
+    }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDateCalendar,
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDateCalendar = picked;
+      });
   }
 
   @override
@@ -1942,6 +2791,15 @@ class _MyPetsReminderState extends State<MyPetsReminder> with TickerProviderStat
     super.initState();
     fSize = widget.fHeight / widget.fWidth;
     tabViewController = TabController(length: 4, vsync: this);
+
+    for(var item in reminderJson['reminders']){
+      remindersAll.add(ReminderModel.fromJson(item));
+    }
+    for(ReminderModel item in remindersAll){
+      if(item.date == selectedDate){
+        remindersSelected.add(ReminderModel.fromModel(item));
+      }
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -1952,27 +2810,65 @@ class _MyPetsReminderState extends State<MyPetsReminder> with TickerProviderStat
           children: [
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              child: Container(
-                height: widget.cHeight * 0.45,
-                width: widget.cWidth * 0.32,
-                decoration: BoxDecoration(
-                    color: Color(0xFFF8F9FA),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Center(
-                    child: VariableText(
-                        text: 'Add Reminder',
-                        fontsize: fSize * 7,
-                        fontcolor: Color(0x703C3C43),
-                        fontFamily: 'sftr')),
+              child: InkWell(
+                onTap: (){
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (_)=> MyPetAddReminderScreen(
+                    petDetails: widget.petDetails,
+                    onSave: (List<ReminderModel> rem){
+                      remindersAll.addAll(rem);
+                      setState(() {
+
+                      });
+                      Navigator.pop(context);
+                    },
+                  )
+                  ));
+                },
+                child:
+                Stack(
+                  children: [
+                    Container(
+                      height: widget.cHeight * 0.50,
+                      width: widget.cWidth * 0.32,
+                      decoration: BoxDecoration(
+                          color:Color(0xFFF8F9FA),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: DashedRect(color: Color(0xffE8E8E8), strokeWidth: 1.5, gap: 8.0,),
+
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: widget.cHeight * 0.30,
+                        width: widget.cWidth * 0.28,
+
+                        child:     Center(
+                            child: VariableText(
+                                text: getTranslated(context, 'Add Reminder'),
+                                fontsize: fSize * 7,
+                                fontcolor: Color(0x703C3C43),
+                                fontFamily: 'sftr')),
+
+                      ),
+                    ),
+
+                  ],
+                ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              child: VariableText(
-                text: 'October, 2021',
-                fontcolor: Color(0xFF2B3E4F),
-                fontsize: fSize * 7,
-                fontFamily: 'sftr',
+            GestureDetector(
+              onTap: (){
+                _selectDate(context);
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                child: VariableText(
+                  text: dateFormatter.format(selectedDateCalendar),
+                  fontcolor: Color(0xFF2B3E4F),
+                  fontsize: fSize * 7,
+                  fontFamily: 'sftr',
+                ),
               ),
             ),
           ],
@@ -1985,12 +2881,11 @@ class _MyPetsReminderState extends State<MyPetsReminder> with TickerProviderStat
             margin: EdgeInsets.symmetric(horizontal: 16),
             child: TabBarView(
                 controller: tabViewController,
-                //physics: NeverScrollableScrollPhysics(),
                 children: <Widget>[
-                  renderWeeks2(widget.cHeight, widget.cWidth),
-                  renderWeeks2(widget.cHeight, widget.cWidth),
-                  renderWeeks2(widget.cHeight, widget.cWidth),
-                  renderWeeks2(widget.cHeight, widget.cWidth),
+                  renderWeeks(weekDays, weekDates1, widget.cHeight, widget.cWidth),
+                  renderWeeks(weekDays, weekDates2, widget.cHeight, widget.cWidth),
+                  renderWeeks(weekDays, weekDates3, widget.cHeight, widget.cWidth),
+                  renderWeeks(weekDays, weekDates4, widget.cHeight, widget.cWidth),
                 ]
             )
         ),
@@ -2006,10 +2901,88 @@ class _MyPetsReminderState extends State<MyPetsReminder> with TickerProviderStat
   }
 
   Widget dailyReminderTime(double cHeight, double cWidth){
+
     return Container(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            children: List.generate(dailyTime.length, (index){
+            children: List.generate(remindersAll.length, (index){
+              return remindersAll[index].date == selectedDate ?
+              DelayedDisplay(
+                slidingCurve: Curves.fastLinearToSlowEaseIn,
+                delay: Duration(milliseconds: 100),
+                child: Container(
+                  //color: Colors.red,
+                  height: cHeight * 0.40,
+                  margin: EdgeInsets.symmetric(vertical: 5,),
+                  child: Row(
+                    children: [
+                      VariableText(
+                          text: remindersAll[index].time.toString(),
+                          fontsize: fSize * 6,
+                          fontcolor: Color(0xFF2B3E4F),
+                          fontFamily: 'sftr'),
+                       Expanded(
+                        child: Row(
+                          children: [
+                            Expanded(
+                                flex: index+1,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 5, right: 5),
+                                  child: Container(
+                                    height: 1,
+                                    color: Color(0xFFE8E8E8),
+                                  ),
+                                )
+                            ),
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                    context, MaterialPageRoute(builder: (_)=> MyPetEditReminderScreen(petDetails: widget.petDetails, reminderDetails: remindersAll[index],)
+                                ));
+                              },
+                              child: Container(
+                                height: cHeight * 0.35,
+                                width: cWidth * 0.30,
+                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                decoration: BoxDecoration(
+                                    color: Color(0xFFA4E3FA),
+                                    borderRadius: BorderRadius.circular(14),
+                                    border: Border.all(color: Color(0xFF00AEEF))
+                                ),
+                                child: Center(
+                                  child: VariableText(
+                                      text: remindersAll[index].title,
+                                      fontsize: fSize * 5,
+                                      fontcolor: Color(0xFF2C3E50),
+                                      fontFamily: 'sftr'),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                                flex: 7,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 5),
+                                  child: Container(
+                                    height: 1,
+                                    color: Color(0xFFE8E8E8),
+                                  ),
+                                )
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ) : Container();
+            })
+        )
+    );
+
+    /*return Container(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: List.generate(reminders.length, (index){
               return Container(
                 //color: Colors.red,
                 height: cHeight * 0.40,
@@ -2017,7 +2990,7 @@ class _MyPetsReminderState extends State<MyPetsReminder> with TickerProviderStat
                 child: Row(
                   children: [
                     VariableText(
-                        text: dailyTime[index],
+                        text: reminders[index].time.toString(),
                         fontsize: fSize * 6,
                         fontcolor: Color(0xFF2B3E4F),
                         fontFamily: 'sftr'),
@@ -2119,10 +3092,10 @@ class _MyPetsReminderState extends State<MyPetsReminder> with TickerProviderStat
               );
             })
         )
-    );
+    );*/
   }
 
-  Widget renderWeeks2(double cHeight, double cWidth){
+  Widget renderWeeks(List<String> cDaysList, List<String> cDateList,double cHeight, double cWidth){
     return Container(
       width: cWidth,
       //color: Colors.red,
@@ -2133,28 +3106,28 @@ class _MyPetsReminderState extends State<MyPetsReminder> with TickerProviderStat
               padding: const EdgeInsets.symmetric(horizontal: 2),
               child: InkWell(
                 onTap: (){
-                  onDaySelected(index);
+                  onDaySelected(cDateList[index]);
                 },
                 child: Container(
                   width: fSize * 20, //cWidth * 0.09,
                   padding: EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                      color: _selectedIndex == index ? Color(0xFF00AEEF) : Colors.white,
+                      color: selectedDate == cDateList[index] ? Color(0xFF00AEEF) : Colors.white,
                       borderRadius: BorderRadius.circular(12)
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       VariableText(
-                          text: weekDays[index],
+                          text: cDaysList[index],
                           fontsize: fSize * 5.5,
-                          fontcolor: _selectedIndex == index ? Colors.white : Color(0xFF2B3E4F),
+                          fontcolor: selectedDate == cDateList[index] ? Colors.white : Color(0xFF2B3E4F),
                           fontFamily: 'sftr'),
                       SizedBox(height: 5),
                       VariableText(
-                          text: '16',
+                          text: cDateList[index],
                           fontsize: fSize * 5.5,
-                          fontcolor: _selectedIndex == index ? Colors.white : Color(0xFF2B3E4F),
+                          fontcolor: selectedDate == cDateList[index] ? Colors.white : Color(0xFF2B3E4F),
                           fontFamily: 'sftr'),
                     ],
                   ),
@@ -2166,50 +3139,6 @@ class _MyPetsReminderState extends State<MyPetsReminder> with TickerProviderStat
     );
   }
 
-  Widget renderWeeks(double cHeight, double cWidth){
-    return Container(
-      width: cWidth,
-      //color: Colors.red,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: weekDays.length,
-              itemBuilder: (BuildContext context, index){
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 2),
-                  child: Container(
-                    width: cWidth * 0.12,
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(12)
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        VariableText(
-                            text: weekDays[index],
-                            fontsize: 12,
-                            fontcolor: Color(0x703C3C43),
-                            fontFamily: 'sftr'),
-                        SizedBox(height: 10),
-                        VariableText(
-                            text: '16',
-                            fontsize: 13,
-                            fontcolor: Color(0x703C3C43),
-                            fontFamily: 'sftr'),
-                      ],
-                    ),
-                  ),
-                );
-              }),
-        ],
-      ),
-    );
-  }
 }
 
 ///Vaccination
@@ -2283,7 +3212,8 @@ class _MyPetsVaccinationState extends State<MyPetsVaccination> {
 
   @override
   Widget build(BuildContext context) {
-    return vaccAdded != true ? Column(
+    return vaccAdded != true ?
+    Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(height: widget.cHeight * 0.40),
@@ -2295,7 +3225,7 @@ class _MyPetsVaccinationState extends State<MyPetsVaccination> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: VariableText(
-            text: 'No Entries Found!',
+            text: getTranslated(context, 'No Entries Found!'),
             fontcolor: Color(0x603C3C43),
             fontsize: 15,
             fontFamily: 'sftr',
@@ -2318,7 +3248,7 @@ class _MyPetsVaccinationState extends State<MyPetsVaccination> {
                   borderRadius: BorderRadius.circular(10)),
               child: Center(
                   child: VariableText(
-                      text: 'Add Vaccination',
+                      text: getTranslated(context, 'Add Vaccination'),
                       fontsize: 15,
                       fontcolor: Color(0x603C3C43),
                       fontFamily: 'sftr')),
@@ -2326,7 +3256,8 @@ class _MyPetsVaccinationState extends State<MyPetsVaccination> {
           ),
         ),
       ],
-    ): Column(
+    ):
+    Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -2345,7 +3276,7 @@ class _MyPetsVaccinationState extends State<MyPetsVaccination> {
                       borderRadius: BorderRadius.circular(10)),
                   child: Center(
                       child: VariableText(
-                          text: 'Add Vaccination',
+                          text: getTranslated(context, 'Add Vaccination'),
                           fontsize: 15,
                           fontcolor: Color(0x603C3C43),
                           fontFamily: 'sftr')),
@@ -2354,25 +3285,27 @@ class _MyPetsVaccinationState extends State<MyPetsVaccination> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              child: Image.asset('lib/assets/icons/myVaccination_sort.png', scale: 3.2),
+              child: Image.asset('lib/assets/icons/filter.png', scale: 3.2),
             )
           ],
         ),
         SizedBox(height: 15,),
 
         Container(
-          padding: EdgeInsets.only(left: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: List.generate(vaccinationHistory.length, (index) {
               return GestureDetector(
                 onTap: () {
                   _onSelected(index);
                 },
-                child: Container(
+                child:
+                    currLang == 'ar' ?
+                Container(
                   decoration: BoxDecoration(
                       color: Color(0xFFF8F7F7),
-                      borderRadius: index == 0 ? BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15)):
-                      BorderRadius.only(topRight: Radius.circular(15), bottomRight: Radius.circular(15))
+                      borderRadius: index == 0 ? BorderRadius.only(topRight: Radius.circular(15), bottomRight: Radius.circular(15)):
+                      BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))
                   ),
                   child: Container(
                     height: widget.cHeight * 0.45,
@@ -2384,14 +3317,38 @@ class _MyPetsVaccinationState extends State<MyPetsVaccination> {
                         borderRadius: BorderRadius.circular(15)),
                     child: Center(
                       child: VariableText(
-                          text: vaccinationHistory[index],
+                          text: getTranslated(context, vaccinationHistory[index].toString()) ,
                           fontsize: 15,
                           fontcolor: _selectedIndex == index
                               ? Colors.white
                               : Color(0xFF2C3E50)),
                     ),
                   ),
-                ),
+                ) :
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xFFF8F7F7),
+                          borderRadius: index == 0 ? BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15)):
+                          BorderRadius.only(topRight: Radius.circular(15), bottomRight: Radius.circular(15))
+                      ),
+                      child: Container(
+                        height: widget.cHeight * 0.45,
+                        width: widget.cWidth * 0.30,
+                        decoration: BoxDecoration(
+                            color: _selectedIndex == index
+                                ? Color(0xFF00AEEF)
+                                : Color(0xFFF8F7F7),
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Center(
+                          child: VariableText(
+                              text: getTranslated(context, vaccinationHistory[index].toString()) ,
+                              fontsize: 15,
+                              fontcolor: _selectedIndex == index
+                                  ? Colors.white
+                                  : Color(0xFF2C3E50)),
+                        ),
+                      ),
+                    ),
               );
             }),
           ),
@@ -2508,6 +3465,7 @@ class _MyAppointmentsState extends State<MyAppointments> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return AppointmentAdded != true ? Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -2520,7 +3478,7 @@ class _MyAppointmentsState extends State<MyAppointments> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: VariableText(
-            text: 'Now You Can Add Appointments',
+            text: getTranslated(context, 'Now You Can Add Appointments'),
             fontcolor: Color(0x603C3C43),
             fontsize: 15,
             fontFamily: 'sftr',
@@ -2543,7 +3501,7 @@ class _MyAppointmentsState extends State<MyAppointments> {
                   borderRadius: BorderRadius.circular(10)),
               child: Center(
                   child: VariableText(
-                      text: 'Add Appointments',
+                      text: getTranslated(context, 'Add Appointments'),
                       fontsize: 15,
                       fontcolor: Color(0x603C3C43),
                       fontFamily: 'sftr')),
@@ -2571,7 +3529,7 @@ class _MyAppointmentsState extends State<MyAppointments> {
                       borderRadius: BorderRadius.circular(10)),
                   child: Center(
                       child: VariableText(
-                          text: 'Add Appointments',
+                          text: getTranslated(context, 'Add Appointments'),
                           fontsize: 15,
                           fontcolor: Color(0x603C3C43),
                           fontFamily: 'sftr')),
@@ -2580,7 +3538,7 @@ class _MyAppointmentsState extends State<MyAppointments> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              child: Image.asset('lib/assets/icons/myVaccination_sort.png', scale: 3.2),
+              child: Image.asset('lib/assets/icons/filter.png', scale: 3.2),
             )
           ],
         ),
@@ -2594,11 +3552,13 @@ class _MyAppointmentsState extends State<MyAppointments> {
                 onTap: () {
                   _onSelected(index);
                 },
-                child: Container(
+                child:
+                    currLang == 'ar' ?
+                Container(
                   decoration: BoxDecoration(
                       color: Color(0xFFF8F7F7),
-                      borderRadius: index == 0 ? BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15)):
-                      BorderRadius.only(topRight: Radius.circular(15), bottomRight: Radius.circular(15))
+                      borderRadius: index == 0 ? BorderRadius.only(topRight: Radius.circular(15), bottomRight: Radius.circular(15)):
+                      BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))
                   ),
                   child: Container(
                     height: widget.cHeight * 0.45,
@@ -2610,23 +3570,50 @@ class _MyAppointmentsState extends State<MyAppointments> {
                         borderRadius: BorderRadius.circular(15)),
                     child: Center(
                       child: VariableText(
-                          text: appointmentHistory[index],
+                          text: getTranslated(context, appointmentHistory[index].toString()),
                           fontsize: 15,
                           fontcolor: _selectedIndex == index
                               ? Colors.white
                               : Color(0xFF2C3E50)),
                     ),
                   ),
-                ),
+                ) :
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xFFF8F7F7),
+                          borderRadius: index == 0 ? BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15)):
+                          BorderRadius.only(topRight: Radius.circular(15), bottomRight: Radius.circular(15))
+                      ),
+                      child: Container(
+                        height: widget.cHeight * 0.45,
+                        width: widget.cWidth * 0.30,
+                        decoration: BoxDecoration(
+                            color: _selectedIndex == index
+                                ? Color(0xFF00AEEF)
+                                : Color(0xFFF8F7F7),
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Center(
+                          child: VariableText(
+                              text: getTranslated(context, appointmentHistory[index].toString()),
+                              fontsize: 15,
+                              fontcolor: _selectedIndex == index
+                                  ? Colors.white
+                                  : Color(0xFF2C3E50)),
+                        ),
+                      ),
+                    ),
               );
             }),
           ),
         ),
 
         SizedBox(height: 15,),
-        HomeUpcomingAppointmentsOnly(
-            cWidth: widget.cWidth,
-            cHeight: widget.cHeight*3),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: AppointmentCard(cHeight: size.height, cWidth: size.width, vetName: 'Benjamin Clarke', college: 'United States Medical Colllege',),
+        ),
+
+        SizedBox(height: 15,),
       ],
     );
   }
@@ -2677,7 +3664,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             child: VariableText(
-              text: 'Appointments Type',
+              text: getTranslated(context, 'Appointments Type'),
               fontcolor: Color(0xFF2C3E50),
               fontsize: 22,
               fontFamily: 'sfdr',
@@ -2712,7 +3699,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                             ),
                           ),
                           VariableText(
-                            text: myServices['services'][index]['name'],
+                            text: getTranslated(context, myServices['services'][index]['name'].toString()),
                             fontcolor: Color(0xFF2C3E50),
                             fontsize: 17,
                             fontFamily: 'sftr',
@@ -2740,7 +3727,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                     borderRadius: BorderRadius.circular(10)),
                 child: Center(
                     child: VariableText(
-                        text: 'Next',
+                        text: getTranslated(context, 'Next'),
                         fontsize: 15,
                         fontcolor: Colors.white,
                         fontFamily: 'sftr')),
@@ -2759,17 +3746,52 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
 class MyMedical extends StatefulWidget {
   double cHeight;
   double cWidth;
+  Function onAddMedical;
 
-  MyMedical({this.cHeight, this.cWidth});
+  MyMedical({this.cHeight, this.cWidth,this.onAddMedical});
 
   @override
   _MyMedicalState createState() => _MyMedicalState();
 }
 
 class _MyMedicalState extends State<MyMedical> {
+  Map<String, dynamic> myMedical = {'medical': [
+    {
+      "name": "Vivamus Curabitur Consectetur ",
+      "image": "lib/assets/images/myPets_tab2.png",
+      "date": "Sun, Jan 19, At 08:00Am",
+      "status":false,
+      "result":"null"
+      },
+    {
+      "name": "Adenovirus",
+      "image": "lib/assets/images/myPets_tab2.png",
+      "date": "27/08/2021",
+        "status":true,
+        "result":"Positive"
+    },
+  {
+  "name": "Vivamus Curabitur Consectetur ",
+  "image": "lib/assets/images/myPets_tab2.png",
+  "date": "Sun, Jan 19, At 08:00Am",
+  "status":false,
+  "result":"null"
+},
+{
+"name": "Adenovirus",
+"image": "lib/assets/images/myPets_tab2.png",
+"date": "27/08/2021",
+"status":true,
+"result":"Negative"
+},
+
+  ]
+  };
+  bool medAdded = false;
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return medAdded != true ?
+    Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(height: widget.cHeight * 0.40),
@@ -2781,7 +3803,7 @@ class _MyMedicalState extends State<MyMedical> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: VariableText(
-            text: 'No Medical Yet',
+            text: getTranslated(context, 'No Medical Yet'),
             fontcolor: Color(0x603C3C43),
             fontsize: 15,
             fontFamily: 'sftr',
@@ -2791,6 +3813,10 @@ class _MyMedicalState extends State<MyMedical> {
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           child: InkWell(
             onTap: () {
+              widget.onAddMedical();
+              setState(() {
+                medAdded = true;
+              });
             },
             child: Container(
               height: widget.cHeight * 0.45,
@@ -2800,7 +3826,7 @@ class _MyMedicalState extends State<MyMedical> {
                   borderRadius: BorderRadius.circular(10)),
               child: Center(
                   child: VariableText(
-                      text: 'Add Medical',
+                      text: getTranslated(context, 'Add Medical'),
                       fontsize: 15,
                       fontcolor: Color(0x603C3C43),
                       fontFamily: 'sftr')),
@@ -2808,7 +3834,203 @@ class _MyMedicalState extends State<MyMedical> {
           ),
         ),
       ],
+    ):
+    Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              child: InkWell(
+                onTap: () {
+                  widget.onAddMedical();
+                },
+                child: Container(
+                  height: widget.cHeight * 0.45,
+                  width: widget.cWidth * 0.37,
+                  decoration: BoxDecoration(
+                      color: Color(0xFFF8F9FA), //Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Center(
+                      child: VariableText(
+                          text: getTranslated(context, 'Add Medical'),
+                          fontsize: 15,
+                          fontcolor: Color(0x603C3C43),
+                          fontFamily: 'sftr')),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              //myVaccination_sort
+              child: Image.asset('lib/assets/icons/filter.png', scale: 3.2),
+            )
+          ],
+        ),
+        SizedBox(height: 15,),
+
+
+
+
+
+        Container(
+          color: Color(0xFFF8F7F7),
+          child: ListView.builder(
+              itemCount: myMedical['medical'].length,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              itemBuilder: (BuildContext context, index){
+                return
+                  myMedical['medical'][index]['status']?
+                  Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              height: widget.cHeight * 0.65,
+                              width: widget.cWidth * 0.16,
+                              decoration: BoxDecoration(
+                                  color: Color(0x5000AEEF),
+                                  borderRadius: BorderRadius.circular(10)
+                              ),
+                              child: Image.asset('lib/assets/icons/myPets_tab4.png', scale: 3.8, color: Color(0xff2B3E4F),),
+                            ),
+                            SizedBox(width: 10,),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: widget.cHeight*0.1,),
+                                VariableText(
+                                  text: myMedical['medical'][index]['name'],
+                                  fontcolor: Color(0xFF2B3E4F),
+                                  fontsize: 15,
+                                  fontFamily: 'sftr',
+                                ),
+                                SizedBox(height: widget.cHeight*0.1,),
+                                VariableText(
+                                  text: myMedical['medical'][index]['date'],
+                                  fontcolor: Color(0xFF2B3E4F),
+                                  fontsize: 11,
+                                  fontFamily: 'sftr',
+                                ),
+
+                              ],
+                            ),
+                            Spacer(),
+
+                            Column(
+                              children: [
+                                Container(
+                                  height: widget.cHeight * 0.3,
+                                  width: widget.cWidth * 0.20,
+                                  decoration: BoxDecoration(
+                                      color: themeColor2,
+                                      border: Border.all(color: Color(0xff2B3E4F)
+                                      ),
+                                      borderRadius: BorderRadius.circular(8)
+                                  ),
+                                  child: Center(child:   VariableText(
+                                    text: myMedical['medical'][index]['result'],
+                                    fontcolor: Color(0xFF2B3E4F),
+                                    fontsize: 12,
+                                    fontFamily: 'sftr',
+                                  ),),
+                                ),
+
+                              ],
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 10),
+
+                      ],
+                    ),
+                  ),
+                ):
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                height: widget.cHeight * 0.65,
+                                width: widget.cWidth * 0.16,
+                                decoration: BoxDecoration(
+                                   color: Color(0x5000AEEF),
+
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Image.asset('lib/assets/icons/myPets_tab4.png', scale: 3.8, color: Color(0xff2B3E4F),),
+                              ),
+                              SizedBox(width: 10,),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: widget.cHeight*0.1,),
+                                  VariableText(
+                                    text: myMedical['medical'][index]['name'],
+                                    fontcolor: Color(0xFF2B3E4F),
+                                    fontsize: 15,
+                                    fontFamily: 'sftr',
+                                  ),
+                                  SizedBox(height: widget.cHeight*0.1,),
+                                  VariableText(
+                                    text: myMedical['medical'][index]['date'],
+                                    fontcolor: Color(0xFF2B3E4F),
+                                    fontsize: 11,
+                                    fontFamily: 'sftr',
+                                  ),
+
+                                  SizedBox(height: widget.cHeight*0.1,),
+                                  InkWell(
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (_)=>AddMedicalLabResult()));
+                                    },
+                                    child: Container(
+                                      height: widget.cHeight * 0.3,
+                                      width: widget.cWidth * 0.16,
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFF00AEEF),
+                                          borderRadius: BorderRadius.circular(8)
+                                      ),
+                                      child: Center(child: VariableText(text: getTranslated(context, 'Status'), fontsize: 11, fontcolor: Colors.white),),
+                                    ),
+                                  ),
+
+                                ],
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 10),
+
+                        ],
+                      ),
+                    ),
+                  );
+              }),
+        )
+      ],
     );
+
   }
 }
 
@@ -2817,17 +4039,51 @@ class _MyMedicalState extends State<MyMedical> {
 class MyCare extends StatefulWidget {
   double cHeight;
   double cWidth;
+  Function onAddCare;
 
-  MyCare({this.cHeight, this.cWidth});
+  MyCare({this.cHeight, this.cWidth,this.onAddCare});
 
   @override
   _MyCareState createState() => _MyCareState();
 }
 
 class _MyCareState extends State<MyCare> {
+  Map<String, dynamic> myCare = {'care': [
+    {
+      "name": "Hair",
+      "image": "lib/assets/icons/seaser.png",
+      "description": "Hygiene",
+      "date": "27/08/2021",
+
+    },
+    {
+      "name": "Hair",
+      "image": "lib/assets/icons/seaser.png",
+      "description": "Hygiene",
+      "date": "27/08/2021",
+
+    },
+    {
+      "name": "Hair",
+      "image": "lib/assets/icons/seaser.png",
+      "description": "Hygiene",
+      "date": "27/08/2021",
+
+    },
+    {
+      "name": "Hair",
+      "image": "lib/assets/icons/seaser.png",
+      "description": "Hygiene",
+      "date": "27/08/2021",
+
+    },
+  ]
+  };
+  bool careAdded = false;
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return careAdded != true ?
+    Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(height: widget.cHeight * 0.40),
@@ -2839,7 +4095,7 @@ class _MyCareState extends State<MyCare> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: VariableText(
-            text: 'No Care Yet',
+            text: getTranslated(context, 'No Care Yet'),
             fontcolor: Color(0x603C3C43),
             fontsize: 15,
             fontFamily: 'sftr',
@@ -2849,6 +4105,10 @@ class _MyCareState extends State<MyCare> {
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           child: InkWell(
             onTap: () {
+              widget.onAddCare();
+              setState(() {
+                careAdded = true;
+              });
             },
             child: Container(
               height: widget.cHeight * 0.45,
@@ -2858,7 +4118,7 @@ class _MyCareState extends State<MyCare> {
                   borderRadius: BorderRadius.circular(10)),
               child: Center(
                   child: VariableText(
-                      text: 'Add Care',
+                      text: getTranslated(context, 'Add Care'),
                       fontsize: 15,
                       fontcolor: Color(0x603C3C43),
                       fontFamily: 'sftr')),
@@ -2866,7 +4126,131 @@ class _MyCareState extends State<MyCare> {
           ),
         ),
       ],
+    ):
+    Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              child: InkWell(
+                onTap: () {
+                  widget.onAddCare();
+                },
+                child: Container(
+                  height: widget.cHeight * 0.45,
+                  width: widget.cWidth * 0.37,
+                  decoration: BoxDecoration(
+                      color: Color(0xFFF8F9FA), //Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Center(
+                      child: VariableText(
+                          text: getTranslated(context, 'Add Care'),
+                          fontsize: 15,
+                          fontcolor: Color(0x603C3C43),
+                          fontFamily: 'sftr')),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              //myVaccination_sort
+              child: Image.asset('lib/assets/icons/myVaccination_sort.png', scale: 3.2),
+            )
+          ],
+        ),
+        SizedBox(height: 15,),
+
+
+
+
+
+        Container(
+          color: Color(0xFFF8F7F7),
+          child: ListView.builder(
+              itemCount: myCare['care'].length,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              itemBuilder: (BuildContext context, index){
+                return
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                height: widget.cHeight * 0.65,
+                                width: widget.cWidth * 0.16,
+                                decoration: BoxDecoration(
+                                    color: Color(0x5000AEEF),
+
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Image.asset('lib/assets/icons/myPets_tab5.png', scale: 3.8, color:themeColor1,),
+                              ),
+                              SizedBox(width: 10,),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+
+                                  Row(
+                                    children: [
+                                      Image.asset(myCare['care'][index]['image'],scale: 3.8, color:Color(0xff2B3E4F),),
+                                      SizedBox(width: widget.cHeight*0.055
+                                        ,),
+                                      VariableText(
+                                        text: myCare['care'][index]['name'],
+                                        fontcolor: Color(0xFF2B3E4F),
+                                        fontsize: 15,
+                                        fontFamily: 'sftr',
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: widget.cHeight*0.055
+                                    ,),
+                                  VariableText(
+                                    text:myCare['care'][index]['description'],
+                                    fontcolor: hinttextColor,
+                                    fontsize: 11,
+                                    fontFamily: 'sftr',
+                                  ),
+
+
+
+
+                                ],
+                              ),
+                              Spacer(),
+                              VariableText(
+                                text:myCare['care'][index]['date'],
+                                fontcolor: Color(0xFF2B3E4F),
+                                fontsize: 15,
+                                fontFamily: 'sftr',
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+
+                        ],
+                      ),
+                    ),
+                  );
+              }),
+        )
+      ],
     );
+
   }
 }
 
@@ -2907,7 +4291,7 @@ class _SubServiceSheetState extends State<SubServiceSheet> {
           Padding(
             padding: EdgeInsets.only(bottom: 25, top: widget.cHeight * 0.04),
             child: VariableText(
-              text: 'What Service Do You Need',
+              text: 'What Service Do You Need?',
               fontcolor: Color(0xFF2C3E50),
               fontsize: 22,
               fontFamily: 'sfdr',
@@ -3055,16 +4439,58 @@ class _PetTypeSheetState extends State<PetTypeSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).orientation == Orientation.portrait ? widget.height * 0.50 : MediaQuery.of(context).size.height * 0.80,
+      height: MediaQuery.of(context).orientation == Orientation.portrait ? widget.height * 0.60 : MediaQuery.of(context).size.height * 0.90,
       child: Column(
         children: [
           SizedBox(height: widget.height*0.03,),
-          VariableText(text: "Select Pet’s Type",
+          VariableText(text: getTranslated(context, "Select Pet’s Type"),
             fontsize: 22,
             fontcolor: Color(0xff2B3E4F),
             fontFamily: 'sfdr',),
           SizedBox(height: widget.height*0.03,),
           Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Container(
+              height:  widget.height*0.12,
+              decoration: BoxDecoration(
+                color: Color(0xffF0F5FC),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Row(
+
+                  children: [
+                    VariableText(
+                        text: getTranslated(context, 'Time To Add Your Best')+'\n'+ getTranslated(context, 'Friend (Your Pet)!'),
+                        fontsize: 13,
+                        fontcolor: Color(0xff2C3E50),
+                        fontFamily: 'sftr'),
+                    Spacer(),
+                    Container(
+                      height:  widget.height*0.05,
+                      width: widget.width*0.30,
+                      decoration: BoxDecoration(
+                        color:themeColor2,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: VariableText(
+                            text: getTranslated(context, 'Add One'),
+                            fontsize: 13,
+                            fontcolor: Color(0xff2C3E50),
+                            fontFamily: 'sfdm')
+                        ,
+                      )
+                    ),
+
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: widget.height*0.03,),
+     /*     Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TextFieldWithStartIcon(
               heights: widget.height*0.06,
@@ -3076,7 +4502,7 @@ class _PetTypeSheetState extends State<PetTypeSheet> {
             ),
           )
           ,
-          SizedBox(height:widget. height*0.01,),
+          SizedBox(height:widget. height*0.01,),*/
 
           Expanded(
             child: DelayedDisplay(
@@ -3168,6 +4594,132 @@ class _PetTypeSheetState extends State<PetTypeSheet> {
                           borderRadius: BorderRadius.circular(10)),
                       child: Center(
                           child: VariableText(
+                              text: getTranslated(context, 'Next'),
+                              fontsize: 20,
+                              fontcolor: Colors.white,
+                              fontFamily: 'sfdm')),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+class ConsolationTypeSheet extends StatefulWidget {
+  double height;
+  double width;
+  Function onNext;
+
+  ConsolationTypeSheet({this.onNext, this.height, this.width});
+
+  @override
+  _ConsolationTypeSheetState createState() => _ConsolationTypeSheetState();
+}
+
+class _ConsolationTypeSheetState extends State<ConsolationTypeSheet> {
+  List<String> consulationOptions = [
+    'Physical Visit  ',
+    'Home Visit',
+  ];
+  int _selectedIndexShare = 0;
+
+  onSharePressed(int i) {
+    setState(() {
+      _selectedIndexShare = i;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).orientation == Orientation.portrait ? widget.height * 0.40 : MediaQuery.of(context).size.height * 0.70,
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(bottom: 25, top: widget.height * 0.04),
+            child: VariableText(
+              text: 'Consolation Type?',
+              fontcolor: Color(0xFF2C3E50),
+              fontsize: 22,
+              fontFamily: 'sfdr',
+            ),
+          ),
+          Expanded(
+            child: DelayedDisplay(
+              slidingCurve: Curves.fastLinearToSlowEaseIn,
+              delay: Duration(milliseconds: 100),
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  //physics: NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemCount: consulationOptions.length,
+                  itemBuilder: (BuildContext context, index) {
+                    return InkWell(
+                      onTap: () => onSharePressed(index),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            VariableText(
+                              text: consulationOptions[index],
+                              fontcolor: Color(0xFF2C3E50),
+                              fontsize: 15,
+                              fontFamily: 'sftr',
+                            ),
+                            Container(
+                              height: 18,
+                              width: 18,
+                              decoration: BoxDecoration(
+                                  color: _selectedIndexShare == index
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: _selectedIndexShare == index ? Border.all(color: Theme.of(context).primaryColor) : Border.all(color: Color(0xFFB6B6B6))),
+                              child: Stack(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      height: 6,
+                                      width: 6,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+            ),
+          ),
+          InkWell(
+            onTap: (){
+              widget.onNext();
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: widget.height * 0.06,
+                      //width: widget.cWidth,
+                      decoration: BoxDecoration(
+                          color: Color(0xFF00AEEF),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                          child: VariableText(
                               text: 'Next',
                               fontsize: 20,
                               fontcolor: Colors.white,
@@ -3184,4 +4736,1245 @@ class _PetTypeSheetState extends State<PetTypeSheet> {
   }
 }
 
+class SortServiceSheet extends StatefulWidget {
+  double cHeight;
+  double cWidth;
+  Function onNext;
 
+  SortServiceSheet({this.onNext, this.cWidth, this.cHeight});
+
+  @override
+  _SortServiceSheetState createState() => _SortServiceSheetState();
+}
+
+class _SortServiceSheetState extends State<SortServiceSheet> {
+  List<String> sortOptions = [
+    'Best Match',
+    'Price Low to High',
+    'Price High To Low',
+    'Min Waiting Time',
+    'Nearest Location'
+  ];
+  int _selectedIndexsort = 0;
+
+  onSharePressed(int i) {
+    setState(() {
+      _selectedIndexsort = i;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).orientation == Orientation.portrait ? widget.cHeight * 0.40 : MediaQuery.of(context).size.height * 0.70,
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: widget.cHeight * 0.01, horizontal: widget.cHeight * 0.02),
+            child: Stack(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment:MainAxisAlignment.center,
+                  children: [
+                    //Spacer(),
+                    VariableText(
+                      text: getTranslated(context, 'Sort By'),
+                      fontcolor: Color(0xFF2C3E50),
+                      fontsize: 22,
+                      fontFamily: 'sfdb',
+                    ),
+                    //Spacer(),
+
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment:MainAxisAlignment.end,
+                  children: [
+                    VariableText(
+                      text: getTranslated(context, 'Clear All'),
+                      fontcolor: themeColor1,
+                      fontsize: 11,
+                      fontFamily: 'sftr',
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: DelayedDisplay(
+              slidingCurve: Curves.fastLinearToSlowEaseIn,
+              delay: Duration(milliseconds: 100),
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemCount: sortOptions.length,
+                  itemBuilder: (BuildContext context, index) {
+                    return InkWell(
+                      onTap: () => onSharePressed(index),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            VariableText(
+                              text: getTranslated(context, sortOptions[index].toString()),
+                              fontcolor: Color(0xFF2C3E50),
+                              fontsize: 15,
+                              fontFamily: 'sftr',
+                            ),
+                            Container(
+                              height: 18,
+                              width: 18,
+                              decoration: BoxDecoration(
+                                  color: _selectedIndexsort == index
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: _selectedIndexsort == index ? Border.all(color: Theme.of(context).primaryColor) : Border.all(color: Color(0xFFB6B6B6))),
+                              child: Stack(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      height: 6,
+                                      width: 6,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+            ),
+          ),
+          InkWell(
+            onTap: (){
+              widget.onNext();
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: widget.cHeight * 0.06,
+                      //width: widget.cWidth,
+                      decoration: BoxDecoration(
+                          color: Color(0xFF00AEEF),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                          child: VariableText(
+                              text: getTranslated(context, 'Apply'),
+                              fontsize: 20,
+                              fontcolor: Colors.white,
+                              fontFamily: 'sfdm')),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FilterServiceSheet extends StatefulWidget {
+  double cHeight;
+  double cWidth;
+  Function onNext;
+
+  FilterServiceSheet({this.onNext, this.cWidth, this.cHeight});
+
+  @override
+  _FilterServiceSheetState createState() => _FilterServiceSheetState();
+}
+
+class _FilterServiceSheetState extends State<FilterServiceSheet>  with TickerProviderStateMixin{
+
+  final Tween<double> turnsTween = Tween<double>(
+    begin: 0,
+    end: 0.5,
+  );
+
+  AnimationController _controller;
+  AnimationController _controller1;
+  AnimationController _controller2;
+  AnimationController _controller3;
+  AnimationController _controller4;
+  AnimationController _controller5;
+  AnimationController _controller6;
+
+  initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _controller1 = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _controller2 = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _controller3 = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _controller4 = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _controller5 = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _controller6 = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+
+
+    for(int i=0; i<pets.length; i++){
+      petCheck.add(false);
+    }
+    super.initState();
+  }
+  List<Map<String, dynamic>> pets = [
+    {
+      "name": "CAMEL",
+      "image": "lib/assets/icons/camelicon.png"
+    },
+    {
+      "name": "CAT",
+      "image": "lib/assets/icons/caticon.png"
+    },
+    {
+      "name": "DOG",
+      "image": "lib/assets/icons/dogicon.png"
+    },
+    {
+      "name": "RABBIT",
+      "image": "lib/assets/icons/rabbiticon.png"
+    },
+    {
+      "name": "HORSE",
+      "image": "lib/assets/icons/horseicon.png"
+    },
+    {
+      "name": "BIRD",
+      "image": "lib/assets/icons/parroticon.png"
+    },
+  ];
+
+  List<bool> petCheck = [];
+
+
+
+
+
+
+
+  List<String> petSize=["S:1-5KG","M:5-10KG","L:10-40KG"];
+  List<String> serviceLocation=["Home Visit","Online Visit","Clinic Visit"];
+  List<String> priceRange=["All Prices","10 - 50 AED","60 - 100 AED"/*,"101 + AED"*/];
+  List<String> petCareServiceCategory = [
+    'Grooming',
+    'Day-Care',
+    'Pet Taxi',
+    'Training',
+    'Boarding (Hotel)',
+    'Relocation'
+  ];
+  List<String> vetCareServiceCategory = [
+    'General Consultation',
+    'Vaccinations',
+    'Dentistry',
+    'Internal Medicine',
+    'Certification',
+    'Microchips Implanting',
+    'Bone Surgery & Lameness',
+    'Fleas & Tick Control Program',
+    'Deworming',
+
+  ];
+  int _selectedIndexsort = 0;
+
+  onSharePressed(int i) {
+    setState(() {
+      _selectedIndexsort = i;
+    });
+  }
+  int petSizeSelected=0;
+  _onselectedpetSize(int i){
+    setState(() {
+      petSizeSelected=i;
+    });
+  }
+  int serviceLocationSelected=0;
+  _onselectedserviceLocation(int i){
+    setState(() {
+      serviceLocationSelected=i;
+    });
+  }
+  int priceRangeSelected=0;
+  _onselectedpriceRange(int i){
+    setState(() {
+      priceRangeSelected=i;
+    });
+  }
+  bool movedown1=false;
+  bool movedown2=false;
+  bool movedown3=false;
+  bool movedown4=false;
+  bool movedown5=false;
+  bool movedown6=false;
+  bool movedown7=false;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).orientation == Orientation.portrait ? widget.cHeight * 0.60 : MediaQuery.of(context).size.height * 0.70,
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: widget.cHeight * 0.02, horizontal: widget.cHeight * 0.02),
+            child: Stack(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment:MainAxisAlignment.center,
+                  children: [
+                    VariableText(
+                      text: getTranslated(context, 'Filters'),
+                      fontcolor: Color(0xFF2C3E50),
+                      fontsize: 22,
+                      fontFamily: 'sfdb',
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment:MainAxisAlignment.end,
+                    children: [
+                      VariableText(
+                        text: getTranslated(context, 'Clear All'),
+                        fontcolor: themeColor1,
+                        fontsize: 11,
+                        fontFamily: 'sftr',
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: DelayedDisplay(
+              slidingCurve: Curves.fastLinearToSlowEaseIn,
+              delay: Duration(milliseconds: 100),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric( horizontal: 16),
+
+                child: Column(
+                  children: [
+                    InkWell(
+                      onTap: (){
+                        if(movedown1==false){
+                          setState(() {
+                            movedown1=true;
+                            _controller.forward();
+                          });
+                        }
+                        else{
+                          setState(() {
+                            movedown1=false;
+                            _controller.reverse();
+                          });
+                        }
+
+                      },
+                      child: Row(
+                        children: [
+                          VariableText(
+                            text: getTranslated(context, "City"),
+                            fontcolor: Color(0xFF2C3E50),
+                            fontsize: 15,
+                            fontFamily: 'sftr',
+                          ),
+                          Spacer(),
+                          movedown1?RotationTransition(
+                              turns: turnsTween.animate(_controller),
+
+                              child: Image.asset('lib/assets/icons/movedown.png',scale: 4,)):Image.asset('lib/assets/icons/movedown.png',scale: 4,)
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 5,),
+                    Container(
+                      height: 1,
+                      color: Color(0xff707070),
+                    ),
+                    movedown1?Container(): Column(
+                      children: [
+                        SizedBox(height: 8,),
+                        InkWell(
+                          onTap: (){
+                            if(movedown2==false){
+                              setState(() {
+                                movedown2=true;
+                                _controller1.forward();
+                              });
+                            }
+                            else{
+                              setState(() {
+                                movedown2=false;
+                                _controller1.reverse();
+                              });
+                            }
+
+                          },
+                          child: Row(
+                            children: [
+                              VariableText(
+                                text: getTranslated(context, "Pet Care Service Category"),
+                                fontcolor: Color(0xFF2C3E50),
+                                fontsize: 15,
+                                fontFamily: 'sftr',
+                              ),
+                              Spacer(),
+                              movedown2?RotationTransition(
+                                  turns: turnsTween.animate(_controller1),
+
+                                  child: Image.asset('lib/assets/icons/movedown.png',scale: 4,)):Image.asset('lib/assets/icons/movedown.png',scale: 4,)
+                            ],
+                          ),
+                        ),
+
+                        Padding(
+                          padding:  EdgeInsets.only(left:20),
+                          child:  movedown2?Container():ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              itemCount: petCareServiceCategory.length,
+                              itemBuilder: (BuildContext context, index) {
+                                return InkWell(
+                                  onTap: () => onSharePressed(index),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        VariableText(
+                                          text: getTranslated(context, petCareServiceCategory[index]),
+                                          fontcolor: Color(0xFF2C3E50),
+                                          fontsize: 15,
+                                          fontFamily: 'sftr',
+                                        ),
+                                        Container(
+                                          height: 18,
+                                          width: 18,
+                                          decoration: BoxDecoration(
+                                              color: _selectedIndexsort == index
+                                                  ? Theme.of(context).primaryColor
+                                                  : Colors.white,
+                                              borderRadius: BorderRadius.circular(50),
+                                              border: _selectedIndexsort == index ? Border.all(color: Theme.of(context).primaryColor) : Border.all(color: Color(0xFFB6B6B6))),
+                                          child: Stack(
+                                            children: [
+                                              Align(
+                                                alignment: Alignment.center,
+                                                child: Container(
+                                                  height: 6,
+                                                  width: 6,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius: BorderRadius.circular(50),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
+
+                        ),
+                        Container(height: 1,
+                          color: Color(0xff707070),),
+                        SizedBox(height: 8,),
+                        InkWell(
+                          onTap: (){
+                            if(movedown3==false){
+                              setState(() {
+                                movedown3=true;
+                                _controller2.forward();
+                              });
+                            }
+                            else{
+                              setState(() {
+                                movedown3=false;
+                                _controller2.reverse();
+                              });
+                            }
+
+                          },
+                          child: Row(
+                            children: [
+                              VariableText(
+                                text: getTranslated(context, "Vet Care Service Category"),
+                                fontcolor: Color(0xFF2C3E50),
+                                fontsize: 15,
+                                fontFamily: 'sftr',
+                              ),
+                              Spacer(),
+                              movedown3?RotationTransition(
+                                  turns: turnsTween.animate(_controller2),
+
+                                  child: Image.asset('lib/assets/icons/movedown.png',scale: 4,)):Image.asset('lib/assets/icons/movedown.png',scale: 4,)
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 8,),
+
+                        Padding(
+                          padding:  EdgeInsets.only(left:20),
+                          child:  movedown3?Container():ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              itemCount: vetCareServiceCategory.length,
+                              itemBuilder: (BuildContext context, index) {
+                                return InkWell(
+                                  onTap: () => onSharePressed(index),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        VariableText(
+                                          text: getTranslated(context, vetCareServiceCategory[index]),
+                                          fontcolor: Color(0xFF2C3E50),
+                                          fontsize: 15,
+                                          fontFamily: 'sftr',
+                                        ),
+                                        Container(
+                                          height: 18,
+                                          width: 18,
+                                          decoration: BoxDecoration(
+                                              color: _selectedIndexsort == index
+                                                  ? Theme.of(context).primaryColor
+                                                  : Colors.white,
+                                              borderRadius: BorderRadius.circular(50),
+                                              border: _selectedIndexsort == index ? Border.all(color: Theme.of(context).primaryColor) : Border.all(color: Color(0xFFB6B6B6))),
+                                          child: Stack(
+                                            children: [
+                                              Align(
+                                                alignment: Alignment.center,
+                                                child: Container(
+                                                  height: 6,
+                                                  width: 6,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius: BorderRadius.circular(50),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
+
+                        ),
+
+                        Container(height: 1,
+                          color: Color(0xff707070),),
+
+                        SizedBox(height: 8,),
+
+                        InkWell(
+                          onTap: (){
+                            if(movedown4==false){
+                              setState(() {
+                                movedown4=true;
+                                _controller3.forward();
+                              });
+                            }
+                            else{
+                              setState(() {
+                                movedown4=false;
+                                _controller3.reverse();
+                              });
+                            }
+
+                          },
+                          child: Row(
+                            children: [
+                              VariableText(
+                                text: getTranslated(context, "Pet Size"),
+                                fontcolor: Color(0xFF2C3E50),
+                                fontsize: 15,
+                                fontFamily: 'sftr',
+                              ),
+                              Spacer(),
+                              movedown4?RotationTransition(
+                                  turns: turnsTween.animate(_controller3),
+
+                                  child: Image.asset('lib/assets/icons/movedown.png',scale: 4,)):Image.asset('lib/assets/icons/movedown.png',scale: 4,)
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 8,),
+                        movedown4?Container():Row(
+                          children:
+                          List.generate(petSize.length, (index){
+
+                            return Row(
+                              children: [
+                                SizedBox(width: widget.cWidth*0.04,),
+                                CustomButton(
+                                    buttonHeight: widget.cHeight*0.05,
+                                    buttonWidth:widget.cWidth*0.25,
+                                    buttonBorderRadius:15,
+                                    buttonBorderColor: petSizeSelected==index?themeColor2:themeColor1,
+                                    buttonFontSize:widget.cHeight*0.018,
+                                    buttonTextColor: petSizeSelected==index?themeColor2: Color(0xFF2C3E50),
+                                    buttonColor: petSizeSelected==index?themeColor1:themeColor2,
+                                    buttonText: petSize[index],
+                                    buttonFontFamily:'sftr',
+                                    buttonOnTap:(){
+                                      _onselectedpetSize(index);
+                                    }
+                                ),
+
+
+
+
+
+                              ],
+                            );
+
+                          }
+                          ),
+                        ),
+
+                        SizedBox(height: 8,),
+                        Container(height: 1,
+                          color: Color(0xff707070),),
+
+                        SizedBox(height: 8,),
+
+                        InkWell(
+                          onTap: (){
+                            if(movedown5==false){
+                              setState(() {
+                                movedown5=true;
+                                _controller4.forward();
+                              });
+                            }
+                            else{
+                              setState(() {
+                                movedown5=false;
+                                _controller4.reverse();
+                              });
+                            }
+
+                          },
+                          child: Row(
+                            children: [
+                              VariableText(
+                                text: getTranslated(context, "Service Location"),
+                                fontcolor: Color(0xFF2C3E50),
+                                fontsize: 15,
+                                fontFamily: 'sftr',
+                              ),
+                              Spacer(),
+                              movedown5?RotationTransition(
+                                  turns: turnsTween.animate(_controller4),
+
+                                  child: Image.asset('lib/assets/icons/movedown.png',scale: 4,)):Image.asset('lib/assets/icons/movedown.png',scale: 4,)
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 8,),
+                        movedown5?Container():Row(
+                          children:
+                          List.generate(petSize.length, (index){
+
+                            return Row(
+                              children: [
+                                SizedBox(width: widget.cWidth*0.04,),
+                                CustomButton(
+                                    buttonHeight: widget.cHeight*0.05,
+                                    buttonWidth:widget.cWidth*0.25,
+                                    buttonBorderRadius:15,
+
+                                    buttonBorderColor: serviceLocationSelected==index?themeColor2:themeColor1,
+                                    buttonFontSize:widget.cHeight*0.018,
+                                    buttonTextColor: serviceLocationSelected==index?themeColor2: Color(0xFF2C3E50),
+                                    buttonColor: serviceLocationSelected==index?themeColor1:themeColor2,
+                                    buttonText: serviceLocation[index],
+                                    buttonFontFamily:'sftr',
+                                    buttonOnTap:(){
+                                      _onselectedserviceLocation(index);
+                                    }
+                                ),
+
+
+
+
+
+                              ],
+                            );
+
+                          }
+                          ),
+                        ),
+                        SizedBox(height: 8,),
+                        Container(height: 1,
+                          color: Color(0xff707070),),
+
+                        SizedBox(height: 8,),
+
+                        InkWell(
+                          onTap: (){
+                            if(movedown6==false){
+                              setState(() {
+                                movedown6=true;
+                                _controller5.forward();
+                              });
+                            }
+                            else{
+                              setState(() {
+                                movedown6=false;
+                                _controller5.reverse();
+                              });
+                            }
+
+                          },
+                          child: Row(
+                            children: [
+                              VariableText(
+                                text: getTranslated(context, "Price Range"),
+                                fontcolor: Color(0xFF2C3E50),
+                                fontsize: 15,
+                                fontFamily: 'sftr',
+                              ),
+                              Spacer(),
+                              movedown6?RotationTransition(
+                                  turns: turnsTween.animate(_controller5),
+
+                                  child: Image.asset('lib/assets/icons/movedown.png',scale: 4,)):Image.asset('lib/assets/icons/movedown.png',scale: 4,)
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 8,),
+                        movedown6?Container():Row(
+                          children:
+                          List.generate(priceRange.length, (index){
+
+                            return Row(
+                              children: [
+                                SizedBox(width: widget.cWidth*0.04,),
+                                CustomButton(
+                                    buttonHeight: widget.cHeight*0.05,
+                                    buttonWidth:widget.cWidth*0.25,
+                                    buttonBorderRadius:15,
+
+                                    buttonBorderColor: priceRangeSelected==index?themeColor2:themeColor1,
+                                    buttonFontSize:widget.cHeight*0.018,
+                                    buttonTextColor: priceRangeSelected==index?themeColor2: Color(0xFF2C3E50),
+                                    buttonColor: priceRangeSelected==index?themeColor1:themeColor2,
+                                    buttonText: priceRange[index],
+                                    buttonFontFamily:'sftr',
+                                    buttonOnTap:(){
+                                      _onselectedpriceRange(index);
+                                    }
+                                ),
+
+
+
+
+
+                              ],
+                            );
+
+                          }
+                          ),
+                        ),
+                        SizedBox(height: 8,),
+                        Container(height: 1,
+                          color: Color(0xff707070),),
+
+                        SizedBox(height: 8,),
+
+                        InkWell(
+                          onTap: (){
+                            if(movedown7==false){
+                              setState(() {
+                                movedown7=true;
+                                _controller6.forward();
+                              });
+                            }
+                            else{
+                              setState(() {
+                                movedown7=false;
+                                _controller6.reverse();
+                              });
+                            }
+
+                          },
+                          child: Row(
+                            children: [
+                              VariableText(
+                                text: getTranslated(context, "Pet Type"),
+                                fontcolor: Color(0xFF2C3E50),
+                                fontsize: 15,
+                                fontFamily: 'sftr',
+                              ),
+                              Spacer(),
+                              movedown7?RotationTransition(
+                                  turns: turnsTween.animate(_controller6),
+
+                                  child: Image.asset('lib/assets/icons/movedown.png',scale: 4,)):Image.asset('lib/assets/icons/movedown.png',scale: 4,)
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 8,),
+                        movedown7?Container():
+                        ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            itemCount: pets.length,
+                            itemBuilder: (BuildContext context,int index){
+                              return InkWell(
+                                onTap: (){
+                                  if(petCheck[index]){
+                                    setState(() {
+                                      petCheck[index] = false;
+                                    });
+                                  }else{
+                                    setState(() {
+                                      petCheck[index] = true;
+                                    });
+                                  }
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                                  child: Row(
+                                    children: [
+                                  /*    CircleAvatar(
+                                        radius:widget.cHeight*0.02,
+                                        backgroundImage:
+                                        AssetImage(pets[index]['image']),
+                                        backgroundColor: Color(0xffEAF0F9),
+                                      ),*/
+                                      VariableText(
+                                          text: getTranslated(context, pets[index]['name'].toString()),
+                                          fontsize: widget.cHeight*0.017,
+                                          fontcolor:Color(0xff2B3E4F),
+                                          weight: FontWeight.normal,
+                                          fontFamily: 'sftr'),
+                                      Spacer(),
+                                      Container(
+                                        height: widget.cHeight * 0.025,
+                                        width: widget.cHeight * 0.025,
+                                        decoration: BoxDecoration(
+                                            color: petCheck[index] == true ? Color(0xFF00AEEF) : Colors.white,
+                                            border: Border.all(color: petCheck[index] == true ? Color(0xFF00AEEF) : Color(0xFFB7B7B7)),
+                                            borderRadius: BorderRadius.circular(3)
+                                        ),
+                                        child: Center(child: Icon(Icons.check, size: 15, color: Colors.white)),
+                                      )
+                                    ],
+                                    /*child: ListTile(
+                            leading:
+                            CircleAvatar(
+                              radius:widget.height*0.02,
+                              backgroundImage:
+                              AssetImage(pets[index]['image']),
+                              backgroundColor: Color(0xffEAF0F9),
+                            ),
+                            title: VariableText(
+                              text: pets[index]['name'],
+                              fontsize: widget.height*0.017,
+                              fontcolor:defaultindex==index ? themeColor2 : Color(0xff2B3E4F),
+                              weight: FontWeight.normal,
+                              fontFamily: 'sftr',),
+                          ),*/
+                                  ),
+                                ),
+                              );
+                            }),
+
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: (){
+              widget.onNext();
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: widget.cHeight * 0.06,
+                      //width: widget.cWidth,
+                      decoration: BoxDecoration(
+                          color: Color(0xFF00AEEF),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                          child: VariableText(
+                              text: getTranslated(context, 'Apply Filter'),
+                              fontsize: 20,
+                              fontcolor: Colors.white,
+                              fontFamily: 'sfdm')),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SpecialitySheet extends StatefulWidget {
+  double cHeight;
+  double cWidth;
+  Function onNext;
+
+  SpecialitySheet({this.onNext, this.cWidth, this.cHeight});
+
+  @override
+  _SpecialitySheetState createState() => _SpecialitySheetState();
+}
+
+class _SpecialitySheetState extends State<SpecialitySheet> {
+  List<String> specialities = [
+    'General Consultation',
+    'Vaccinations',
+    'Dentistry',
+    'Internal Medicine',
+    'Certification',
+  ];
+  int _selectedIndexsort = 0;
+
+  onSharePressed(int i) {
+    setState(() {
+      _selectedIndexsort = i;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).orientation == Orientation.portrait ? widget.cHeight * 0.40 : MediaQuery.of(context).size.height * 0.70,
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: widget.cHeight * 0.02, horizontal: widget.cHeight * 0.02),
+            child: Stack(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment:MainAxisAlignment.center,
+                  children: [
+                    //Spacer(),
+                    VariableText(
+                      text: getTranslated(context, 'Speciality'),
+                      fontcolor: Color(0xFF2C3E50),
+                      fontsize: 22,
+                      fontFamily: 'sfdb',
+                    ),
+                    //Spacer(),
+
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment:MainAxisAlignment.end,
+                  children: [
+                    VariableText(
+                      text: getTranslated(context, 'Clear All'),
+                      fontcolor: themeColor1,
+                      fontsize: 11,
+                      fontFamily: 'sftr',
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: DelayedDisplay(
+              slidingCurve: Curves.fastLinearToSlowEaseIn,
+              delay: Duration(milliseconds: 100),
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemCount: specialities.length,
+                  itemBuilder: (BuildContext context, index) {
+                    return InkWell(
+                      onTap: () => onSharePressed(index),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            VariableText(
+                              text: getTranslated(context, specialities[index].toString()),
+                              fontcolor: Color(0xFF2C3E50),
+                              fontsize: 15,
+                              fontFamily: 'sftr',
+                            ),
+                            Container(
+                              height: 18,
+                              width: 18,
+                              decoration: BoxDecoration(
+                                  color: _selectedIndexsort == index
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: _selectedIndexsort == index ? Border.all(color: Theme.of(context).primaryColor) : Border.all(color: Color(0xFFB6B6B6))),
+                              child: Stack(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      height: 6,
+                                      width: 6,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+            ),
+          ),
+          InkWell(
+            onTap: (){
+              widget.onNext();
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: widget.cHeight * 0.06,
+                      //width: widget.cWidth,
+                      decoration: BoxDecoration(
+                          color: Color(0xFF00AEEF),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                          child: VariableText(
+                              text: getTranslated(context, 'Apply'),
+                              fontsize: 20,
+                              fontcolor: Colors.white,
+                              fontFamily: 'sfdm')),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ServiceLocationSheet extends StatefulWidget {
+  double cHeight;
+  double cWidth;
+  Function onNext;
+
+  ServiceLocationSheet({this.onNext, this.cWidth, this.cHeight});
+
+  @override
+  _ServiceLocationSheetState createState() => _ServiceLocationSheetState();
+}
+
+class _ServiceLocationSheetState extends State<ServiceLocationSheet> {
+  List<String> serviceLocation = [
+    'Online',
+    'At Home',
+    'Clinic',
+  ];
+  int _selectedIndexsort = 0;
+
+  onSharePressed(int i) {
+    setState(() {
+      _selectedIndexsort = i;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).orientation == Orientation.portrait ? widget.cHeight * 0.40 : MediaQuery.of(context).size.height * 0.70,
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: widget.cHeight * 0.02, horizontal: widget.cHeight * 0.02),
+            child: Stack(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment:MainAxisAlignment.center,
+                  children: [
+                    //Spacer(),
+                    VariableText(
+                      text: getTranslated(context, 'Service Location'),
+                      fontcolor: Color(0xFF2C3E50),
+                      fontsize: 22,
+                      fontFamily: 'sfdb',
+                    ),
+                    //Spacer(),
+
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment:MainAxisAlignment.end,
+                  children: [
+                    VariableText(
+                      text: getTranslated(context, 'Clear All'),
+                      fontcolor: themeColor1,
+                      fontsize: 11,
+                      fontFamily: 'sftr',
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: DelayedDisplay(
+              slidingCurve: Curves.fastLinearToSlowEaseIn,
+              delay: Duration(milliseconds: 100),
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemCount: serviceLocation.length,
+                  itemBuilder: (BuildContext context, index) {
+                    return InkWell(
+                      onTap: () => onSharePressed(index),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            VariableText(
+                              text: getTranslated(context, serviceLocation[index].toString()),
+                              fontcolor: Color(0xFF2C3E50),
+                              fontsize: 15,
+                              fontFamily: 'sftr',
+                            ),
+                            Container(
+                              height: 18,
+                              width: 18,
+                              decoration: BoxDecoration(
+                                  color: _selectedIndexsort == index
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: _selectedIndexsort == index ? Border.all(color: Theme.of(context).primaryColor) : Border.all(color: Color(0xFFB6B6B6))),
+                              child: Stack(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      height: 6,
+                                      width: 6,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+            ),
+          ),
+          InkWell(
+            onTap: (){
+              widget.onNext();
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: widget.cHeight * 0.06,
+                      //width: widget.cWidth,
+                      decoration: BoxDecoration(
+                          color: Color(0xFF00AEEF),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                          child: VariableText(
+                              text: getTranslated(context, 'Apply'),
+                              fontsize: 20,
+                              fontcolor: Colors.white,
+                              fontFamily: 'sfdm')),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

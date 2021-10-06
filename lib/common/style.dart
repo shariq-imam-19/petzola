@@ -40,6 +40,7 @@ const TextStyle sfsb18 =TextStyle(
 ///Ali
 const Color themeColor1=Color(0xFF00AEEf);
 const Color themeColor2=Color(0xffffffff);
+const Color themeColor3=Color(0xffF47920);
 const Color hinttextColor=  Color(0x6c3C3C43,);
 const Color textColor=  Color(0xff2B3E4F,);
 const Color appBarIconColor = Color(0xFF2C3E50);

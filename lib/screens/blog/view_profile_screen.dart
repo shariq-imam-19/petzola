@@ -499,7 +499,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                                   ),
                                   Padding(
                                     padding:  EdgeInsets.only(top: height*0.016,left: height*0.298),
-                                    child: Image.asset("lib/assets/icons/cameraicon.png",scale: height*0.005,),
+                                    child: Image.asset("lib/assets/icons/cameraicon.png",scale: height*0.0035,),
                                   )
 
                                 ],

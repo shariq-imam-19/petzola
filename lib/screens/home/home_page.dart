@@ -1,24 +1,47 @@
 import 'dart:io';
 
+//import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 import 'package:petzola/common/commons.dart';
 import 'package:petzola/common/common_z.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petzola/common/commons.dart';
+import 'package:petzola/common/global_variables.dart';
 
 import 'package:petzola/common/style.dart';
+import 'package:petzola/localization/demo_localization.dart';
+import 'package:petzola/localization/language_constants.dart';
 import 'package:petzola/screens/home/blogs_screen.dart';
 import 'package:petzola/screens/home/home_screen.dart';
 import 'package:petzola/screens/home/menu_screen.dart';
 import 'package:petzola/screens/home/pets_screen.dart';
 import 'package:petzola/screens/home/schedule_screen.dart';
+import 'package:petzola/screens/messege/messege_screen.dart';
 import 'package:petzola/screens/notification/notification_screen.dart';
+import 'package:petzola/screens/profile/edit_profile_screen.dart';
+import 'dart:math' as math;
 
 import '../../common/style.dart';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 class HomePage extends StatefulWidget {
+
+  int pageIndex;
+  var newAppointment;
+  HomePage({this.pageIndex, this.newAppointment});
+
+  static void setLocale(BuildContext context, Locale newLocale) {
+    _HomePageState state = context.findAncestorStateOfType<_HomePageState>();
+    state.setLocalee(newLocale);
+  }
+
   @override
   _HomePageState createState() => _HomePageState();
+
+
+
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
@@ -28,22 +51,39 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final List<Widget> _children = [];
   int _currentIndex = 2;
 
+  Locale _locale;
+
+  setLocalee(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+
+  @override
+  void didChangeDependencies() async {
+    Locale a = await getLocale();
+    setState(() {
+      _locale = a;
+    });
+    super.didChangeDependencies();
+  }
+
   Future<bool> _onBackPressed() {
     return showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('Are you sure?'),
-              content: Text('Do you want to exit an App'),
+              title: Text(getTranslated(context, 'Are you sure?')),
+              content: Text(getTranslated(context, 'Do you want to exit an App')),
               actions: <Widget>[
                 FlatButton(
-                  child: Text('No'),
+                  child: Text(getTranslated(context, 'No')),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
                 FlatButton(
-                  child: Text('Yes'),
+                  child: Text(getTranslated(context, 'Yes')),
                   onPressed: () {
                     exit(0);
                   },
@@ -63,78 +103,212 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   @override
-  void initState() {
+  void initState(){
     // TODO: implement initState
     super.initState();
     tabBarController = TabController(length: tabData.length, vsync: this);
     tabViewController = TabController(length: tabData.length, vsync: this);
     tabBarController.index = 2;
     tabViewController.index = tabBarController.index;
+    if(widget.pageIndex!=null){
+      tabBarController.index = widget.pageIndex;
+      tabViewController.animateTo(widget.pageIndex);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Directionality(
-        textDirection: TextDirection.ltr,
-        child: Builder(
+
+      return MaterialApp(
+        locale: _locale,
+        supportedLocales: [Locale("ar", "SA"), Locale("en", "US")],
+        localizationsDelegates: [
+          DemoLocalization.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        localeResolutionCallback: (locale, supportedLocales) {
+          for (var supportedLocale in supportedLocales) {
+            if (supportedLocale.languageCode == locale.languageCode ||
+                supportedLocale.countryCode == locale.countryCode) {
+              currLang = supportedLocale.languageCode;
+              return supportedLocale;
+            }
+          }
+          return supportedLocales.first;
+        },
+        home: Builder(
           builder: (BuildContext context) {
             return WillPopScope(
               onWillPop: _onBackPressed,
               child: Scaffold(
                 backgroundColor: Colors.white,
-                appBar: renderAppbar(),
-                body: TabBarView(
-                  controller: tabViewController,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: [
-                    PetsScreen(),
-                    ScheduleScreen(),
-                    HomeScreen(),
-                    BlogsScreen(),
-                    MenuScreen(onTap: (){
-                      tabBarController.index=0;
-                      tabViewController.animateTo(0);
-                      setState(() {});
-                    },)
+                appBar: tabBarController.index == 0 ? AppBar(
+                  elevation: 0,
+                  backgroundColor: Colors.white,
+                  titleSpacing: 0,
+                  centerTitle: true,
+                  leadingWidth: 65,
+                  title: VariableText(text: getTranslated(context, 'My Pets') , fontcolor: Color(0xFF2C3E50), fontsize: 17, fontFamily: 'sftsb',),
+                  leading: Container(
+                    margin: EdgeInsets.only(left: 8),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Color(0xFFEAF0F9),
+                            borderRadius: BorderRadius.circular(60)
+                        ),
+                        child:
+                        currLang == 'ar' ?
+                        Transform(
+                          alignment: Alignment.center,
+                          transform: Matrix4.rotationY(math.pi),
+                          child: IconButton(icon: Image.asset('lib/assets/icons/appbar_back.png', scale: 3.2,),
+                            onPressed: (){
+                              tabBarController.index = 2;
+                              _currentIndex = 2;
+                              tabViewController.animateTo(2);
+                              setState(() {});
+                            },
+                          ),
+                        ) :
+                        IconButton(icon: Image.asset('lib/assets/icons/appbar_back.png', scale: 3.2,),
+                          onPressed: (){
+                            tabBarController.index = 2;
+                            _currentIndex = 2;
+                            tabViewController.animateTo(2);
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  actions: [
+                    InkWell(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext contextB)=>MainNotificationScreen()));},
+                      child: SizedBox(
+                        width: 26,
+                        child: Image.asset("lib/assets/icons/notification2x.png", color: appBarIconColor),
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (_)=>MainMessegeScreen()));},
+
+
+                      child: SizedBox(
+                        width: 26,
+                        child: Image.asset("lib/assets/icons/chat2x.png", color: appBarIconColor),
+                      ),
+                    ),
+                    SizedBox(width: 16,),
+                  ],
+                ):
+                AppBar(
+                  elevation: 0,
+                  backgroundColor: Colors.white,
+                  titleSpacing: 16,
+                  title:Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: (){
+                              Navigator.push(context,MaterialPageRoute(builder: (_)=>EditProfileScreen()));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Color(0xFFF8F7F7),
+                                  borderRadius: BorderRadius.circular(50)
+                              ),
+                              child: Image.asset('lib/assets/images/user_profile.png', scale: 3.1,),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          tabViewController.index == 2 ?
+                          VariableText(text: getTranslated(context, 'Welcome'), fontcolor: Color(0xFF2C3E50), fontsize: 17, fontFamily: 'sftsb',)
+                              :
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children:[
+                                VariableText(text: getTranslated(context, 'Welcome Back') , fontcolor: Color(0xFF3C3C43), fontsize: 11, fontFamily: 'sftsb'),
+                                VariableText(text: 'Laurel Watkins', fontcolor: Color(0xFF2C3E50), fontsize: 17, fontFamily: 'sftsb'),
+                              ]
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    InkWell(
+                      onTap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>MainNotificationScreen()));},
+                      child: SizedBox(
+                        width: 26,
+                        child: Image.asset("lib/assets/icons/notification2x.png", color: appBarIconColor),
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (_)=>MainMessegeScreen()));
+                      },
+                      child: SizedBox(
+                        width: 26,
+                        child: Image.asset("lib/assets/icons/chat2x.png", color: appBarIconColor),
+                      ),
+                    ),
+                    SizedBox(width: 16,),
                   ],
                 ),
-                bottomNavigationBar: renderBottomNavBar(),
-                /*bottomNavigationBar: BottomNavigationBar(
-                  currentIndex: _currentIndex,
-                  onTap: onTabTapped,
-                  items: [
-                    new BottomNavigationBarItem(
-                      icon: Icon(Icons.home),
-                      title: Text(''),
+                //renderAppbar(context),
+                body: Stack(
+                  children: [
+                    TabBarView(
+                      controller: tabViewController,
+                      physics: NeverScrollableScrollPhysics(),
+                      children: [
+                        PetsScreen(),
+                        ScheduleScreen(newAppointment: widget.newAppointment),
+                        HomeScreen(),
+                        BlogsScreen(),
+                        MenuScreen(onTap: () {
+                          tabBarController.index = 0;
+                          tabViewController.animateTo(0);
+                          setState(() {});
+                        },)
+                      ],
                     ),
-                    new BottomNavigationBarItem(
-                      icon: Icon(Icons.mail),
-                      title: Text(''),
-                    ),
-                    new BottomNavigationBarItem(
-                        icon: Icon(Icons.person),
-                        title: Text('')
-                    ),
+                    Positioned(
+                        bottom: 0,
+                        right: 0,
+                        left: 0,
+                        child: renderBottomNavBar()),
+
 
                   ],
-                ),*/
+                ),
+                //bottomNavigationBar: renderBottomNavBar(),
               ),
             );
           },
         ),
-      ),
-    );
+      );
+
   }
 
-  Widget renderAppbar(){
+  Widget renderAppbar(contextB){
     return tabBarController.index == 0 ? AppBar(
       elevation: 0,
       backgroundColor: Colors.white,
       titleSpacing: 0,
       centerTitle: true,
       leadingWidth: 65,
-      title: VariableText(text: 'My Pets', fontcolor: Color(0xFF2C3E50), fontsize: 17, fontFamily: 'sftsb',),
+      title: VariableText(text: getTranslated(context, 'My Pets') , fontcolor: Color(0xFF2C3E50), fontsize: 17, fontFamily: 'sftsb',),
       leading: Container(
         margin: EdgeInsets.only(left: 8),
         child: Padding(
@@ -144,20 +318,35 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               color: Color(0xFFEAF0F9),
               borderRadius: BorderRadius.circular(60)
             ),
-            child: IconButton(icon: Image.asset('lib/assets/icons/appbar_back.png', scale: 3.2,),
-              onPressed: (){
-                tabBarController.index = 2;
-                _currentIndex = 2;
-                tabViewController.animateTo(2);
-                setState(() {});
-              },
-            ),
+            child:
+                currLang == 'ar' ?
+            Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(math.pi),
+              child: IconButton(icon: Image.asset('lib/assets/icons/appbar_back.png', scale: 3.2,),
+                onPressed: (){
+                  tabBarController.index = 2;
+                  _currentIndex = 2;
+                  tabViewController.animateTo(2);
+                  setState(() {});
+                },
+              ),
+            ) :
+                IconButton(icon: Image.asset('lib/assets/icons/appbar_back.png', scale: 3.2,),
+                  onPressed: (){
+                    tabBarController.index = 2;
+                    _currentIndex = 2;
+                    tabViewController.animateTo(2);
+                    setState(() {});
+                  },
+                ),
           ),
         ),
       ),
       actions: [
         InkWell(
-          onTap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>MainNotificationScreen()));},
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext contextB)=>MainNotificationScreen()));},
           child: SizedBox(
             width: 26,
             child: Image.asset("lib/assets/icons/notification2x.png", color: appBarIconColor),
@@ -165,7 +354,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
         SizedBox(width: 12),
         InkWell(
-          onTap: () {},
+          onTap: () {
+    Navigator.push(context, MaterialPageRoute(builder: (_)=>MainMessegeScreen()));},
+
+
           child: SizedBox(
             width: 26,
             child: Image.asset("lib/assets/icons/chat2x.png", color: appBarIconColor),
@@ -183,53 +375,31 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         children: [
           Row(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                    color: Color(0xFFF8F7F7),
-                  borderRadius: BorderRadius.circular(50)
+              InkWell(
+                onTap: (){
+                  Navigator.push(context,MaterialPageRoute(builder: (_)=>EditProfileScreen()));
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Color(0xFFF8F7F7),
+                    borderRadius: BorderRadius.circular(50)
+                  ),
+                  child: Image.asset('lib/assets/images/user_profile.png', scale: 3.1,),
                 ),
-                child: Image.asset('lib/assets/images/user_profile.png', scale: 3.1,),
               ),
               SizedBox(width: 10),
               tabViewController.index == 2 ?
-              VariableText(text: 'Welcome', fontcolor: Color(0xFF2C3E50), fontsize: 17, fontFamily: 'sftsb',)
+              VariableText(text: getTranslated(context, 'Welcome'), fontcolor: Color(0xFF2C3E50), fontsize: 17, fontFamily: 'sftsb',)
                   :
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
               children:[
-              VariableText(text: 'Welcome Back', fontcolor: Color(0xFF3C3C43), fontsize: 11, fontFamily: 'sftsb'),
+              VariableText(text: getTranslated(context, 'Welcome Back') , fontcolor: Color(0xFF3C3C43), fontsize: 11, fontFamily: 'sftsb'),
                 VariableText(text: 'Laurel Watkins', fontcolor: Color(0xFF2C3E50), fontsize: 17, fontFamily: 'sftsb'),
               ]
               )
             ],
           ),
-          /*Row(
-            children: [
-              GestureDetector(
-                onTap: (){},
-                child: Container(
-                  child: ImageIcon(
-                    AssetImage('lib/assets/icons/notification2x.png'),
-                    color: Colors.black,
-                    size: 26,
-                  ),
-                ),
-              ),
-              SizedBox(width: 12),
-              GestureDetector(
-                onTap: (){
-                  print("asd");
-                },
-                child: Container(
-                  child: ImageIcon(
-                    AssetImage('lib/assets/icons/chat2x.png'),
-                    color: Colors.black,
-                    size: 26,
-                  ),
-                ),
-              )
-            ],
-          )*/
         ],
       ),
       actions: [
@@ -242,7 +412,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
         SizedBox(width: 12),
         InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (_)=>MainMessegeScreen()));
+          },
           child: SizedBox(
             width: 26,
             child: Image.asset("lib/assets/icons/chat2x.png", color: appBarIconColor),
@@ -326,7 +498,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         return ClipPath(
           clipper: ArcClipper(),
           child: Container(
-            //color: Colors.red,
+            color: Colors.white,
             height: 90,
             width: MediaQuery.of(context).size.width /
 
@@ -411,13 +583,35 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 }
 
 class ArcClipper extends CustomClipper<Path> {
+
+  /*@override
+  Path getClip(Size size) {
+    var path = Path();
+    path.lineTo(0.0, size.height - 30);
+
+    var firstControlPoint = Offset(size.width / 4, size.height);
+    var firstPoint = Offset(size.width / 2, size.height);
+    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
+        firstPoint.dx, firstPoint.dy);
+
+    var secondControlPoint = Offset(size.width - (size.width / 4), size.height);
+    var secondPoint = Offset(size.width, size.height - 30);
+    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
+        secondPoint.dx, secondPoint.dy);
+
+    path.lineTo(size.width, 0.0);
+    path.close();
+
+    return path;
+  }*/
+
   @override
   Path getClip(Size size) {
     Path path = Path();
 
     var controlPoint = Offset(size.width/2, -20);
     var endPoint = Offset(0, 20);
-    path.moveTo(0, 0);
+    path.moveTo(0, 10);
     path.lineTo(0, size.height);
     path.lineTo(size.width, size.height);
     path.lineTo(size.width, 20);
@@ -429,5 +623,5 @@ class ArcClipper extends CustomClipper<Path> {
   }
 
   @override
-  bool shouldReclip(CustomClipper old) => false;
+  bool shouldReclip(CustomClipper<Path> old) => false;
 }

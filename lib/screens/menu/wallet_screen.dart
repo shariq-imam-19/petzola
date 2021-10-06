@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:petzola/common/commons.dart';
 import 'package:petzola/common/common_z.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:petzola/common/global_variables.dart';
 import 'package:petzola/common/style.dart';
+import 'package:petzola/localization/language_constants.dart';
 import 'package:vector_math/vector_math.dart' as v_math;
 class WalletScreen extends StatefulWidget {
 
@@ -34,6 +36,7 @@ class _WalletScreenState extends State<WalletScreen> {
            body: Padding(
              padding:  EdgeInsets.symmetric(horizontal:height*0.025),
              child: SingleChildScrollView(
+
                child: Column(
                  crossAxisAlignment: CrossAxisAlignment.start,
                  children: [
@@ -42,29 +45,58 @@ class _WalletScreenState extends State<WalletScreen> {
                    Container(
                      height: height*0.25,
                      width: height*0.95,
-                     child: Row(
+                     child:
+                         currLang =='ar' ?
+                     Row(
                        children: [
-                         CustomCurveContainer(text1:"766.00" ,text2:"Eg" ,text3:"Balance" ,
-                             iconpath:   'lib/assets/icons/wallet.png',
-                             height: height,
-                             width: height ,
-                             showEg: true,
-                             sidecircle1:false,
-                             orientation: true,
-                             sidecircle2:true),
-                         SizedBox(width: height*0.05,),
+                         Expanded(
+                           child: CustomCurveContainer(text1:"766.00" ,text2:"Eg" ,text3:"Balance" ,
+                               iconpath:   'lib/assets/icons/wallet.png',
+                               height: height,
+                               width: height ,
+                               showEg: true,
+                               sidecircle1:true,
+                               orientation: true,
+                               sidecircle2:false),
+                         ),
+                         SizedBox(width: height*0.02,),
 
-                         CustomCurveContainer(text1:"766.00" ,text2:"Eg" ,text3:"Balance" ,
-                             iconpath:   'lib/assets/icons/wallet.png',
-                             height: height,
-                             width: height ,
-                             orientation: true,
-                             showEg: true,
-                             sidecircle1:false,
-                             sidecircle2:true),
+                         Expanded(
+                           child: CustomCurveContainer(text1:"32157" ,text2:"" ,text3:"Point" ,
+                               iconpath:   'lib/assets/icons/coin.png',
+                               height: height,
+                               width: height ,
+                               orientation: true,
+                               showEg: true,
+                               sidecircle1:false,
+                               sidecircle2:true),
+                         ),
 
                        ],
-                     ),
+                     ) :
+                         Row(
+                           children: [
+                             CustomCurveContainer(text1:"766.00" ,text2:"Eg" ,text3:"Balance" ,
+                                 iconpath:   'lib/assets/icons/wallet.png',
+                                 height: height,
+                                 width: height ,
+                                 showEg: true,
+                                 sidecircle1:false,
+                                 orientation: true,
+                                 sidecircle2:true),
+                             SizedBox(width: height*0.05,),
+
+                             CustomCurveContainer(text1:"32157" ,text2:"" ,text3:"Point" ,
+                                 iconpath:   'lib/assets/icons/coin.png',
+                                 height: height,
+                                 width: height ,
+                                 orientation: true,
+                                 showEg: true,
+                                 sidecircle1:true,
+                                 sidecircle2:false),
+
+                           ],
+                         ),
                    ),
                    SizedBox(height: height*0.03,),
 
@@ -75,14 +107,14 @@ class _WalletScreenState extends State<WalletScreen> {
                        buttonFontSize:height*0.025,
                        buttonColor:themeColor1,
                        buttonTextColor:themeColor2,
-                       buttonText: "Redeeming points",
+                       buttonText: getTranslated(context, "Redeeming Points"),
                        buttonFontFamily:'sfdm',
                        buttonOnTap:(){
                          Navigator.pop(context);
                        }
                    ),
                    SizedBox(height: height*0.03,),
-                   VariableText(text: "Transaction",
+                   VariableText(text: getTranslated(context, "Transaction"),
                      fontsize: height*0.022,
                      fontcolor: Color(0xff2B3E4F),
 
@@ -99,7 +131,7 @@ class _WalletScreenState extends State<WalletScreen> {
                              Image.asset('lib/assets/icons/walletoutline.png',scale: 5.5,),
                              SizedBox(height: height*0.025,),
                              Center(
-                               child: VariableText(text: "You Don’t Have Any Transactions Yet",
+                               child: VariableText(text: getTranslated(context, "You Don’t Have Any Transactions Yet") ,
                                  fontsize: height*0.016,
                                  fontcolor: Color(0xfc3C3C43),
                                  fontFamily: 'sftr',),
@@ -142,23 +174,57 @@ class _WalletScreenState extends State<WalletScreen> {
                 Container(
                   height: height*0.25,
                   width: width,
-                  child: Row(
+                  child:
+                  currLang == 'ar' ?
+                  Row(
                     children: [
-                      CustomCurveContainer(text1:"766.00" ,text2:"Eg" ,text3:"Balance" ,
-                      iconpath:   'lib/assets/icons/wallet.png',
-                      height: height,
-                      width: width ,
-                      showEg: true,
-                          sidecircle1:false,
-                          sidecircle2:true),
-                      SizedBox(width: height*0.03,),
-                      CustomCurveContainer(text1:"32157" ,text2:"" ,text3:"Point" ,
-                        iconpath:   'lib/assets/icons/coin.png',
+                      Expanded(
+                        child: CustomCurveContainer(text1:"766.00" ,text2:"Eg" ,text3:"Balance" ,
+                        iconpath:   'lib/assets/icons/wallet.png',
                         height: height,
                         width: width ,
-                        showEg: false,
-                          sidecircle1:true,
-                          sidecircle2:false),
+                        showEg: true,
+                            orientation: false,
+                            sidecircle1:true,
+                            sidecircle2:false),
+                      ),
+                      SizedBox(width: height*0.02,),
+                      Expanded(
+                        child: CustomCurveContainer(text1:"32157" ,text2:"" ,text3:"Point" ,
+                          iconpath:   'lib/assets/icons/coin.png',
+                          height: height,
+                          width: width ,
+                          showEg: false,
+                            orientation: false,
+                            sidecircle1:false,
+                            sidecircle2:true),
+                      ),
+
+                    ],
+                  ) :
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomCurveContainer(text1:"766.00" ,text2:"Eg" ,text3:"Balance" ,
+                            iconpath:   'lib/assets/icons/wallet.png',
+                            height: height,
+                            width: width ,
+                            showEg: true,
+                            orientation: false,
+                            sidecircle1:false,
+                            sidecircle2:true),
+                      ),
+                      SizedBox(width: height*0.02,),
+                      Expanded(
+                        child: CustomCurveContainer(text1:"32157" ,text2:"" ,text3:"Point" ,
+                            iconpath:   'lib/assets/icons/coin.png',
+                            height: height,
+                            width: width ,
+                            showEg: false,
+                            orientation: false,
+                            sidecircle1:true,
+                            sidecircle2:false),
+                      ),
 
                     ],
                   ),
@@ -170,17 +236,17 @@ class _WalletScreenState extends State<WalletScreen> {
                     buttonHeight: height*0.07,
                     buttonWidth:width*0.90,
                     buttonBorderRadius:8,
-                    buttonFontSize:height*0.025,
+                    buttonFontSize:height*0.022,
                     buttonColor:themeColor1,
                     buttonTextColor:themeColor2,
-                    buttonText: "Redeeming points",
+                    buttonText: getTranslated(context, "Redeeming Points"),
                     buttonFontFamily:'sfdm',
                     buttonOnTap:(){
                       Navigator.pop(context);
                     }
                 ),
                 SizedBox(height: height*0.03,),
-                VariableText(text: "Transaction",
+                VariableText(text: getTranslated(context, "Transaction"),
                   fontsize: height*0.022,
                   fontcolor: Color(0xff2B3E4F),
 
@@ -197,7 +263,7 @@ class _WalletScreenState extends State<WalletScreen> {
                           Image.asset('lib/assets/icons/walletoutline.png',scale: 5.5,),
                           SizedBox(height: height*0.025,),
                           Center(
-                            child: VariableText(text: "You Don’t Have Any Transactions Yet",
+                            child: VariableText(text: getTranslated(context, "You Don’t Have Any Transactions Yet"),
                               fontsize: height*0.016,
                               fontcolor: Color(0xfc3C3C43),
 
@@ -246,7 +312,7 @@ class CustomCurveContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  ClipPath(
-      clipper: DolDurmaClipper( holeRadius: height * 0.055,bottom: height*0.095,sidecircle1: sidecircle1,sidecircle2: sidecircle2),
+      clipper: DolDurmaClipper( holeRadius: height * 0.055,bottom: height*0.070,sidecircle1: sidecircle1,sidecircle2: sidecircle2),
       child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
@@ -255,9 +321,8 @@ class CustomCurveContainer extends StatelessWidget {
             color: Color(0xffF0F5FC),
 
           ),
-           width:
-           orientation?width*0.45:width*0.41,
-          height:  height*0.23,
+           //width: orientation?width*0.45:width*0.41,
+          height:  height*0.20,
 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -266,7 +331,7 @@ class CustomCurveContainer extends StatelessWidget {
               Row(   crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  VariableText(text: text1, fontsize: height*0.030,fontFamily: 'sfdsb', fontcolor: Color(0xFF2B3E4F),),
+                  VariableText(text: text1, fontsize: height*0.028,fontFamily: 'sfdsb', fontcolor: Color(0xFF2B3E4F),),
                   SizedBox(width: height*0.005,),
                   showEg?Column(
                     children: [
@@ -279,19 +344,23 @@ class CustomCurveContainer extends StatelessWidget {
                 ],
               ),
               SizedBox(height: height*0.03,),
-              Row(   crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(iconpath,scale: 3.5,),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(iconpath,scale: 3.5,),
 
-                  Padding(
-                    padding:  EdgeInsets.only(top: height*0.015,left:  height*0.02,),
-                    child: VariableText(text: text3, fontsize: height*0.020,fontFamily: 'sftr', fontcolor: Color(0xFF2B3E4F),),
-                  ),
+                    Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 10),
+                      child: VariableText(text: getTranslated(context, text3.toString()), fontsize: height*0.020,fontFamily: 'sftr', fontcolor: Color(0xFF2B3E4F),),
+                    ),
 
 
 
-                ],
+                  ],
+                ),
               ),
 
 

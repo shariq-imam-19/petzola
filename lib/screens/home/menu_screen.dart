@@ -4,7 +4,9 @@ import 'package:petzola/common/commons.dart';
 
 import 'package:petzola/common/commons.dart';
 import 'package:petzola/common/common_z.dart';
+import 'package:petzola/common/global_variables.dart';
 import 'package:petzola/common/style.dart';
+import 'package:petzola/localization/language_constants.dart';
 import 'package:petzola/screens/menu/contactus_screen.dart';
 import 'package:petzola/screens/menu/faq_screen.dart';
 import 'package:petzola/screens/menu/favourite_screen.dart';
@@ -43,51 +45,40 @@ Widget menuScreen() {
         body: SingleChildScrollView(
           child: Stack(
             children: [
+              currLang == 'ar' ?
+              Positioned(
+                top: height*0.04,
+                right: height*0.05,
+                child: Container(
+                  margin: EdgeInsets.only(right: width*0.75),
+                  child:Image.asset("lib/assets/icons/menuimagesheet.png",scale: 4.1,)
+
+                  ,
+                ),
+              ) :
               Positioned(
                 top: height*0.05,
                 left: height*0.05,
                 child: Container(
                   margin: EdgeInsets.only(left: width*0.75),
-
-
                   child:Image.asset("lib/assets/icons/menuimagesheet.png",scale: 5.2,)
-
                   ,
                 ),
               ),
               Column(
                 children: [
                   SizedBox(height: width*0.07,),
-                  menuListTile(size: width,imagepath: "lib/assets/icons/mypets.png",text: "My pets",ontap:()=>widget.onTap(),),
+                  menuListTile(size: width,imagepath: "lib/assets/icons/mypets.png",text: "My Pets",ontap:()=>widget.onTap(),),
                   menuListTile(size: width,imagepath: "lib/assets/icons/menuwalleticon.png",text:"Wallet",ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>WalletScreen()));}, ),
-                  menuListTile(size: width,imagepath: "lib/assets/icons/menuinvitefriendicon.png",text: "Invite friend",ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>InviteFriendScreen()));}),
-                  menuListTile(size: width,imagepath: "lib/assets/icons/menufavouriteicon.png",text: "Favorite",ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>FavouriteScreen()));}),
+                  menuListTile(size: width,imagepath: "lib/assets/icons/menuinvitefriendicon.png",text: "Invite Friend",ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>InviteFriendScreen()));}),
+                  menuListTile(size: width,imagepath: "lib/assets/icons/menufavouriteicon.png",text: "Favourite",ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>FavouriteScreen()));}),
                   menuListTile(size: width,imagepath: "lib/assets/icons/menusettingicon.png",text:"Settings" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>ProfileScreen()));}),
-                  Padding(
-                    padding:  EdgeInsets.only(left: height*0.13),
-                    child: menuListTile(size: width,imagepath: "lib/assets/icons/menulanguageicon.png",text:"Language" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>LanguageScreen()));}),
-                  ),
-                  Padding(
-                    padding:  EdgeInsets.only(left: height*0.13),
-                    child: menuListTile(size: width,imagepath: "lib/assets/icons/menunotificationicon.png",text:"Notification" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>NotificationScreen()));}),
-                  ),
-
-                  menuListTile(size: width,imagepath: "lib/assets/icons/menucontactusicon.png",text:"Contact us" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>ContactusScreen()));}),
+                  menuListTile(size: width,imagepath: "lib/assets/icons/menulanguageicon.png",text:"Language" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>LanguageScreen()));}),
+                  menuListTile(size: width,imagepath: "lib/assets/icons/menunotificationicon.png",text:"Notification" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>NotificationScreen()));}),
+                  menuListTile(size: width,imagepath: "lib/assets/icons/menucontactusicon.png",text:"Contact Us" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>ContactusScreen()));}),
                   menuListTile(size: width,imagepath: "lib/assets/icons/menutermandcondtionicon.png",text:"Terms & Conditions" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>TermsConditionsScreen()));}),
                   menuListTile(size: width,imagepath: "lib/assets/icons/menufaqicon.png",text:"FAQ" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>FAQScreen()));}),
-                  SizedBox(height: width*0.03,),
-
-
-
-
-
-
-
-
-
-
-
-
+                  SizedBox(height: 70),
                 ],
               ),
 
@@ -98,60 +89,54 @@ Widget menuScreen() {
     case Orientation.portrait:
       return Scaffold(
         backgroundColor: themeColor2,
-        body: SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
-          child: Stack(
-            children: [
-              Positioned(
-                top: height*0.05,
-                left: height*0.05,
-                child: Container(
-                  margin: EdgeInsets.only(left: width*0.45),
+        body: Stack(
+          children: [
+            currLang == 'ar' ?
+            Positioned(
+              top: height*0.04,
+              right: height*0.20,
+              child: Container(
+                //margin: EdgeInsets.only(left: width*0.45),
 
 
-                  child:Image.asset("lib/assets/icons/menuimagesheet.png",scale: 5.2,)
+                child:Image.asset("lib/assets/icons/menuimagesheet.png",scale: 4.1,)
 
-                  ,
-                ),
+                ,
               ),
-              Column(
+            ) :
+            Positioned(
+              top: height*0.05,
+              left: height*0.05,
+              child: Container(
+                margin: EdgeInsets.only(left: width*0.45),
+
+
+                child:Image.asset("lib/assets/icons/menuimagesheet.png",scale: 5.2,)
+
+                ,
+              ),
+            ),
+
+            SingleChildScrollView(
+              child: Column(
                 children: [
                   SizedBox(height: height*0.07,),
-                  menuListTile(size: height,imagepath: "lib/assets/icons/mypets.png",text: "My pets",ontap:()=>widget.onTap()),
+                  menuListTile(size: height,imagepath: "lib/assets/icons/mypets.png",text: "My Pets",ontap:()=>widget.onTap()),
                   menuListTile(size: height,imagepath: "lib/assets/icons/menuwalleticon.png",text:"Wallet",ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>WalletScreen()));}, ),
-                  menuListTile(size: height,imagepath: "lib/assets/icons/menuinvitefriendicon.png",text: "Invite friend",ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>InviteFriendScreen()));}),
-                  menuListTile(size: height,imagepath: "lib/assets/icons/menufavouriteicon.png",text: "Favorite",ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>FavouriteScreen()));}),
+                  menuListTile(size: height,imagepath: "lib/assets/icons/menuinvitefriendicon.png",text: "Invite Friend",ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>InviteFriendScreen()));}),
+                  menuListTile(size: height,imagepath: "lib/assets/icons/menufavouriteicon.png",text: "Favourite",ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>FavouriteScreen()));}),
                   menuListTile(size: height,imagepath: "lib/assets/icons/menusettingicon.png",text:"Settings" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>ProfileScreen()));}),
-                  Padding(
-                    padding:  EdgeInsets.only(left: width*0.13),
-                    child: menuListTile(size: height,imagepath: "lib/assets/icons/menulanguageicon.png",text:"Language" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>LanguageScreen()));}),
-                  ),
-                  Padding(
-                    padding:  EdgeInsets.only(left: width*0.13),
-                    child: menuListTile(size: height,imagepath: "lib/assets/icons/menunotificationicon.png",text:"Notification" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>NotificationScreen()));}),
-                  ),
-
-                  menuListTile(size: height,imagepath: "lib/assets/icons/menucontactusicon.png",text:"Contact us" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>ContactusScreen()));}),
+                  menuListTile(size: height,imagepath: "lib/assets/icons/menulanguageicon.png",text:"Language" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>LanguageScreen()));}),
+                  menuListTile(size: height,imagepath: "lib/assets/icons/menunotificationicon.png",text:"Notification" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>NotificationScreen()));}),
+                  menuListTile(size: height,imagepath: "lib/assets/icons/menucontactusicon.png",text:"Contact Us" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>ContactusScreen()));}),
                   menuListTile(size: height,imagepath: "lib/assets/icons/menutermandcondtionicon.png",text:"Terms & Conditions" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>TermsConditionsScreen()));}),
                   menuListTile(size: height,imagepath: "lib/assets/icons/menufaqicon.png",text:"FAQ" ,ontap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>FAQScreen()));}),
-
-
-
-
-
-
-
-
-
-
-
-
-
+                  SizedBox(height: 90),
                 ],
               ),
+            ),
 
-            ],
-          ),
+          ],
         ),
       );
   }
@@ -183,7 +168,7 @@ class menuListTile extends StatelessWidget {
           backgroundColor: Colors.transparent,
         ),
         title:  Container(
-          child: VariableText(text: text,
+          child: VariableText(text: getTranslated(context, text.toString()),
             fontsize: size*0.018,
             fontcolor: Color(0xff2B3E4F),
             weight: FontWeight.normal,

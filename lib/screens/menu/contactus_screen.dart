@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petzola/common/commons.dart';
 import 'package:petzola/common/style.dart';
+import 'package:petzola/localization/language_constants.dart';
 import 'package:petzola/models/cities_model.dart';
 class ContactusScreen extends StatefulWidget {
 
@@ -88,7 +89,7 @@ class _ContactusScreenState extends State<ContactusScreen> {
                   RectangluartextFeild(
                     heights: width*0.07,
                     widths: width*0.95,
-                    hinttext: "Your Email",
+                    hinttext: getTranslated(context, "Your Email"),
 
                     fontsize: width*0.019,
                     keytype: TextInputType.emailAddress,
@@ -98,7 +99,7 @@ class _ContactusScreenState extends State<ContactusScreen> {
                     children: [
                       Container(
                         height: width*0.07,
-                        width: width*0.18,
+                        //width: width*0.18,
                         decoration: BoxDecoration(
                           color: Color(0xffF5F8FA),
                           borderRadius: BorderRadius.circular(8),
@@ -112,10 +113,10 @@ class _ContactusScreenState extends State<ContactusScreen> {
                                 icon: Visibility (visible:false, child: Icon(Icons.arrow_downward)),
 
                                 hint: Padding(
-                                  padding:  EdgeInsets.only(left:width*0.07),
+                                  padding:  EdgeInsets.symmetric(horizontal:width*0.04),
                                   child: Image.asset("lib/assets/icons/egypt.png",scale: 4.5,),
                                 ) ,
-                                isExpanded: true,
+                                isExpanded: false,
                                 onChanged: (City city) async{
                                   setState(() {
                                     sel_cities=city;
@@ -126,7 +127,7 @@ class _ContactusScreenState extends State<ContactusScreen> {
                                   return DropdownMenuItem<City>(
                                     value: item,
                                     child: Padding(
-                                      padding:  EdgeInsets.only(left:width*0.07),
+                                      padding:  EdgeInsets.symmetric(horizontal:width*0.04),
                                       child: Image.asset(item.toString(),scale: 4.5,) ,
 
 
@@ -142,73 +143,80 @@ class _ContactusScreenState extends State<ContactusScreen> {
 
 
 
-                      Container(
-                        height: width*0.07,
-                        width: width*0.75,
-                        decoration: BoxDecoration(
-                          color: Color(0xffF5F8FA),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child:
-                        Padding(
-                          padding:  EdgeInsets.symmetric(horizontal:width*0.025),
-                          child: TextFormField(
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(10),
-                            ],
-                            style:        TextStyle(
-                              fontSize: width*0.019,
-                              fontFamily: 'sftr',
-
-                              color:  Color(0xff3C3C43,),),
-                            // onChanged: enableBtn ,
-                            // controller: _numController2,
-                            keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter Number';
-                              } else {
-                                return null;
-                              }
-                            },
-                            decoration: InputDecoration(
-                              fillColor: Color(0xffF5F8FA),
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-
-                              hintText: '01030891060',
-                              contentPadding: EdgeInsets.only(top: width*0.001, bottom: 0, left: width*0.1),
-                              hintStyle:
-                              TextStyle(
-                                  fontSize: width*0.019,
-                                  fontFamily: 'sftr',
-
-                                  color: Color(
-                                    0x6c3C3C43,
-                                  )),
-                              prefixIcon:
+                      Expanded(
+                        child: Container(
+                          height: width*0.07,
+                          //width: width*0.80,
+                          decoration: BoxDecoration(
+                            color: Color(0xffF5F8FA),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child:
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
                               Padding(
-                                padding:  EdgeInsets.only(left: width*0.01,right: width*0.01),
-                                child: Text(
+                                padding:  EdgeInsets.symmetric(horizontal:width*0.002),
+                                child: TextFormField(
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(10),
+                                  ],
+                                  style:        TextStyle(
+                                    fontSize: width*0.019,
+                                    fontFamily: 'sftr',
 
-                                  '+$selectedCityCode',
-                                  style:
-                                  TextStyle(
-                                      fontSize: width*0.019,
-                                      fontFamily: 'sftr',
+                                    color:  Color(0xff3C3C43,),),
+                                  // onChanged: enableBtn ,
+                                  // controller: _numController2,
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter Number';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                    fillColor: Color(0xffF5F8FA),
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
 
-                                      color: Color(
-                                        0xff2B3E4F,
+                                    hintText: '01030891060',
+                                    contentPadding: EdgeInsets.only(top: width*0.001, bottom: 0, left: width*0.1),
+                                    hintStyle:
+                                    TextStyle(
+                                        fontSize: width*0.019,
+                                        fontFamily: 'sftr',
 
-                                      )),
+                                        color: Color(
+                                          0x6c3C3C43,
+                                        )),
+                                    prefixIcon:
+                                    Padding(
+                                      padding:  EdgeInsets.only(left: width*0.01,right: width*0.01),
+                                      child: Text(
+
+                                        '+$selectedCityCode',
+                                        style:
+                                        TextStyle(
+                                            fontSize: width*0.019,
+                                            fontFamily: 'sftr',
+
+                                            color: Color(
+                                              0xff2B3E4F,
+
+                                            )),
+                                      ),
+                                    ),
+                                    prefixIconConstraints:
+                                    BoxConstraints(minWidth: 0, minHeight: 0),
+                                  ),
                                 ),
                               ),
-                              prefixIconConstraints:
-                              BoxConstraints(minWidth: 0, minHeight: 0),
-                            ),
+                            ],
                           ),
                         ),
                       ),
@@ -262,7 +270,7 @@ class _ContactusScreenState extends State<ContactusScreen> {
                           focusedBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none, hintText: "Write your message",
+                          disabledBorder: InputBorder.none, hintText: getTranslated(context, "Write Your Message"),
                           hintStyle: TextStyle(
                               fontSize:  width*0.018,
                               fontFamily: 'sftr',
@@ -290,7 +298,7 @@ class _ContactusScreenState extends State<ContactusScreen> {
                         buttonFontSize:width*0.025,
                         buttonColor:themeColor1,
                         buttonTextColor:themeColor2,
-                        buttonText: "Send message",
+                        buttonText: getTranslated(context, "Send Message"),
                         buttonFontFamily:'sfdm',
                         buttonOnTap:(){
                           Navigator.pop(context);
@@ -320,7 +328,8 @@ class _ContactusScreenState extends State<ContactusScreen> {
           LayoutBuilder(builder: (context, constraints) {
             return SingleChildScrollView(
                 physics: ScrollPhysics(),
-                child: ConstrainedBox(
+                child:
+                ConstrainedBox(
                     constraints: BoxConstraints(minWidth: constraints.maxWidth, minHeight: constraints.maxHeight),
                     child: IntrinsicHeight(
                       child: Column(
@@ -349,7 +358,7 @@ class _ContactusScreenState extends State<ContactusScreen> {
                             RectangluartextFeild(
                               heights: height*0.07,
                               widths: width*0.90,
-                              hinttext: "Your Email",
+                              hinttext: getTranslated(context, "Your Email"),
 
                               fontsize: height*0.019,
                               keytype: TextInputType.emailAddress,
@@ -363,13 +372,10 @@ class _ContactusScreenState extends State<ContactusScreen> {
 
                                 Container(
                                   height: height*0.07,
-                                  width: width*0.15,
+                                  //width: width*0.15,
                                   decoration: BoxDecoration(
                                     color: Color(0xffF5F8FA),
                                     borderRadius: BorderRadius.circular(8),
-
-
-
                                   ),
                                   child:  DropdownButtonHideUnderline(
                                       child: DropdownButton<City>(
@@ -377,10 +383,10 @@ class _ContactusScreenState extends State<ContactusScreen> {
                                           icon: Visibility (visible:false, child: Icon(Icons.arrow_downward)),
 
                                           hint: Padding(
-                                            padding:  EdgeInsets.only(left:height*0.015),
+                                            padding: EdgeInsets.symmetric(horizontal:width*0.04),
                                             child: Image.asset("lib/assets/icons/egypt.png",scale: 4.5,),
                                           ) ,
-                                          isExpanded: true,
+                                          isExpanded: false,
                                           onChanged: (City city) async{
                                             setState(() {
                                               sel_cities=city;
@@ -391,7 +397,7 @@ class _ContactusScreenState extends State<ContactusScreen> {
                                             return DropdownMenuItem<City>(
                                               value: item,
                                               child: Padding(
-                                                padding:  EdgeInsets.only(left:height*0.015),
+                                                padding: EdgeInsets.symmetric(horizontal:width*0.04),
                                                 child: Image.asset(item.toString(),scale: 4.5,) ,
 
 
@@ -414,66 +420,65 @@ class _ContactusScreenState extends State<ContactusScreen> {
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child:
-                                  Padding(
-                                    padding:  EdgeInsets.symmetric(horizontal:height*0.015),
-                                    child: TextFormField(
-                                      inputFormatters: [
-                                        LengthLimitingTextInputFormatter(10),
-                                      ],
-                                      style:        TextStyle(
-                                        fontSize: height*0.019,
-                                        fontFamily: 'sftr',
-
-                                        color:  Color(0xff3C3C43,),),
-                                      // onChanged: enableBtn ,
-                                      // controller: _numController2,
-                                      keyboardType: TextInputType.number,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter Number';
-                                        } else {
-                                          return null;
-                                        }
-                                      },
-                                      decoration: InputDecoration(
-                                        fillColor: Color(0xffF5F8FA),
-                                        border: InputBorder.none,
-                                        focusedBorder: InputBorder.none,
-                                        enabledBorder: InputBorder.none,
-                                        errorBorder: InputBorder.none,
-                                        disabledBorder: InputBorder.none,
-
-                                        hintText: '01030891060',
-                                        contentPadding: EdgeInsets.only(top: height*0.0050, bottom: 0, left: height*0.1),
-                                        hintStyle:
-                                        TextStyle(
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding:  EdgeInsets.symmetric(horizontal:height*0.004),
+                                        child: TextFormField(
+                                          inputFormatters: [
+                                            LengthLimitingTextInputFormatter(10),
+                                          ],
+                                          style: TextStyle(
                                             fontSize: height*0.019,
                                             fontFamily: 'sftr',
-
-                                            color: Color(
-                                              0x6c3C3C43,
-                                            )),
-                                        prefixIcon:
-                                        Padding(
-                                          padding:  EdgeInsets.only(left: height*0.01,right: height*0.01),
-                                          child: Text(
-
-                                            '+$selectedCityCode',
-                                            style:
+                                            color:  Color(0xff3C3C43,),),
+                                          // onChanged: enableBtn ,
+                                          // controller: _numController2,
+                                          keyboardType: TextInputType.number,
+                                          validator: (value) {
+                                            if (value == null || value.isEmpty) {
+                                              return 'Please enter Number';
+                                            } else {
+                                              return null;
+                                            }
+                                          },
+                                          decoration: InputDecoration(
+                                            fillColor: Color(0xffF5F8FA),
+                                            border: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            enabledBorder: InputBorder.none,
+                                            errorBorder: InputBorder.none,
+                                            disabledBorder: InputBorder.none,
+                                            hintText: '01030891060',
+                                            //contentPadding: EdgeInsets.only(top: height*0.0050, bottom: 0, left: height*0.1),
+                                            hintStyle:
                                             TextStyle(
                                                 fontSize: height*0.019,
                                                 fontFamily: 'sftr',
-
                                                 color: Color(
-                                                  0xff2B3E4F,
-
+                                                  0x6c3C3C43,
                                                 )),
+                                            prefixIcon:
+                                            Padding(
+                                              padding:  EdgeInsets.only(left: height*0.01,right: height*0.01),
+                                              child: Text(
+                                                '+$selectedCityCode',
+                                                style:
+                                                TextStyle(
+                                                    fontSize: height*0.019,
+                                                    fontFamily: 'sftr',
+                                                    color: Color(
+                                                      0xff2B3E4F,
+
+                                                    )),
+                                              ),
+                                            ),
+                                            prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
                                           ),
                                         ),
-                                        prefixIconConstraints:
-                                        BoxConstraints(minWidth: 0, minHeight: 0),
                                       ),
-                                    ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -514,7 +519,7 @@ class _ContactusScreenState extends State<ContactusScreen> {
                                     focusedBorder: InputBorder.none,
                                     enabledBorder: InputBorder.none,
                                     errorBorder: InputBorder.none,
-                                    disabledBorder: InputBorder.none, hintText: "Write your message",
+                                    disabledBorder: InputBorder.none, hintText: getTranslated(context, "Write Your Message"),
                                     hintStyle: TextStyle(
                                         fontSize:  height*0.018,
                                         fontFamily: 'sftr',
@@ -539,7 +544,7 @@ class _ContactusScreenState extends State<ContactusScreen> {
                                   buttonFontSize:height*0.025,
                                   buttonColor:themeColor1,
                                   buttonTextColor:themeColor2,
-                                  buttonText: "Send message",
+                                  buttonText: getTranslated(context, "Send Message"),
                                   buttonFontFamily:'sfdm',
                                   buttonOnTap:(){
                                     Navigator.pop(context);

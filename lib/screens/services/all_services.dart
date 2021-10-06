@@ -2,6 +2,9 @@ import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petzola/common/common_z.dart';
+import 'package:petzola/common/commons.dart';
+import 'package:petzola/localization/language_constants.dart';
+import 'package:petzola/screens/services/select_service_screen.dart';
 
 class AllServices extends StatefulWidget {
   List serviceList;
@@ -21,7 +24,10 @@ class _AllServicesState extends State<AllServices> {
       case Orientation.landscape:
         return Scaffold(
           backgroundColor: Colors.white,
-          appBar: renderAppbar(),
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(kToolbarHeight),
+            child: CustomMenuAppBar(size: size.width,title: "My Pets",),
+          ),
           body: SingleChildScrollView(
               child: Column(
             children: [
@@ -33,7 +39,10 @@ class _AllServicesState extends State<AllServices> {
       case Orientation.portrait:
         return Scaffold(
           backgroundColor: Colors.white,
-          appBar: renderAppbar(),
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(kToolbarHeight),
+            child: CustomMenuAppBar(size: size.height,title: "My Pets",),
+          ),//renderAppbar(),
           body: SingleChildScrollView(
               child: Column(
                children: [
@@ -55,7 +64,7 @@ class _AllServicesState extends State<AllServices> {
       titleSpacing: 0,
       centerTitle: true,
       leadingWidth: 65,
-      title: VariableText(text: 'My Pets', fontcolor: Color(0xFF2C3E50), fontsize: 17, fontFamily: 'sftsb',),
+      title: VariableText(text: getTranslated(context, 'My Pets'), fontcolor: Color(0xFF2C3E50), fontsize: 17, fontFamily: 'sftsb',),
       leading: Container(
         margin: EdgeInsets.only(left: 8),
         child: Padding(
@@ -100,8 +109,8 @@ class _AllServicesState extends State<AllServices> {
       child: TextFieldWithStartIcon(
         heights: height * 0.07,
         widths: width,
-        fontsize: height * 0.019,
-        hinttext: "Service Name",
+        fontsize: height * 0.017,
+        hinttext: getTranslated(context, "Service Name"),
         imageIconPath: "lib/assets/icons/searchIcon.png",
         keytype: TextInputType.text,
       ),
@@ -117,7 +126,8 @@ class _AllServicesState extends State<AllServices> {
             padding: const EdgeInsets.only(top: 5, bottom: 20, left: 5, right: 5),
             child: InkWell(
               onTap: (){
-                selectSubService(context, height, width);
+                Navigator.push(context, MaterialPageRoute(builder: (_)=>SelectServiceScreen()));
+                //selectSubService(context, height, width);
               },
               child: Container(
                 height: height * 0.17,
@@ -130,7 +140,7 @@ class _AllServicesState extends State<AllServices> {
                       child: Container(
                         //height: height * 0.15,
                         width:  width * 0.28,
-                        margin: EdgeInsets.only(right: 10),
+                        margin: EdgeInsets.symmetric(horizontal: 3),
                         decoration: BoxDecoration(
                             color: Color(0x5000AEEF),
                             borderRadius: BorderRadius.circular(10)),
@@ -141,7 +151,7 @@ class _AllServicesState extends State<AllServices> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 10),
+                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
                       child: VariableText(
                         text: widget.serviceList[index]['name'],
                         fontsize: height * 0.015,
@@ -179,7 +189,18 @@ class _AllServicesState extends State<AllServices> {
             topLeft: Radius.circular(25), topRight: Radius.circular(25))),
         context: context,
         builder: (BuildContext context) {
-          return PetTypeSheet(height: height, width: width, onNext: (){Navigator.of(context).pop();});
+          return PetTypeSheet(height: height, width: width, onNext: (){Navigator.of(context).pop();selectConsolationType(context, height, width);});
+        });
+  }
+  selectConsolationType(BuildContext context, double height,double width){
+    showModalBottomSheet<dynamic>(
+        isScrollControlled: true,
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+        context: context,
+        builder: (BuildContext context) {
+          return ConsolationTypeSheet(height: height, width: width, onNext: (){Navigator.of(context).pop();});
         });
   }
 }

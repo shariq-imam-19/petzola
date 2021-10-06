@@ -5,6 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:petzola/common/commons.dart';
 import 'package:petzola/common/common_z.dart';
 import 'package:petzola/common/global_variables.dart';
+import 'dart:math' as math;
+
+import 'package:petzola/localization/language_constants.dart';
 
 class AddVaccination extends StatefulWidget {
   var petDetails;
@@ -89,7 +92,7 @@ class _AddVaccinationState extends State<AddVaccination> {
                     borderRadius: BorderRadius.circular(10)),
                 child: Center(
                     child: VariableText(
-                        text: 'Save Vaccination',
+                        text: getTranslated(context, 'Save Vaccination'),
                         fontsize: 20,
                         fontcolor: Colors.white,
                         fontFamily: 'sfdm')),
@@ -116,7 +119,7 @@ class _AddVaccinationState extends State<AddVaccination> {
               enable: false,
               cont: _selectVaccineController,
               imageIconPath: 'lib/assets/icons/dropdownicon.png',
-              hinttext: selectedVaccName == null ? 'Select Vaccines' : selectedVaccName,
+              hinttext: selectedVaccName == null ? getTranslated(context, 'Select Vaccines') : selectedVaccName,
             ),
           ),
         ),
@@ -133,7 +136,7 @@ class _AddVaccinationState extends State<AddVaccination> {
               imageIconPath: 'lib/assets/icons/myPets_tab3.png',
               hinttext: selectedDate != null
                   ? dateFormat.format(selectedDate)
-                  : 'Date',
+                  : getTranslated(context, 'Date'),
             ),
           ),
         ),
@@ -144,7 +147,7 @@ class _AddVaccinationState extends State<AddVaccination> {
             enable: false,
             widths: width,
             maxLines: 1,
-            hinttext: 'Cared',
+            hinttext: getTranslated(context, 'Cared'),
           ),
         ),
         SizedBox(height: 10),
@@ -154,7 +157,7 @@ class _AddVaccinationState extends State<AddVaccination> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: VariableText(
-                text: 'Additional Information',
+                text: getTranslated(context, 'Additional Information'),
                 fontcolor: Color(0xFF2B3E4F),
                 fontsize: 20,
                 fontFamily: 'sftr',
@@ -199,7 +202,7 @@ class _AddVaccinationState extends State<AddVaccination> {
                   heights: height * 0.14,
                   widths: width,
                   maxLines: 4,
-                  hinttext: 'Note',
+                  hinttext: getTranslated(context, 'Note'),
                 ),
               ),
               Padding(
@@ -221,7 +224,7 @@ class _AddVaccinationState extends State<AddVaccination> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: VariableText(
-                            text: 'Add Media',
+                            text: getTranslated(context, 'Add Media'),
                             fontcolor: Color(0x603C3C43),
                             fontsize: 11,
                             fontFamily: 'sftr',
@@ -300,15 +303,31 @@ class _AddVaccinationState extends State<AddVaccination> {
           ),
         ],
       ),
-      leading: IconButton(
-        icon: Image.asset(
-          'lib/assets/icons/appbar_back.png',
-          scale: 2.5,
+      leading:
+          currLang == 'ar' ?
+      Transform(
+        alignment: Alignment.center,
+        transform: Matrix4.rotationY(math.pi),
+        child: IconButton(
+          icon: Image.asset(
+            'lib/assets/icons/appbar_back.png',
+            scale: 2.5,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      ),
+      ) :
+          IconButton(
+            icon: Image.asset(
+              'lib/assets/icons/appbar_back.png',
+              scale: 2.5,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+
       actions: [
         InkWell(
           onTap: () {},

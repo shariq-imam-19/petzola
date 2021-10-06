@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:search_widget/search_widget.dart';
 import 'package:petzola/common/commons.dart';
 import 'package:petzola/common/common_z.dart';
 import 'package:petzola/common/global_variables.dart';
@@ -82,8 +82,10 @@ class _OnboardingScreen2State extends State<OnboardingScreen2>  with TickerProvi
               padding:  EdgeInsets.all(width*0.01),
               child: Column(
                 children: [
-                  ChangeOrientationIcon(ontap: (){    Navigator.of(context).pop();},size: width,),
-                  SizedBox(height: width*0.08,),
+                  SizedBox(height: width * 0.02,),
+                  ChangeOrientationIcon(ontap: (){Navigator.of(context).pop();},
+                    size: width,),
+                  SizedBox(height: width*0.06,),
                   Center(
                     child:
                     VariableText(text: "Time To Add Your Best Friend",
@@ -141,7 +143,7 @@ class _OnboardingScreen2State extends State<OnboardingScreen2>  with TickerProvi
                     imageIconPath: "lib/assets/icons/dropdownicon.png",
                     keytype: TextInputType.text,
                     onTap: (){
-                      selectPetType(width,height);
+                      selectPetTypeL(width,height);
 
                     },
                   ),
@@ -191,8 +193,6 @@ class _OnboardingScreen2State extends State<OnboardingScreen2>  with TickerProvi
           else{
             landscapOrientation=true;
           }
-
-
         });
         return Scaffold(
           backgroundColor: themeColor2,
@@ -202,8 +202,10 @@ class _OnboardingScreen2State extends State<OnboardingScreen2>  with TickerProvi
               padding:  EdgeInsets.all(height*0.01),
               child: Column(
                 children: [
-                  ChangeOrientationIcon(ontap: (){    Navigator.of(context).pop();},size: height,),
-                  SizedBox(height: height*0.08,),
+                  SizedBox(height: height * 0.02,),
+                  ChangeOrientationIcon(ontap: (){Navigator.of(context).pop();}
+                  ,size: height),
+                  SizedBox(height: height*0.06,),
                   Center(
                     child:
                     VariableText(text: "Time To Add Your Best Friend",
@@ -236,15 +238,11 @@ class _OnboardingScreen2State extends State<OnboardingScreen2>  with TickerProvi
                   RectangluartextFeild(
                     heights: height*0.07,
                     widths: width*0.90,
-
                     hinttext: "Pet's Name",
                     //cont: password,
                     textlength: 11,
-
                     fontsize: height*0.019,
-
                     // obscureText: true,
-
                     keytype: TextInputType.text,
                     //  onChanged: enableBtn(mobileno.text),
 
@@ -311,6 +309,33 @@ class _OnboardingScreen2State extends State<OnboardingScreen2>  with TickerProvi
     });
 
   }
+  void selectPetTypeL(double height,double width){
+    showModalBottomSheet(
+        isScrollControlled: true,
+        //transitionAnimationController: controller,
+        backgroundColor: Colors.transparent,
+        context: context, builder: (context) {
+
+      return DraggableScrollableSheet(
+          initialChildSize: 0.90, //set this as you want
+          maxChildSize:0.90, //set this as you want
+          minChildSize:0.70, //set this as you want
+          expand: false,
+          builder: (context, scrollController) {
+            return selectPetTypeClass(height:height,width:width,landscapOrientation:true
+              ,onSelect: (temp){
+                Navigator.of(context).pop();
+                setState(() {
+                  showpetType=temp;
+                });
+              },);
+            //whatever you're returning, does not have to be a Container
+          }
+
+      );
+    });
+
+  }
 }
 
 class selectPetTypeClass extends StatefulWidget {
@@ -354,15 +379,57 @@ String selectedPetType;
       "name": "BIRD",
       "image": "lib/assets/icons/parroticon.png"
     },
+    {
+      "name": "Camel",
+      "image": "lib/assets/icons/camelicon.png"
+    },
+    {
+      "name": "CAT",
+      "image": "lib/assets/icons/caticon.png"
+    },
+    {
+      "name": "DOG",
+      "image": "lib/assets/icons/dogicon.png"
+    },
+    {
+      "name": "RABBIT",
+      "image": "lib/assets/icons/rabbiticon.png"
+    },
+    {
+      "name": "HORSE",
+      "image": "lib/assets/icons/horseicon.png"
+    },
+    {
+      "name": "BIRD",
+      "image": "lib/assets/icons/parroticon.png"
+    },
   ];
+final TextEditingController _controller = new TextEditingController();
+List<dynamic> _list;
+bool _isSearching;
+List<dynamic>  searchresult = new List();
+bool startsearching;
 @override
-initState() {
+void initState() {
   super.initState();
- }
-@override
-void dispose() {
-  super.dispose();
-
+  startsearching=false;
+  _isSearching = false;
+  values();
+}
+void values() {
+  _list = List();
+  _list.add(["BIRD","lib/assets/icons/parroticon.png"]);
+  _list.add(["Camel","lib/assets/icons/camelicon.png"]);
+  _list.add(["CAT","lib/assets/icons/caticon.png"]);
+  _list.add(["DOG","lib/assets/icons/dogicon.png"]);
+  _list.add(["RABBIT","lib/assets/icons/rabbiticon.png"]);
+  _list.add(["HORSE","lib/assets/icons/horseicon.png"]);
+  _list.add(["BIRD","lib/assets/icons/parroticon.png"]);
+  _list.add(["Camel","lib/assets/icons/camelicon.png"]);
+  _list.add(["CAT","lib/assets/icons/caticon.png"]);
+  _list.add(["DOG","lib/assets/icons/dogicon.png"]);
+  _list.add(["RABBIT","lib/assets/icons/rabbiticon.png"]);
+  _list.add(["HORSE","lib/assets/icons/horseicon.png"]);
 
 
 }
@@ -371,124 +438,180 @@ void dispose() {
   Widget build(BuildContext context) {
    return
      Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-            topLeft:Radius.circular(widget.height*0.05) ,
-            topRight: Radius.circular(widget.height*0.05)
-        ),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: widget.height*0.03,),
-            VariableText(text: "Select A Type",
-              fontsize: widget.height*0.028,
-              fontcolor: Color(0xff2B3E4F),
+       decoration: BoxDecoration(
+         color: Colors.white,
+         borderRadius: BorderRadius.only(
+             topLeft:Radius.circular(widget.height*0.05) ,
+             topRight: Radius.circular(widget.height*0.05)
+         ),
+       ),
+       child: Column(
+         children: [
+           SizedBox(height: widget.height*0.03,),
+           VariableText(text: "Select A Type",
+             fontsize: widget.height*0.028,
+             fontcolor: Color(0xff2B3E4F),
 
-              fontFamily: 'sfdr',),
-            SizedBox(height: widget.height*0.03,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-            child:            Row(
-              children: [
-                Expanded(
-                  child: RectangluartextFeildWithStartIcon(
-                    heights: widget.height*0.07,
-                    // widths:widget. height*0.95,
+             fontFamily: 'sfdr',),
+           SizedBox(height: widget.height*0.03,),
+           Padding(
+             padding: const EdgeInsets.symmetric(horizontal: 16),
+             child:            Row(
+               children: [
 
-                    fontsize:widget. height*0.019,
-                    hinttext: "Search",
-                    imageIconPath: "lib/assets/icons/searchIcon.png",
-                    keytype: TextInputType.text,
-                  ),
-                ),
-              ],
-            ),)
+                 Expanded(
+                   child:
+                   RectangluartextFeildWithStartIcon(
+                     heights: widget.height*0.07,
+                     fontsize:widget. height*0.019,
+                     hinttext: "Search",
+                     imageIconPath: "lib/assets/icons/searchIcon.png",
+                     keytype: TextInputType.text,
+                     cont: _controller,
+                     onChanged: searchOperation,
+
+                   ),
+
+                 ),
+               ],
+             ),),
+           SizedBox(height:widget. height*0.02,),
+           Expanded(
+             child: Container(
+               //color: Colors.red,
+               child:      searchresult.length != 0 || _controller.text.isNotEmpty
+                   ? new ListView.builder(
+                 shrinkWrap: true,
+                 itemCount: searchresult.length,
+                 itemBuilder: (BuildContext context, int index) {
+                   return new   InkWell(
+                     onTap: (){
+                       setState(() {
+                         defaultindex=index;
+                         selectedPetType=searchresult[defaultindex][0];
+                       });
+                       print("selected type"+selectedPetType);
+
+                     },
+                     child: Container(
+                       color: defaultindex==index?themeColor1:themeColor2,
+                       child: ListTile(
+                         leading:
+                         CircleAvatar(
+                           radius:widget.height*0.02,
+                           backgroundImage:
+                           AssetImage(searchresult[index][1]),
+                           //  AssetImage("lib/assets/icons/changeorientation.png"),
+                           backgroundColor: Color(0xffEAF0F9),
+                         ),
+                         title:  VariableText(
+                           text:
+                           searchresult[index][0],
+                           fontsize: widget.height*0.017,
+                           fontcolor:defaultindex==index?themeColor2:Color(0xff2B3E4F),
+                           weight: FontWeight.normal,
+                           fontFamily: 'sftr',),
+
+                       ),
+                     ),
+                   );
+                 },
+               )
+                   :
+               ListView.builder(
+                   //physics: NeverScrollableScrollPhysics(), ///
+                   shrinkWrap: true,
+                   scrollDirection: Axis.vertical,
+                   itemCount: pets.length,
+                   itemBuilder: (BuildContext context,int index){
+                     return    InkWell(
+
+                       onTap: (){
+                         setState(() {
+                           defaultindex=index;
+                           selectedPetType=pets[defaultindex]['name'];
+                         });
+                         print("selected type"+selectedPetType);
+
+                       },
+                       child: Container(
+
+                         color: defaultindex==index?themeColor1:themeColor2,
+                         child: ListTile(
+
+                           leading:
+                           CircleAvatar(
+                             radius:widget.height*0.02,
+                             backgroundImage:
+                             AssetImage(pets[index]['image']),
+                             //  AssetImage("lib/assets/icons/changeorientation.png"),
+                             backgroundColor: Color(0xffEAF0F9),
+                           ),
+                           title:  VariableText(
+                             text:
+                             pets[index]['name'],
+                             fontsize: widget.height*0.017,
+                             fontcolor:defaultindex==index?themeColor2:Color(0xff2B3E4F),
+                             weight: FontWeight.normal,
+                             fontFamily: 'sftr',),
+
+                         ),
+                       ),
+                     );
+
+                   }),
+             ),
+           ),
+           Padding(
+             padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+             child: Row(
+               children: [
+                 Expanded(
+                   child: CustomButton(
+                     buttonHeight:widget. height*0.06,
+                     buttonBorderRadius:8,
+                     buttonFontSize:widget.height*0.025,
+                     buttonColor:themeColor1,
+                     buttonTextColor:themeColor2,
+                     buttonText: "Select",
+                     buttonFontFamily:'sfdm',
+                     buttonOnTap:()=>widget.onSelect(
+                         selectedPetType
+                     ),),
+                 ),
+               ],
+             ),
+           ),
 
 
 
-            ,
-            SizedBox(height:widget. height*0.02,),
-
-            ListView.builder(
-                physics: NeverScrollableScrollPhysics(), ///
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                itemCount: pets.length,
-                itemBuilder: (BuildContext context,int index){
-                  return    InkWell(
-
-                    onTap: (){
-                      setState(() {
-                        defaultindex=index;
-                        selectedPetType=pets[defaultindex]['name'];
-                      });
-                      print("selected type"+selectedPetType);
-
-                    },
-                    child: Container(
-
-                      color: defaultindex==index?themeColor1:themeColor2,
-                      child: ListTile(
-
-                        leading:
-                        CircleAvatar(
-                          radius:widget.height*0.02,
-                          backgroundImage:
-                          AssetImage(pets[index]['image']),
-                          //  AssetImage("lib/assets/icons/changeorientation.png"),
-                          backgroundColor: Color(0xffEAF0F9),
-                        ),
-                        title:  VariableText(
-                          text:
-                          pets[index]['name'],
-                          fontsize: widget.height*0.017,
-                          fontcolor:defaultindex==index?themeColor2:Color(0xff2B3E4F),
-                          weight: FontWeight.normal,
-                          fontFamily: 'sftr',),
-
-                      ),
-                    ),
-                  );
-
-                }),
 
 
 
-
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: CustomButton(
-                        buttonHeight:widget. height*0.06,
-                       // buttonWidth:widget.height,
-                        buttonBorderRadius:8,
-                        buttonFontSize:widget.height*0.025,
-                        buttonColor:themeColor1,
-                        buttonTextColor:themeColor2,
-                        buttonText: "Select",
-                        buttonFontFamily:'sfdm',
-                        buttonOnTap:()=>widget.onSelect(
-                            selectedPetType
-                        ),),
-                  ),
-                ],
-              ),
-            ),
-             
-
-
-            SizedBox(height: widget.width*0.07,),
-
-          ],
-        ),
-      ),
-    );
+         ],
+       ),
+     );
   }
 
+
+void searchOperation(String searchText) {
+  setState(() {
+    startsearching=true;
+  });
+
+  searchresult.clear();
+  if (_isSearching != null) {
+    for (int i = 0; i < _list.length; i++) {
+      String data = _list[i][0];
+      print("data "+data);
+      if (data.toLowerCase().contains(searchText.toLowerCase())) {
+        searchresult.addAll([_list[i]]);
+
+        setState(() {
+        });
+      }
+    }
+  }
+}
 }
 

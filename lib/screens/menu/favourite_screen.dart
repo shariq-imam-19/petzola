@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:petzola/common/commons.dart';
 import 'package:petzola/common/common_z.dart';
 import 'package:petzola/common/style.dart';
+import 'package:petzola/localization/language_constants.dart';
 class FavouriteScreen extends StatefulWidget {
 
   @override
@@ -154,7 +155,7 @@ Widget FavouriteScreen() {
                 Image.asset('lib/assets/icons/favouriteoutline.png',scale: 5.5,),
                 SizedBox(height: height*0.025,),
                 Center(
-                  child: VariableText(text: "There Are No Preferences Yet",
+                  child: VariableText(text: getTranslated(context, "There Are No Preferences Yet"),
                     fontsize: height*0.016,
                     fontcolor: Color(0xfc3C3C43),
 
