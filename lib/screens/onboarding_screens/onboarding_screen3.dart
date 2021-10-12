@@ -204,7 +204,7 @@ class _OnboardingScreen3State extends State<OnboardingScreen3>   {
                     },
                   ),
                   SizedBox(height: width*0.07,),
-                  CustomLoadingAnimation(height: width,width: height,animationPercent: 0.75,onTap: (){
+                  CustomLoadingAnimation(height: width,width: height,animationPercent: 0.75,step:3,onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (_)=>OnboardingScreen4()));
                   },),
                   SizedBox(height: width*0.06,),
@@ -378,7 +378,7 @@ class _OnboardingScreen3State extends State<OnboardingScreen3>   {
                     },
                   ),
                   SizedBox(height: height*0.07,),
-                  CustomLoadingAnimation(height: height,width: width,animationPercent: 0.75,onTap: (){
+                  CustomLoadingAnimation(height: height,width: width,animationPercent: 0.75,step:3,onTap: (){
                     showBreedType=null;
                     Navigator.push(context, MaterialPageRoute(builder: (_)=>OnboardingScreen4()));
 

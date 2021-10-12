@@ -132,7 +132,7 @@ Widget OnboardingScreen1() {
 
                   ],),
                 SizedBox(height: width*0.06,),
-                CustomLoadingAnimation(height: width,width: height,animationPercent: 0.25,onTap: (){
+                CustomLoadingAnimation(height: width,width: height,animationPercent: 0.25,step:1,onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (_)=>OnboardingScreen2()));
 
 
@@ -266,7 +266,7 @@ Widget OnboardingScreen1() {
 
                ],),
                 SizedBox(height: height*0.06,),
-                CustomLoadingAnimation(height: height,width: width,animationPercent: 0.25,onTap: (){
+                CustomLoadingAnimation(height: height,width: width,animationPercent: 0.25,step:1,onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (_)=>OnboardingScreen2()));
 
 

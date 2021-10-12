@@ -32,10 +32,10 @@ class HomePage extends StatefulWidget {
   var newAppointment;
   HomePage({this.pageIndex, this.newAppointment});
 
-  static void setLocale(BuildContext context, Locale newLocale) {
+  /*static void setLocale(BuildContext context, Locale newLocale) {
     _HomePageState state = context.findAncestorStateOfType<_HomePageState>();
     state.setLocalee(newLocale);
-  }
+  }*/
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final List<Widget> _children = [];
   int _currentIndex = 2;
 
-  Locale _locale;
+  /*Locale _locale;
 
   setLocalee(Locale locale) {
     setState(() {
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       _locale = a;
     });
     super.didChangeDependencies();
-  }
+  }*/
 
   Future<bool> _onBackPressed() {
     return showDialog(
@@ -118,9 +118,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
-      return MaterialApp(
-        locale: _locale,
+/*locale: _locale,
         supportedLocales: [Locale("ar", "SA"), Locale("en", "US")],
         localizationsDelegates: [
           DemoLocalization.delegate,
@@ -137,169 +135,197 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             }
           }
           return supportedLocales.first;
-        },
-        home: Builder(
-          builder: (BuildContext context) {
-            return WillPopScope(
-              onWillPop: _onBackPressed,
-              child: Scaffold(
-                backgroundColor: Colors.white,
-                appBar: tabBarController.index == 0 ? AppBar(
-                  elevation: 0,
-                  backgroundColor: Colors.white,
-                  titleSpacing: 0,
-                  centerTitle: true,
-                  leadingWidth: 65,
-                  title: VariableText(text: getTranslated(context, 'My Pets') , fontcolor: Color(0xFF2C3E50), fontsize: 17, fontFamily: 'sftsb',),
-                  leading: Container(
-                    margin: EdgeInsets.only(left: 8),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Color(0xFFEAF0F9),
-                            borderRadius: BorderRadius.circular(60)
-                        ),
-                        child:
-                        currLang == 'ar' ?
-                        Transform(
-                          alignment: Alignment.center,
-                          transform: Matrix4.rotationY(math.pi),
-                          child: IconButton(icon: Image.asset('lib/assets/icons/appbar_back.png', scale: 3.2,),
-                            onPressed: (){
-                              tabBarController.index = 2;
-                              _currentIndex = 2;
-                              tabViewController.animateTo(2);
-                              setState(() {});
-                            },
-                          ),
-                        ) :
-                        IconButton(icon: Image.asset('lib/assets/icons/appbar_back.png', scale: 3.2,),
-                          onPressed: (){
-                            tabBarController.index = 2;
-                            _currentIndex = 2;
-                            tabViewController.animateTo(2);
-                            setState(() {});
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  actions: [
-                    InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext contextB)=>MainNotificationScreen()));},
-                      child: SizedBox(
-                        width: 26,
-                        child: Image.asset("lib/assets/icons/notification2x.png", color: appBarIconColor),
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_)=>MainMessegeScreen()));},
+        },*/
 
 
-                      child: SizedBox(
-                        width: 26,
-                        child: Image.asset("lib/assets/icons/chat2x.png", color: appBarIconColor),
-                      ),
-                    ),
-                    SizedBox(width: 16,),
-                  ],
-                ):
-                AppBar(
-                  elevation: 0,
-                  backgroundColor: Colors.white,
-                  titleSpacing: 16,
-                  title:Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          InkWell(
-                            onTap: (){
-                              Navigator.push(context,MaterialPageRoute(builder: (_)=>EditProfileScreen()));
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Color(0xFFF8F7F7),
-                                  borderRadius: BorderRadius.circular(50)
-                              ),
-                              child: Image.asset('lib/assets/images/user_profile.png', scale: 3.1,),
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          tabViewController.index == 2 ?
-                          VariableText(text: getTranslated(context, 'Welcome'), fontcolor: Color(0xFF2C3E50), fontsize: 17, fontFamily: 'sftsb',)
-                              :
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children:[
-                                VariableText(text: getTranslated(context, 'Welcome Back') , fontcolor: Color(0xFF3C3C43), fontsize: 11, fontFamily: 'sftsb'),
-                                VariableText(text: 'Laurel Watkins', fontcolor: Color(0xFF2C3E50), fontsize: 17, fontFamily: 'sftsb'),
-                              ]
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                  actions: [
-                    InkWell(
-                      onTap: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>MainNotificationScreen()));},
-                      child: SizedBox(
-                        width: 26,
-                        child: Image.asset("lib/assets/icons/notification2x.png", color: appBarIconColor),
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_)=>MainMessegeScreen()));
-                      },
-                      child: SizedBox(
-                        width: 26,
-                        child: Image.asset("lib/assets/icons/chat2x.png", color: appBarIconColor),
-                      ),
-                    ),
-                    SizedBox(width: 16,),
-                  ],
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: tabBarController.index == 0 ? AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          titleSpacing: 0,
+          centerTitle: true,
+          leadingWidth: 65,
+          title: VariableText(text: getTranslated(context, 'My Pets'),
+            fontcolor: Color(0xFF2C3E50),
+            fontsize: 17,
+            fontFamily: 'sftsb',),
+          leading: Container(
+            margin: EdgeInsets.only(left: 8),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Color(0xFFEAF0F9),
+                    borderRadius: BorderRadius.circular(60)
                 ),
-                //renderAppbar(context),
-                body: Stack(
-                  children: [
-                    TabBarView(
-                      controller: tabViewController,
-                      physics: NeverScrollableScrollPhysics(),
-                      children: [
-                        PetsScreen(),
-                        ScheduleScreen(newAppointment: widget.newAppointment),
-                        HomeScreen(),
-                        BlogsScreen(),
-                        MenuScreen(onTap: () {
-                          tabBarController.index = 0;
-                          tabViewController.animateTo(0);
-                          setState(() {});
-                        },)
-                      ],
-                    ),
-                    Positioned(
-                        bottom: 0,
-                        right: 0,
-                        left: 0,
-                        child: renderBottomNavBar()),
-
-
-                  ],
+                child:
+                currLang == 'ar' ?
+                Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationY(math.pi),
+                  child: IconButton(icon: Image.asset(
+                    'lib/assets/icons/appbar_back.png', scale: 3.2,),
+                    onPressed: () {
+                      tabBarController.index = 2;
+                      _currentIndex = 2;
+                      tabViewController.animateTo(2);
+                      setState(() {});
+                    },
+                  ),
+                ) :
+                IconButton(icon: Image.asset(
+                  'lib/assets/icons/appbar_back.png', scale: 3.2,),
+                  onPressed: () {
+                    tabBarController.index = 2;
+                    _currentIndex = 2;
+                    tabViewController.animateTo(2);
+                    setState(() {});
+                  },
                 ),
-                //bottomNavigationBar: renderBottomNavBar(),
               ),
-            );
-          },
-        ),
-      );
+            ),
+          ),
+          actions: [
+            InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext contextB) =>
+                        MainNotificationScreen()));
+              },
+              child: SizedBox(
+                width: 26,
+                child: Image.asset("lib/assets/icons/notification2x.png",
+                    color: appBarIconColor),
+              ),
+            ),
+            SizedBox(width: 12),
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => MainMessegeScreen()));
+              },
 
+
+              child: SizedBox(
+                width: 26,
+                child: Image.asset(
+                    "lib/assets/icons/chat2x.png", color: appBarIconColor),
+              ),
+            ),
+            SizedBox(width: 16,),
+          ],
+        ) :
+        AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          titleSpacing: 16,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (_) => EditProfileScreen()));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xFFF8F7F7),
+                          borderRadius: BorderRadius.circular(50)
+                      ),
+                      child: Image.asset(
+                        'lib/assets/images/user_profile.png', scale: 3.1,),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  tabViewController.index == 2 ?
+                  VariableText(text: getTranslated(context, 'Welcome'),
+                    fontcolor: Color(0xFF2C3E50),
+                    fontsize: 17,
+                    fontFamily: 'sftsb',)
+                      :
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        VariableText(
+                            text: getTranslated(context, 'Welcome Back'),
+                            fontcolor: Color(0xFF3C3C43),
+                            fontsize: 11,
+                            fontFamily: 'sftsb'),
+                        VariableText(text: 'Laurel Watkins',
+                            fontcolor: Color(0xFF2C3E50),
+                            fontsize: 17,
+                            fontFamily: 'sftsb'),
+                      ]
+                  )
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (_) => MainNotificationScreen()));
+              },
+              child: SizedBox(
+                width: 26,
+                child: Image.asset("lib/assets/icons/notification2x.png",
+                    color: appBarIconColor),
+              ),
+            ),
+            SizedBox(width: 12),
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => MainMessegeScreen()));
+              },
+              child: SizedBox(
+                width: 26,
+                child: Image.asset(
+                    "lib/assets/icons/chat2x.png", color: appBarIconColor),
+              ),
+            ),
+            SizedBox(width: 16,),
+          ],
+        ),
+        //renderAppbar(context),
+        body: Stack(
+          children: [
+            TabBarView(
+              controller: tabViewController,
+              physics: NeverScrollableScrollPhysics(),
+              children: [
+                PetsScreen(),
+                ScheduleScreen(newAppointment: widget.newAppointment),
+                HomeScreen(),
+                BlogsScreen(),
+                MenuScreen(onTap: () {
+                  tabBarController.index = 0;
+                  tabViewController.animateTo(0);
+                  setState(() {});
+                },)
+              ],
+            ),
+            Positioned(
+                bottom: 0,
+                right: 0,
+                left: 0,
+                child: renderBottomNavBar()),
+
+
+          ],
+        ),
+        //bottomNavigationBar: renderBottomNavBar(),
+      ),
+    );
   }
+
+
 
   Widget renderAppbar(contextB){
     return tabBarController.index == 0 ? AppBar(

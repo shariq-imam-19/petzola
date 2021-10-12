@@ -141,7 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: 15),
               HomeFindVet(myVets: findVets['vets'], title: "Let’s Find Your Vet", subTitle: 'Explore',
                   cWidth: size.width, cHeight: size.height * 0.40),
-              SizedBox(height: 90,)
+              SizedBox(height: 90,),
+
             ],
           ),
         );

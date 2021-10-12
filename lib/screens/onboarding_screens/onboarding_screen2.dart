@@ -150,8 +150,8 @@ class _OnboardingScreen2State extends State<OnboardingScreen2>  with TickerProvi
 
 
                   SizedBox(height: width*0.07,),
-                  CustomLoadingAnimation(height: width,width: height,animationPercent: 0.50,onTap: (){
-                    showpetType=null;
+                  CustomLoadingAnimation(height: width,width: height,animationPercent: 0.50,step:2,onTap: (){
+                 showpetType=null;
                     Navigator.push(context, MaterialPageRoute(builder: (_)=>OnboardingScreen3()));
                   },
                       ),
@@ -267,7 +267,7 @@ class _OnboardingScreen2State extends State<OnboardingScreen2>  with TickerProvi
 
 
                   SizedBox(height: height*0.07,),
-                  CustomLoadingAnimation(height: height,width: width,animationPercent: 0.50,onTap: (){
+                  CustomLoadingAnimation(height: height,width: width,animationPercent: 0.50,step:2,onTap: (){
                     showpetType=null;
 
                     Navigator.push(context, MaterialPageRoute(builder: (_)=>OnboardingScreen3()));

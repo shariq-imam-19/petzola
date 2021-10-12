@@ -185,7 +185,7 @@ class _OnboardingScreen4State extends State<OnboardingScreen4>   {
                       fontFamily: 'sftr',),
                   ),
                   SizedBox(height: width*0.20,),
-                  CustomLoadingAnimation(height: width,width: height,animationPercent: 0.99,onTap: (){
+                  CustomLoadingAnimation(height: width,width: height,animationPercent: 0.99,step:4,onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));
                   },),
                   SizedBox(height: width*0.06,),
@@ -323,7 +323,9 @@ class _OnboardingScreen4State extends State<OnboardingScreen4>   {
                Spacer(),
     Padding(
       padding:  EdgeInsets.only(bottom: height*0.04),
-      child: CustomLoadingAnimation(height: height,width: width,animationPercent: 0.99,onTap: (){
+      child: CustomLoadingAnimation(height: height,width: width,animationPercent: 0.99,
+          step:4,
+          onTap: (){
       Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));}),
     )
 

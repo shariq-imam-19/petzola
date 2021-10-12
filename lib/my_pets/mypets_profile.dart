@@ -1196,9 +1196,10 @@ class _PetsProfileState extends State<PetsProfile>
                   onTabPressed(index);
                 },
                 child: Container(
+                  //color: Colors.red,
                   padding: EdgeInsets.only(right: 12),
                   margin: _selectedIndex == index
-                      ? EdgeInsets.only(bottom: 10)
+                      ? EdgeInsets.only(bottom: 0)
                       : EdgeInsets.only(bottom: 0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

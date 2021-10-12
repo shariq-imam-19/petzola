@@ -288,34 +288,37 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
           shrinkWrap: true,
           itemCount:serivices['serivices'].length,
           itemBuilder: (BuildContext context, index){
-            return  Column(
-              children: [
-                ServiceContainer(
-                    cWidth:width,
-                    cHeight: height,
-                    name:serivices['serivices'][index]['name'],
-                    address:serivices['serivices'][index]['address'],
-                    image:serivices['serivices'][index]['image'],
-                    serivicetype:serivices['serivices'][index]['serivicetype'],
-                    timming:serivices['serivices'][index]['timming'],
-                    ontapBookNow:(){
-                      // Navigator.push(context, MaterialPageRoute(builder: (_)=>VetConsultationServiceScreen()));
+            return  Padding(
+              padding:  EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  ServiceContainer(
+                      cWidth:width,
+                      cHeight: height,
+                      name:serivices['serivices'][index]['name'],
+                      address:serivices['serivices'][index]['address'],
+                      image:serivices['serivices'][index]['image'],
+                      serivicetype:serivices['serivices'][index]['serivicetype'],
+                      timming:serivices['serivices'][index]['timming'],
+                      ontapBookNow:(){
+                        // Navigator.push(context, MaterialPageRoute(builder: (_)=>VetConsultationServiceScreen()));
 
 
 
 
-                      if(index==1){
-                        Navigator.push(context, MaterialPageRoute(builder: (_)=>PetConsultationServiceScreen()));
+                        if(index==1){
+                          Navigator.push(context, MaterialPageRoute(builder: (_)=>PetConsultationServiceScreen()));
+                        }
+
+                        else {
+                          Navigator.push(context, MaterialPageRoute(builder: (_)=>VetConsultationServiceScreen()));
+                        }
                       }
 
-                      else {
-                        Navigator.push(context, MaterialPageRoute(builder: (_)=>VetConsultationServiceScreen()));
-                      }
-                    }
-
-                ),
-                SizedBox(height: height*0.02,),
-              ],
+                  ),
+                  SizedBox(height: height*0.02,),
+                ],
+              ),
             );
           }),
     );

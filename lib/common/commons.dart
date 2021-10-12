@@ -12,7 +12,7 @@ import 'package:petzola/screens/messege/messege_screen.dart';
 import 'package:petzola/screens/notification/notification_screen.dart';
 import 'package:petzola/screens/services/clinic_detail.dart';
 import 'dart:math' as math;
-
+import 'package:step_progress_indicator/step_progress_indicator.dart';
 class CustomButton extends StatefulWidget {
   final double buttonHeight,buttonWidth,buttonBorderRadius,buttonFontSize;
   final Color buttonColor,buttonTextColor,buttonBorderColor;
@@ -773,30 +773,66 @@ class AppCheckbox extends StatelessWidget {
     );
   }
 }
-class CustomLoadingAnimation extends StatelessWidget {
+class CustomLoadingAnimation extends StatefulWidget {
   final double height,width,animationPercent;
+  final int step;
   final Function onTap;
-  CustomLoadingAnimation({this.height,this.width,this.onTap,this.animationPercent});
-
+  CustomLoadingAnimation({this.height,this.step,this.width,this.onTap,this.animationPercent});
 
   @override
+  _CustomLoadingAnimationState createState() => _CustomLoadingAnimationState();
+}
+
+class _CustomLoadingAnimationState extends State<CustomLoadingAnimation> {
+  @override
   Widget build(BuildContext context) {
-    return Stack(
+
+  /*  return    InkWell(
+      onTap: widget.onTap,
+
+      child: CircularStepProgressIndicator(
+        //roundedCap: (context,index)=>true,
+        totalSteps: 4,
+        currentStep: widget.step,
+selectedColor: themeColor1,
+        unselectedColor: Color(0x4800AEEF),
+        height: widget.height*0.10,
+        width: widget.height*0.10,
+
+        child:  Padding(
+          padding:  EdgeInsets.all(widget.height*0.01),
+          child: Container(
+          // height: height*0.05,
+          // width: height*0.05,
+            decoration: BoxDecoration(
+           shape: BoxShape.circle,
+              color:Color(0x4800AEEF),
+            ),
+            child: Image.asset("lib/assets/icons/rigtharrow.png",scale: 4.5,color: themeColor1,),
+          ),
+        ),
+
+        //startingAngle: -math.pi * 2 / 3,
+        //arcSize: math.pi * 2 / 3 * 2,
+      ),
+    );*/
+     return currLang=='ar'?
+   /*   Stack(
       children: [
         InkWell(
-          onTap: onTap,
+          onTap: widget.onTap,
 
           child: CircularPercentIndicator(
-            radius: height*0.093,
+            radius: widget.height*0.093,
             lineWidth: 8.0,
-            percent: animationPercent,
+            percent: widget.animationPercent,
             animation: true,
             animationDuration: 2000,
             center:    Container(
-              height: height*0.050,
-              width: height*0.050,
+              height: widget.height*0.050,
+              width: widget.height*0.050,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular( height*0.05),
+                borderRadius: BorderRadius.circular( widget.height*0.05),
                 color:Color(0x4800AEEF),
               ),
               child: Image.asset("lib/assets/icons/rigtharrow.png",scale: 4.5,color: themeColor1,),
@@ -807,40 +843,184 @@ class CustomLoadingAnimation extends StatelessWidget {
           ),
         ),
         Padding(
-          padding:  EdgeInsets.only(left:height*0.04),
+          padding:  EdgeInsets.only(right:widget.height*0.04),
           child: Container(
             height: 10,
             width: 10,
-            color:themeColor2,
+            color: themeColor2,
+           // color:Colors.red,
           ),
         ),
         Padding(
-          padding:  EdgeInsets.only(top:height*0.04),
+          padding:  EdgeInsets.only(top:widget.height*0.04,right: widget.height*0.08),
           child: Container(
             height: 10,
             width: 12,
-            color:themeColor2,
+            color: themeColor2,
+            //color:Colors.black,
           ),
         ),
         Padding(
-          padding:  EdgeInsets.only(left:height*0.08,top:height*0.04),
+          padding:  EdgeInsets.only(left:widget.height*0.08,top:widget.height*0.04),
           child: Container(
             height: 10,
             width: 10,
-            color:themeColor2,
+            color: themeColor2,
+            // color:Colors.green,
           ),
         ),
         Padding(
-          padding:  EdgeInsets.only(left:height*0.04,top:height*0.08),
+          padding:  EdgeInsets.only(right:widget.height*0.04,top:widget.height*0.08),
           child: Container(
             height: 10,
             width: 10,
-            color:themeColor2,
+           color: themeColor2,
+           // color:Colors.pink,
           ),
         ),
 
       ],
-    );
+    )*/
+     Stack(
+       children: [
+         InkWell(
+           onTap: widget.onTap,
+
+           child: CircularPercentIndicator(
+             radius: widget.height*0.093,
+             lineWidth: 8.0,
+             percent: widget.animationPercent,
+             animation: true,
+             animationDuration: 2000,
+             center:    Container(
+               height: widget.height*0.050,
+               width: widget.height*0.050,
+               decoration: BoxDecoration(
+                 borderRadius: BorderRadius.circular( widget.height*0.05),
+                 color:Color(0x4800AEEF),
+               ),
+               child: Image.asset("lib/assets/icons/rigtharrow.png",scale: 4.5,color: themeColor1,),
+             ),
+             backgroundColor: Color(0x4800AEEF),
+             progressColor: themeColor1,
+
+           ),
+         ),
+         Positioned(
+           top: 0,
+           left:widget.height*0.04,
+           child: Container(
+             height: widget.height*0.02,
+             width: widget.width*0.02,
+             color: themeColor2,
+             // color:Colors.red,
+           ) ,
+         ),
+         Positioned(
+           top: widget.height*0.04,
+           // left:0,
+           child: Container(
+             height: widget.height*0.02,
+             width: widget.width*0.03,
+            color: themeColor2,
+             //color:Colors.red,
+           ) ,
+         ),
+         Positioned(
+           top: widget.height*0.04,
+           right:widget.height*0.08,
+           left:-1,
+          // bottom:0,
+           child: Container(
+             height: widget.height*0.02,
+             width: widget.width*0.05,
+             color: themeColor2,
+             // color:Colors.red,
+           ) ,
+         ),
+         Positioned(
+           top: widget.height*0.08,
+           left:widget.height*0.04,
+           child: Container(
+             height: widget.height*0.02,
+             width: widget.width*0.02,
+            color: themeColor2,
+             //color:Colors.red,
+           ) ,
+         ),
+
+
+       ],
+     ):
+      Stack(
+        children: [
+          InkWell(
+            onTap: widget.onTap,
+
+            child: CircularPercentIndicator(
+              radius: widget.height*0.093,
+              lineWidth: 8.0,
+              percent: widget.animationPercent,
+              animation: true,
+              animationDuration: 2000,
+              center:    Container(
+                height: widget.height*0.050,
+                width: widget.height*0.050,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular( widget.height*0.05),
+                  color:Color(0x4800AEEF),
+                ),
+                child: Image.asset("lib/assets/icons/rigtharrow.png",scale: 4.5,color: themeColor1,),
+              ),
+              backgroundColor: Color(0x4800AEEF),
+              progressColor: themeColor1,
+
+            ),
+          ),
+          Positioned(
+            top: 0,
+            left:widget.height*0.04,
+            child: Container(
+              height: widget.height*0.02,
+              width: widget.width*0.02,
+              color: themeColor2,
+              // color:Colors.red,
+            ) ,
+          ),
+          Positioned(
+            top: widget.height*0.04,
+           left:-1,
+            child: Container(
+              height: widget.height*0.02,
+              width: widget.width*0.03,
+              color: themeColor2,
+              // color:Colors.red,
+            ) ,
+          ),
+          Positioned(
+            top: widget.height*0.04,
+            left:widget.height*0.08,
+            child: Container(
+              height: widget.height*0.02,
+              width: widget.width*0.03,
+              color: themeColor2,
+              // color:Colors.red,
+            ) ,
+          ),
+          Positioned(
+            top: widget.height*0.08,
+            left:widget.height*0.04,
+            child: Container(
+              height: widget.height*0.02,
+              width: widget.width*0.02,
+             color: themeColor2,
+              //color:Colors.red,
+            ) ,
+          ),
+
+
+        ],
+      );
   }
 }
 class FavouriteContainer extends StatelessWidget {
@@ -3046,14 +3226,20 @@ class ServiceContainer extends StatelessWidget {
                     children: [
                       //image
                       Container(
-                          height: cHeight*0.18,
+                         // height: cHeight*0.18,
                           width: cWidth*0.20,
                            //color:themeColor3,
-                          child: Image.asset(image, scale: 2.3)),
+                          child: Column(
+                            children: [
+                              SizedBox(height: cHeight*0.04,),
+
+                              Image.asset(image, scale: 2.3),
+                            ],
+                          )),
                   SizedBox(width: 10,),
                       Container(
                         //color: Colors.pink,
-                        height: cHeight*0.18,
+                       // height: cHeight*0.18,
                         width: cWidth*0.62,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -3076,27 +3262,31 @@ class ServiceContainer extends StatelessWidget {
                             ),
 
                             //address
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                VariableText(text: serivicetype, fontsize: 11, fontFamily:'sftr',fontcolor: hinttextColor,),
-                                //Spacer(),
-                                Row(
-                                  children: [
-                                    VariableText(text: '426', fontsize: cHeight*0.030,fontFamily: 'sfdb', fontcolor: Colors.black,),
-                                    SizedBox(width: cHeight*0.0050,),
-                                    Column(
-                                      children: [
-                                        SizedBox(height: cHeight*0.02,),
-                                        VariableText(text: 'Eg', fontsize: 11,fontFamily: 'sftr', fontcolor: Color(0xFF2C3E50),),
+                            Container(
+                              //color:Colors.red,
+                              child:
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  VariableText(text: serivicetype, fontsize: 11, fontFamily:'sftr',fontcolor: hinttextColor,),
+                                  //Spacer(),
+                                  Row(
+                                    children: [
+                                      VariableText(text: '426', fontsize: cHeight*0.030,fontFamily: 'sfdb', fontcolor: Colors.black,),
+                                      SizedBox(width: cHeight*0.0050,),
+                                      Column(
+                                        children: [
+                                          SizedBox(height: cHeight*0.02,),
+                                          VariableText(text: 'Eg', fontsize: 11,fontFamily: 'sftr', fontcolor: Color(0xFF2C3E50),),
 
-                                      ],
-                                    )
+                                        ],
+                                      )
 
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
 
                           ],

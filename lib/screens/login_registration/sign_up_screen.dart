@@ -141,7 +141,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   ],),
                 SizedBox(height: width*0.06,),
-                CustomLoadingAnimation(height: width,width: height,animationPercent: 0.25,onTap: (){
+                CustomLoadingAnimation(height: width,width: height,animationPercent: 0.25,step:1,onTap: (){
                   print("sjsjsjsjsj");
                   Navigator.push(context, MaterialPageRoute(builder: (_)=>OnboardingScreen2()));
                   },),
@@ -281,7 +281,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   ],),
                 SizedBox(height: height*0.06,),
-                CustomLoadingAnimation(height: height,width: width,animationPercent: 0.25,onTap: (){
+                CustomLoadingAnimation(height: height,width: width,animationPercent: 0.25,step:1,onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (_)=>OnboardingScreen2()));
 
                 },)

@@ -826,8 +826,7 @@ class _HomeFindVetState extends State<HomeFindVet> {
                         child: Container(
                           height: widget.cHeight * 0.16,
                           width: widget.cWidth * 0.42,
-                          decoration: BoxDecoration(
-                              color: _selectedIndex == index
+                          decoration: BoxDecoration(color: _selectedIndex == index
                                   ? Color(0xFF00AEEF)
                                   : Color(0xFFF8F7F7),
                               borderRadius: BorderRadius.circular(15)),
@@ -889,6 +888,7 @@ class _HomeFindVetState extends State<HomeFindVet> {
                 height: widget.cHeight * 0.55,
                 //padding: EdgeInsets.only(top: 10, bottom: 10),
                 color: Color(0xFFF8F7F7),
+
                 child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: widget.myVets.length,
@@ -933,7 +933,7 @@ class _HomeFindVetState extends State<HomeFindVet> {
                       );
                     }),
               ),
-              SizedBox(height: 10,),
+             // SizedBox(height: 10,),
             ],
           ),
         ),

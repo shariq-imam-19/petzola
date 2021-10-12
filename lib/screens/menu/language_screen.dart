@@ -8,6 +8,8 @@ import 'package:petzola/localization/Language.dart';
 import 'package:petzola/localization/language_constants.dart';
 import 'package:petzola/screens/home/home_page.dart';
 import 'package:petzola/screens/splash_screen.dart';
+
+import '../../main.dart';
 class LanguageScreen extends StatefulWidget {
 
   @override
@@ -247,7 +249,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
 
   void _changeLanguage(Language language) async {
     Locale _locale = await setLocale(language.languageCode);
-    HomePage.setLocale(context, _locale);
+    MyApp.setLocale(context, _locale);
   }
 
 }
